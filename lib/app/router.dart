@@ -1,4 +1,6 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:cotr_flutter_app/features/auth/ui/sign_in_view.dart';
+import 'package:cotr_flutter_app/features/auth/ui/sign_up_view.dart';
 import 'package:cotr_flutter_app/features/home/ui/home_view.dart';
 import 'package:cotr_flutter_app/features/subscriptions/ui/subscription_view.dart';
 
@@ -15,6 +17,10 @@ class AppRouter extends RootStackRouter {
       initial: true,
       page: HomeRoute.page,
       path: '/',
+    ),
+    AutoRoute(
+      page: SignInRoute.page,
+      path: '/sign-in',
     ),
     AutoRoute(
       page: SubscriptionRoute.page,

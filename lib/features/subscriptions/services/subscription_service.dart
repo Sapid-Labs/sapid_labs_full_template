@@ -10,17 +10,19 @@ import 'package:injectable/injectable.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'dart:io' show Platform;
 
+import 'package:signals/signals_flutter.dart';
+
 @singleton
 class SubscriptionService extends ChangeNotifier {
   String _premiumId = 'premium';
 
-  ValueNotifier<bool> premium = ValueNotifier(false);
+  final premium = signal<bool>(false);
 
-  ValueNotifier<Offering?> offering = ValueNotifier(null);
+  final offering = signal<Offering?>(null);
 
-  ValueNotifier<int> totalRecipes = ValueNotifier(0);
+  final totalRecipes = signal<int>(0);
 
-  ValueNotifier<bool> countingRecipes = ValueNotifier(true);
+  final countingRecipes = signal<bool>(true);
 
   void setOffering(Offering? val) {
     offering.value = val;
@@ -39,29 +41,39 @@ class SubscriptionService extends ChangeNotifier {
 
     late PurchasesConfiguration configuration;
     if (Platform.isAndroid) {
-      configuration = PurchasesConfiguration(const String.fromEnvironment('google_sdk_key'));
+      configuration = PurchasesConfiguration(
+          const String.fromEnvironment('google_sdk_key'));
       if (false) {
         // use your preferred way to determine if this build is for Amazon store
         // checkout our MagicWeather sample for a suggestion
-        configuration = AmazonConfiguration(const String.fromEnvironment('amazon_sdk_key'));
+        configuration =
+            AmazonConfiguration(const String.fromEnvironment('amazon_sdk_key'));
       }
     } else if (Platform.isIOS) {
-      configuration = PurchasesConfiguration(const String.fromEnvironment('ios_sdk_key'));
+      configuration =
+          PurchasesConfiguration(const String.fromEnvironment('ios_sdk_key'));
     }
 
-    await Purchases.configure(configuration..appUserID = authService.userId);
+    await Purchases.configure(
+        configuration..appUserID = authService.userId.value);
 
     await userSetup();
 
     Purchases.addCustomerInfoUpdateListener((purchaserInfo) {
-      debugPrint('purchaserInfo.activeSubscriptions: ' + purchaserInfo.activeSubscriptions.toString());
-      debugPrint('purchaserInfo.entitlements.all: ' + purchaserInfo.entitlements.all.toString());
-      debugPrint('purchaserInfo.entitlements.active: ' + purchaserInfo.entitlements.active.toString());
-      debugPrint('purchaserInfo.entitlements.all[_premiumId]: ' + purchaserInfo.entitlements.all[_premiumId].toString());
-      debugPrint('purchaserInfo.allExpirationDates: ' + (purchaserInfo.allExpirationDates.toString()));
+      debugPrint(
+          'purchaserInfo.activeSubscriptions: ${purchaserInfo.activeSubscriptions}');
+      debugPrint(
+          'purchaserInfo.entitlements.all: ${purchaserInfo.entitlements.all}');
+      debugPrint(
+          'purchaserInfo.entitlements.active: ${purchaserInfo.entitlements.active}');
+      debugPrint(
+          'purchaserInfo.entitlements.all[_premiumId]: ${purchaserInfo.entitlements.all[_premiumId]}');
+      debugPrint(
+          'purchaserInfo.allExpirationDates: ${purchaserInfo.allExpirationDates}');
       // handle any changes to purchaserInfo
       if (purchaserInfo.entitlements.all[_premiumId]?.isActive ?? false) {
-        setPremium(purchaserInfo.entitlements.all[_premiumId]?.isActive ?? false);
+        setPremium(
+            purchaserInfo.entitlements.all[_premiumId]?.isActive ?? false);
       }
     });
   }
@@ -103,16 +115,20 @@ class SubscriptionService extends ChangeNotifier {
   }
 
   Future<void> purchaseSubscription(Package package) async {
-    analyticsService.logEvent('purchase subscription', parameters: {'package': package.identifier});
+    analyticsService.logEvent('purchase subscription',
+        parameters: {'package': package.identifier});
     try {
       CustomerInfo customerInfo = await Purchases.purchasePackage(package);
-      var isPremium = customerInfo.entitlements.all[_premiumId]?.isActive ?? false;
-      analyticsService.logEvent('purchase subscription success', parameters: {'package': package.identifier});
+      var isPremium =
+          customerInfo.entitlements.all[_premiumId]?.isActive ?? false;
+      analyticsService.logEvent('purchase subscription success',
+          parameters: {'package': package.identifier});
       if (isPremium) {
         setPremium(true);
       }
     } on PlatformException catch (e) {
-      analyticsService.logEvent('purchase subscription error', parameters: {'package': package.identifier});
+      analyticsService.logEvent('purchase subscription error',
+          parameters: {'package': package.identifier});
       var errorCode = PurchasesErrorHelper.getErrorCode(e);
       if (errorCode != PurchasesErrorCode.purchaseCancelledError) {
         // showError(e);
@@ -133,7 +149,9 @@ class SubscriptionService extends ChangeNotifier {
           heightFactor: .7,
           child: DecoratedBox(
             decoration: BoxDecoration(
-              color: Color.alphaBlend(Theme.of(context).primaryColor.withOpacity(.1), Theme.of(context).canvasColor),
+              color: Color.alphaBlend(
+                  Theme.of(context).primaryColor.withOpacity(.1),
+                  Theme.of(context).canvasColor),
               borderRadius: BorderRadius.circular(8),
             ),
             child: ListView(
@@ -142,7 +160,8 @@ class SubscriptionService extends ChangeNotifier {
                 AppName(),
                 gap8,
                 Text(
-                  message ?? 'You need to be a premium member to access this feature.',
+                  message ??
+                      'You need to be a premium member to access this feature.',
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(
@@ -184,7 +203,8 @@ class SubscriptionService extends ChangeNotifier {
                     router.push(SubscriptionRoute());
                   },
                   style: ButtonStyle(
-                    backgroundColor: WidgetStatePropertyAll(Theme.of(context).colorScheme.primary),
+                    backgroundColor: WidgetStatePropertyAll(
+                        Theme.of(context).colorScheme.primary),
                   ),
                   child: Text(
                     'Get Premium',

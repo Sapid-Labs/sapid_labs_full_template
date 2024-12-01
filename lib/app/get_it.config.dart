@@ -15,6 +15,7 @@ import 'package:shared_preferences/shared_preferences.dart' as _i460;
 import '../features/auth/services/auth_service.dart' as _i413;
 import '../features/shared/services/analytics_service.dart' as _i751;
 import '../features/shared/services/modules.dart' as _i176;
+import '../features/shared/services/permission_service.dart' as _i901;
 import '../features/subscriptions/services/subscription_service.dart' as _i506;
 
 // initializes the registration of main-scope dependencies inside of GetIt
@@ -29,6 +30,7 @@ Future<_i174.GetIt> $initGetIt(
     environmentFilter,
   );
   final registerModule = _$RegisterModule();
+  gh.factory<_i901.PermissionService>(() => _i901.PermissionService());
   await gh.factoryAsync<_i460.SharedPreferences>(
     () => registerModule.sharedPrefs,
     preResolve: true,

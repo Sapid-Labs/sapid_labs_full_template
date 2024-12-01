@@ -21,10 +21,13 @@ class TextUtils {
 
   // String Validation
   static bool isNullOrEmpty(String? text) => text == null || text.isEmpty;
-  static bool isNullOrWhitespace(String? text) => text == null || text.trim().isEmpty;
-  static bool containsOnlyDigits(String text) => RegExp(r'^[0-9]+$').hasMatch(text);
+  static bool isNullOrWhitespace(String? text) =>
+      text == null || text.trim().isEmpty;
+  static bool containsOnlyDigits(String text) =>
+      RegExp(r'^[0-9]+$').hasMatch(text);
   static bool isValidEmail(String text) {
-    return RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$').hasMatch(text);
+    return RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
+        .hasMatch(text);
   }
 
   static bool isValidUrl(String text) {
@@ -55,7 +58,8 @@ class TextUtils {
     return '(${number.substring(0, 3)}) ${number.substring(3, 6)}-${number.substring(6)}';
   }
 
-  static String formatCurrency(double amount, {String symbol = '\$', int decimals = 2}) {
+  static String formatCurrency(double amount,
+      {String symbol = '\$', int decimals = 2}) {
     return '$symbol${amount.toStringAsFixed(decimals)}';
   }
 
@@ -65,7 +69,10 @@ class TextUtils {
   }
 
   static List<String> extractUrls(String text) {
-    return RegExp(r'https?://[^\s]+').allMatches(text).map((match) => match.group(0) ?? '').toList();
+    return RegExp(r'https?://[^\s]+')
+        .allMatches(text)
+        .map((match) => match.group(0) ?? '')
+        .toList();
   }
 
   static String slugify(String text) {
@@ -76,7 +83,8 @@ class TextUtils {
   }
 
   // Security
-  static String maskString(String text, {int visibleChars = 4, String mask = '*'}) {
+  static String maskString(String text,
+      {int visibleChars = 4, String mask = '*'}) {
     if (text.length <= visibleChars) return text;
     return '${text.substring(0, visibleChars)}${mask * (text.length - visibleChars)}';
   }
@@ -137,39 +145,55 @@ extension FastTextStyle on BuildContext {
 extension FastTextColor on TextStyle {
   BuildContext get context => router.navigatorKey.currentContext!;
 
-  TextStyle get primary => copyWith(color: Theme.of(context).colorScheme.primary);
+  TextStyle get primary =>
+      copyWith(color: Theme.of(context).colorScheme.primary);
 
-  TextStyle get secondary => copyWith(color: Theme.of(context).colorScheme.secondary);
+  TextStyle get secondary =>
+      copyWith(color: Theme.of(context).colorScheme.secondary);
 
-  TextStyle get tertiary => copyWith(color: Theme.of(context).colorScheme.tertiary);
+  TextStyle get tertiary =>
+      copyWith(color: Theme.of(context).colorScheme.tertiary);
 
-  TextStyle get onPrimary => copyWith(color: Theme.of(context).colorScheme.onPrimary);
+  TextStyle get onPrimary =>
+      copyWith(color: Theme.of(context).colorScheme.onPrimary);
 
-  TextStyle get onSecondary => copyWith(color: Theme.of(context).colorScheme.onSecondary);
+  TextStyle get onSecondary =>
+      copyWith(color: Theme.of(context).colorScheme.onSecondary);
 
-  TextStyle get onTertiary => copyWith(color: Theme.of(context).colorScheme.onTertiary);
+  TextStyle get onTertiary =>
+      copyWith(color: Theme.of(context).colorScheme.onTertiary);
 
-  TextStyle get background => copyWith(color: Theme.of(context).colorScheme.background);
+  TextStyle get background =>
+      copyWith(color: Theme.of(context).colorScheme.background);
 
-  TextStyle get onBackground => copyWith(color: Theme.of(context).colorScheme.onBackground);
+  TextStyle get onBackground =>
+      copyWith(color: Theme.of(context).colorScheme.onBackground);
 
-  TextStyle get surface => copyWith(color: Theme.of(context).colorScheme.surface);
+  TextStyle get surface =>
+      copyWith(color: Theme.of(context).colorScheme.surface);
 
-  TextStyle get onSurface => copyWith(color: Theme.of(context).colorScheme.onSurface);
+  TextStyle get onSurface =>
+      copyWith(color: Theme.of(context).colorScheme.onSurface);
 
-  TextStyle get surfaceTint => copyWith(color: Theme.of(context).colorScheme.surfaceTint);
+  TextStyle get surfaceTint =>
+      copyWith(color: Theme.of(context).colorScheme.surfaceTint);
 
   TextStyle get error => copyWith(color: Theme.of(context).colorScheme.error);
 
-  TextStyle get onError => copyWith(color: Theme.of(context).colorScheme.onError);
+  TextStyle get onError =>
+      copyWith(color: Theme.of(context).colorScheme.onError);
 
-  TextStyle get outline => copyWith(color: Theme.of(context).colorScheme.outline);
+  TextStyle get outline =>
+      copyWith(color: Theme.of(context).colorScheme.outline);
 
-  TextStyle get inversePrimary => copyWith(color: Theme.of(context).colorScheme.inversePrimary);
+  TextStyle get inversePrimary =>
+      copyWith(color: Theme.of(context).colorScheme.inversePrimary);
 
-  TextStyle get inverseSurface => copyWith(color: Theme.of(context).colorScheme.inverseSurface);
+  TextStyle get inverseSurface =>
+      copyWith(color: Theme.of(context).colorScheme.inverseSurface);
 
-  TextStyle get onInverseSurface => copyWith(color: Theme.of(context).colorScheme.onInverseSurface);
+  TextStyle get onInverseSurface =>
+      copyWith(color: Theme.of(context).colorScheme.onInverseSurface);
 
   TextStyle get white => copyWith(color: Colors.white);
 

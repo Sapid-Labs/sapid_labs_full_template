@@ -1,21 +1,53 @@
-# CotR Flutter App
+# Flutter Fast App
 
-This template repository is designed to kickstart your Flutter application while using the opinionated Code on the Rocks framework.
+This template repository is designed to kickstart your Flutter application while using an opinionated framework.
 
-## Basic
+## Start
 
-```bash
-git clone --branch https://github.com/jtmuller5/cotr_flutter_app
-```
-
-## Supabase 
+To get started, clone the main branch:
 
 ```bash
-git clone --branch supabase https://github.com/jtmuller5/cotr_flutter_app
+git clone --branch https://github.com/jtmuller5/flutter_fast_app
 ```
 
-## Firebase
+This branch will serve as your app's foundation and it contains generic features that are used by all Flutter apps.
+
+Now for the fun part. To add support for a third-party service, like Supabase or Firebase, merge the branch with the service name into the main branch. For example, to add Supabase authentication support to your app, run the following command:
 
 ```bash
-git clone --branch firebase https://github.com/jtmuller5/cotr_flutter_app
+git merge supabase_auth
 ```
+
+## Branches
+
+| Branch | Description |
+| --- | --- |
+| main | The foundation of the app. |
+| supabase_auth | Adds Supabase authentication support. |
+| firebase_auth | Adds Firebase authentication support. |
+| supabase_analytics | Adds Supabase analytics support. |
+| firebase_analytics | Adds Firebase analytics support. |
+| supabase_database | Adds Supabase database support. |
+| firebase_database | Adds Firebase database support. |
+| supabase_push_notifications | Adds Supabase push notifications support. |
+| firebase_push_notifications | Adds Firebase push notifications support. |
+| supabase_storage | Adds Supabase storage support. |
+| firebase_storage | Adds Firebase storage support. |
+| revenuecat_subscriptions | Adds RevenueCat subscriptions support. |
+
+## Features
+
+### Authentication
+
+### Analytics
+
+### Database
+
+### Push Notifications
+
+### Storage
+
+### Subscriptions
+
+
+## Development

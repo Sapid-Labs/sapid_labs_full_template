@@ -701,6 +701,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.5.1"
+  preact_signals:
+    dependency: transitive
+    description:
+      name: preact_signals
+      sha256: a5b445796a02244b85fa43d79a7030fbfbbb08f7c48277ee93c636140a8fb2e0
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.8.3"
   pub_semver:
     dependency: transitive
     description:
@@ -805,6 +813,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.0"
+  signals:
+    dependency: "direct main"
+    description:
+      name: signals
+      sha256: "33d4eb56caa0457f6047ba97fc4492392d648bcc9a73367c8bdc09e89c51d794"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.0.1"
+  signals_core:
+    dependency: transitive
+    description:
+      name: signals_core
+      sha256: b7cd3aaa4ed107d298ae7b88073a33797d8019f5d59600d0bf1f27b48a214496
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.0.1"
+  signals_flutter:
+    dependency: transitive
+    description:
+      name: signals_flutter
+      sha256: "22de199d0cf489b8a8f042c9b69bf5093fc10d3a8a695d851a8ac16e8cb70e97"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.0.1"
   sky_engine:
     dependency: transitive
     description: flutter

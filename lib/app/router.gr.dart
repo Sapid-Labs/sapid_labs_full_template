@@ -29,6 +29,44 @@ class HomeRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [SignInView]
+class SignInRoute extends PageRouteInfo<void> {
+  const SignInRoute({List<PageRouteInfo>? children})
+      : super(
+          SignInRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'SignInRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const SignInView();
+    },
+  );
+}
+
+/// generated route for
+/// [SignUpView]
+class SignUpRoute extends PageRouteInfo<void> {
+  const SignUpRoute({List<PageRouteInfo>? children})
+      : super(
+          SignUpRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'SignUpRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const SignUpView();
+    },
+  );
+}
+
+/// generated route for
 /// [SubscriptionView]
 class SubscriptionRoute extends PageRouteInfo<void> {
   const SubscriptionRoute({List<PageRouteInfo>? children})

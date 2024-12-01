@@ -28,6 +28,7 @@ dependencies:
   purchases_flutter: ^8.2.1
   recase: 4.1.0
   shared_preferences: ^2.3.3
+  signals: ^6.0.1
   universal_html: ^2.2.4
   universal_io: 2.2.2 
   url_launcher: ^6.3.1
