@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:cotr_flutter_app/features/auth/ui/account_view.dart';
+import 'package:cotr_flutter_app/features/auth/ui/reset_password_view.dart';
 import 'package:cotr_flutter_app/features/auth/ui/sign_in_view.dart';
 import 'package:cotr_flutter_app/features/auth/ui/sign_up_view.dart';
 import 'package:cotr_flutter_app/features/auth/utils/auth_guard.dart';
@@ -34,6 +35,10 @@ class AppRouter extends RootStackRouter {
       page: AccountRoute.page,
       path: '/account',
       guards: [AuthGuard()],
+    ),
+    AutoRoute(
+      page: ResetPasswordRoute.page,
+      path: '/reset-password',
     ),
     AutoRoute(
       page: SubscriptionRoute.page,

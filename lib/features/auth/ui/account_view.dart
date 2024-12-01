@@ -17,7 +17,13 @@ class AccountView extends StatefulWidget {
 class _AccountViewState extends State<AccountView> {
   bool isSigningOut = false;
 
-  Future<void> _handleSignOut() async {
+  Future<void> handleResetPassword() async {
+    if (mounted) {
+      await router.push(ResetPasswordRoute());
+    }
+  }
+
+  Future<void> handleSignOut() async {
     if (isSigningOut) return;
 
     setState(() {
@@ -49,7 +55,7 @@ class _AccountViewState extends State<AccountView> {
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
-            onPressed: _handleSignOut,
+            onPressed: handleSignOut,
           ),
         ],
       ),
@@ -87,9 +93,14 @@ class _AccountViewState extends State<AccountView> {
               ),
             ),
             gap32,
+            OutlinedButton.icon(
+              onPressed: handleResetPassword,
+              icon: const Icon(Icons.lock),
+              label: const Text('Reset Password'),
+            ),
             // Sign Out Button
             FilledButton.icon(
-              onPressed: _handleSignOut,
+              onPressed: handleSignOut,
               icon: const Icon(Icons.logout),
               label: const Text('Sign Out'),
             ),

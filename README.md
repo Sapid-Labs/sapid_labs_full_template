@@ -56,6 +56,7 @@ git merge supabase_auth
 - VS Code `tasks.json` file
 - App version widget
 - Reusable app logo and name widgets
+- Copilot instructions
 
 ## Assets
 
