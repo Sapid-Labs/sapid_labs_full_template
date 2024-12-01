@@ -6,6 +6,7 @@ import 'package:cotr_flutter_app/features/auth/ui/sign_in_view.dart';
 import 'package:cotr_flutter_app/features/auth/ui/sign_up_view.dart';
 import 'package:cotr_flutter_app/features/auth/utils/auth_guard.dart';
 import 'package:cotr_flutter_app/features/home/ui/home_view.dart';
+import 'package:cotr_flutter_app/features/settings/ui/settings_view.dart';
 import 'package:cotr_flutter_app/features/subscriptions/ui/subscription_view.dart';
 
 part 'router.gr.dart';
@@ -35,6 +36,11 @@ class AppRouter extends RootStackRouter {
     AutoRoute(
       page: AccountRoute.page,
       path: '/account',
+      guards: [AuthGuard()],
+    ),
+    AutoRoute(
+      page: SettingsRoute.page,
+      path: '/settings',
       guards: [AuthGuard()],
     ),
     AutoRoute(
