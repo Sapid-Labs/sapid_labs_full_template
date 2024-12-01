@@ -5,8 +5,10 @@ import 'package:signals/signals_flutter.dart';
 class AuthService {
   final userId = signal<String?>('12345');
   final email = signal<String?>('test@test.com');
+  late final FlutterComputed isAuthenticated;
 
   Future<void> setup() async {
+    isAuthenticated = computed(() => userId.value != null);
     // Setup logic
   }
 

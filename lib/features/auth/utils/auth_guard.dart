@@ -1,0 +1,23 @@
+import 'package:auto_route/auto_route.dart';
+import 'package:cotr_flutter_app/app/services.dart';
+import 'package:flutter/material.dart';
+
+class AuthGuard extends AutoRouteGuard {
+  @override
+  void onNavigation(NavigationResolver resolver, StackRouter router) async {
+    debugPrint('Basic observer - AuthGuard: ${resolver.hashCode}');
+    debugPrint('Basic observer - stack: ${router.stack.map((e) => e.name)}');
+    try {
+      bool isAuthenticated = authService.isAuthenticated.value;
+
+      if (isAuthenticated) {
+        resolver.next(true); // Allow navigation
+      } else {
+        resolver.next(false); // Stop navigation
+      }
+    } catch (e) {
+      debugPrint('Basic observer - AuthGuard - error: $e');
+      resolver.next(false);
+    }
+  }
+}
