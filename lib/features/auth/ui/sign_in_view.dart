@@ -73,80 +73,82 @@ class _SignInViewState extends State<SignInView> with SignalsMixin {
           padding: const EdgeInsets.all(16.0),
           child: Form(
             key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                AppLogo(sideLength: 200),
-                gap24,
-                if (error.value != null)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 16.0),
-                    child: Text(
-                      error.value!,
-                      style:
-                          TextStyle(color: Theme.of(context).colorScheme.error),
-                      textAlign: TextAlign.center,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  AppLogo(sideLength: 200),
+                  gap24,
+                  if (error.value != null)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 16.0),
+                      child: Text(
+                        error.value!,
+                        style:
+                            TextStyle(color: Theme.of(context).colorScheme.error),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: 'Email',
+                      border: OutlineInputBorder(),
+                    ),
+                    keyboardType: TextInputType.emailAddress,
+                    enabled: !isLoading.value,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your email';
+                      }
+                      if (!value.contains('@')) {
+                        return 'Please enter a valid email';
+                      }
+                      return null;
+                    },
+                    onChanged: (value) => email.value = value,
                   ),
-                TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'Email',
-                    border: OutlineInputBorder(),
+                  gap16,
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: 'Password',
+                      border: OutlineInputBorder(),
+                    ),
+                    obscureText: true,
+                    enabled: !isLoading.value,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your password';
+                      }
+                      if (value.length < 6) {
+                        return 'Password must be at least 6 characters';
+                      }
+                      return null;
+                    },
+                    onChanged: (value) => password.value = value,
                   ),
-                  keyboardType: TextInputType.emailAddress,
-                  enabled: !isLoading.value,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your email';
-                    }
-                    if (!value.contains('@')) {
-                      return 'Please enter a valid email';
-                    }
-                    return null;
-                  },
-                  onChanged: (value) => email.value = value,
-                ),
-                gap16,
-                TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'Password',
-                    border: OutlineInputBorder(),
+                  const SizedBox(height: 24),
+                  ElevatedButton(
+                    onPressed: isLoading.value ? null : _handleEmailSignIn,
+                    child: isLoading.value
+                        ? const SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                        : const Text('Sign In'),
                   ),
-                  obscureText: true,
-                  enabled: !isLoading.value,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your password';
-                    }
-                    if (value.length < 6) {
-                      return 'Password must be at least 6 characters';
-                    }
-                    return null;
-                  },
-                  onChanged: (value) => password.value = value,
-                ),
-                const SizedBox(height: 24),
-                ElevatedButton(
-                  onPressed: isLoading.value ? null : _handleEmailSignIn,
-                  child: isLoading.value
-                      ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                      : const Text('Sign In'),
-                ),
-                gap16,
-                SignInButton(
-                  Buttons.Google,
-                  onPressed: () {
-                    isLoading.value
-                        ? null
-                        : () async => await _handleGoogleSignIn();
-                  },
-                ),
-              ],
+                  gap16,
+                  SignInButton(
+                    Buttons.Google,
+                    onPressed: () {
+                      isLoading.value
+                          ? null
+                          : () async => await _handleGoogleSignIn();
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         );
