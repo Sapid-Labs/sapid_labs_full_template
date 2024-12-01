@@ -1,0 +1,24 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "cotr_flutter_app",
+      "request": "launch",
+      "type": "dart",
+      "args": ["--dart-define-from-file=assets/config.json", "--web-port=5000"]
+    },
+    {
+      "name": "cotr_flutter_app (profile mode)",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "profile"
+    },
+    {
+      "name": "cotr_flutter_app (release mode)",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "release",
+      "args": ["--dart-define-from-file=assets/config.json", "--web-port=5000"]
+    }
+  ]
+}

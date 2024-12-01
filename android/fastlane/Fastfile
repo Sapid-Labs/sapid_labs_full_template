@@ -1,0 +1,54 @@
+update_fastlane
+
+default_platform(:android)
+
+platform :android do
+
+  lane :bump_version_code do
+    versionCode = File.read("metadata/versionCode").to_i
+         versionCode = versionCode + 1
+
+         f = File.new("metadata/versionCode", "w")
+         f.write(versionCode)
+         f.close
+         versionCode
+  end
+
+  desc "Deploy a new version to the Google Play"
+  lane :prod do
+    versionCode = bump_version_code
+  
+    sh("flutter", "build", "appbundle", "--build-number=#{versionCode}", "--dart-define-from-file=assets/config.json")
+  
+    upload_to_play_store(
+      track: 'production',
+      aab: '../build/app/outputs/bundle/release/app-release.aab',
+    )
+  
+    send_slack_notification(message: "New production version #{versionCode} has been pushed to Google Play!")
+  end
+  
+  desc "Deploy a new version to the beta test track of Google Play"
+  lane :internal do
+    versionCode = bump_version_code
+  
+    sh("flutter", "build", "appbundle", "--build-number=#{versionCode}", "--dart-define-from-file=assets/config.json")
+  
+    upload_to_play_store(
+      track: 'internal',
+      aab: '../build/app/outputs/bundle/release/app-release.aab',
+    )
+  
+    send_slack_notification(message: "New internal version #{versionCode} has been pushed to Google Play!")
+  end
+  
+  desc "Send a message to Slack"
+  lane :send_slack_notification do |options|
+    message = options[:message] || "A new update has been pushed!"
+    slack(
+      message: message,
+      success: true,
+      slack_url:  ENV["SLACK_WEBHOOK_URL"]
+    )
+  end
+end

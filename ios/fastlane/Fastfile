@@ -1,0 +1,64 @@
+update_fastlane
+
+default_platform(:ios)
+
+platform :ios do
+
+  lane :bump_version_code do
+    versionCode = File.read("metadata/versionCode").to_i
+    versionCode = versionCode + 1
+    
+    f = File.new("metadata/versionCode", "w")
+    f.write(versionCode)
+    f.close
+    versionCode
+  end
+  
+  lane :bump_version_name do
+    version_name = File.read("metadata/versionName").to_i
+    version_name = version_name + 1
+    
+    f = File.new("metadata/versionName", "w")
+    f.write(version_name)
+    f.close
+    version_name
+  end
+  
+  desc "Push a new release build to the App Store"
+  lane :prod do
+    versionCode = bump_version_code
+    version_name = bump_version_name 
+    sh("flutter","build","ipa","--build-name", "100.0.#{version_name}","--dart-define-from-file=assets/config.json")
+    upload_to_app_store(ipa: "../build/ios/ipa/cotrFlutterApp.ipa",
+    submit_for_review: true,
+    automatic_release: true,
+    force: true,
+    submission_information: {
+    "export_compliance_uses_encryption": false,
+    "add_id_info_uses_idfa": false}
+    )
+    
+    send_slack_notification(message: "New production version #{versionCode} has been pushed to App Store!")  
+  end
+  
+  desc "Push a new beta build to TestFlight"
+  lane :beta do
+    versionCode = bump_version_code
+    version_name = bump_version_name
+    sh("flutter","build","ipa","--build-name", "100.0.#{version_name}","--dart-define-from-file=assets/config.json")
+    upload_to_testflight(ipa: "../build/ios/ipa/cotrFlutterApp.ipa")
+    
+    send_slack_notification(message: "New internal version #{versionCode} has been pushed to TestFlight!")
+    
+  end
+  
+  desc "Send a message to Slack"
+  lane :send_slack_notification do |options|
+    message = options[:message] || "A new update has been pushed!"
+    slack(
+    message: message,
+    success: true,
+    slack_url: ENV["SLACK_WEBHOOK_URL"]
+    )
+  end
+end
