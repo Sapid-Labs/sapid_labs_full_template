@@ -49,5 +49,20 @@ git merge supabase_auth
 
 ### Subscriptions
 
+### Extras
+
+- Constant gaps
+- Flex Color Scheme setup
+- VS Code `tasks.json` file
+- App version widget
+- Reusable app logo and name widgets
+
+## Assets
+
+Images in the `assets` folder are [resolution-aware](https://docs.flutter.dev/ui/assets/assets-and-images#resolution-aware).
+
+Sign In Buttons are from the [flutter_signin_button](https://pub.dev/packages/flutter_signin_button) package.
+Google Sign-In Buttons: https://developers.google.com/identity/branding-guidelines
+Apple Sign-In Buttons: https://developer.apple.com/design/resources/
 
 ## Development

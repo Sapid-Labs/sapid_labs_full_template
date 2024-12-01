@@ -2,7 +2,10 @@ import 'package:auto_route/auto_route.dart';
 import 'package:cotr_flutter_app/app/constants.dart';
 import 'package:cotr_flutter_app/app/router.dart';
 import 'package:cotr_flutter_app/app/services.dart';
+import 'package:cotr_flutter_app/features/shared/ui/app_logo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_signin_button/button_list.dart';
+import 'package:flutter_signin_button/button_view.dart';
 import 'package:signals/signals_flutter.dart';
 
 @RoutePage()
@@ -21,19 +24,19 @@ class _SignUpViewState extends State<SignUpView> with SignalsMixin {
   late final isLoading = createSignal(false);
   late final error = createSignal<String?>(null);
   late final showPassword = createSignal(false);
-  
+
   Future<void> _handleEmailSignUp() async {
     if (!_formKey.currentState!.validate()) return;
 
     try {
       isLoading.value = true;
       error.value = null;
-      
+
       await authService.signUpWithEmailAndPassword(
         email: email.value,
         password: password.value,
       );
-      
+
       if (mounted) {
         // Navigate to home or intended screen after successful signup
         router.replaceAll([const HomeRoute()]);
@@ -49,9 +52,9 @@ class _SignUpViewState extends State<SignUpView> with SignalsMixin {
     try {
       isLoading.value = true;
       error.value = null;
-      
+
       await authService.signInWithGoogle();
-      
+
       if (mounted) {
         // Navigate to home or intended screen after successful signup
         router.replaceAll([const HomeRoute()]);
@@ -82,7 +85,8 @@ class _SignUpViewState extends State<SignUpView> with SignalsMixin {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const SizedBox(height: 20),
+                  AppLogo(sideLength: 200),
+                  gap24,
                   Text(
                     'Join Us',
                     style: Theme.of(context).textTheme.headlineMedium,
@@ -100,7 +104,8 @@ class _SignUpViewState extends State<SignUpView> with SignalsMixin {
                       padding: const EdgeInsets.only(bottom: 16.0),
                       child: Text(
                         error.value!,
-                        style: TextStyle(color: Theme.of(context).colorScheme.error),
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.error),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -131,11 +136,12 @@ class _SignUpViewState extends State<SignUpView> with SignalsMixin {
                       prefixIcon: const Icon(Icons.lock_outlined),
                       suffixIcon: IconButton(
                         icon: Icon(
-                          showPassword.value 
-                            ? Icons.visibility_off 
-                            : Icons.visibility,
+                          showPassword.value
+                              ? Icons.visibility_off
+                              : Icons.visibility,
                         ),
-                        onPressed: () => showPassword.value = !showPassword.value,
+                        onPressed: () =>
+                            showPassword.value = !showPassword.value,
                       ),
                     ),
                     obscureText: !showPassword.value,
@@ -159,11 +165,12 @@ class _SignUpViewState extends State<SignUpView> with SignalsMixin {
                       prefixIcon: const Icon(Icons.lock_outlined),
                       suffixIcon: IconButton(
                         icon: Icon(
-                          showPassword.value 
-                            ? Icons.visibility_off 
-                            : Icons.visibility,
+                          showPassword.value
+                              ? Icons.visibility_off
+                              : Icons.visibility,
                         ),
-                        onPressed: () => showPassword.value = !showPassword.value,
+                        onPressed: () =>
+                            showPassword.value = !showPassword.value,
                       ),
                     ),
                     obscureText: !showPassword.value,
@@ -179,7 +186,7 @@ class _SignUpViewState extends State<SignUpView> with SignalsMixin {
                     },
                     onChanged: (value) => confirmPassword.value = value,
                   ),
-                  const SizedBox(height: 24),
+                  gap24,
                   ElevatedButton(
                     onPressed: isLoading.value ? null : _handleEmailSignUp,
                     child: Padding(
@@ -205,25 +212,15 @@ class _SignUpViewState extends State<SignUpView> with SignalsMixin {
                     ],
                   ),
                   gap16,
-                  OutlinedButton(
-                    onPressed: isLoading.value ? null : _handleGoogleSignUp,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            'assets/google_logo.png',
-                            height: 24,
-                            width: 24,
-                          ),
-                          const SizedBox(width: 8),
-                          const Text('Sign up with Google'),
-                        ],
-                      ),
-                    ),
+                  SignInButton(
+                    Buttons.Google,
+                    onPressed: () {
+                      isLoading.value
+                          ? null
+                          : () async => await _handleGoogleSignUp();
+                    },
                   ),
-                  const SizedBox(height: 24),
+                  gap24,
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

@@ -2,7 +2,10 @@ import 'package:auto_route/auto_route.dart';
 import 'package:cotr_flutter_app/app/constants.dart';
 import 'package:cotr_flutter_app/app/router.dart';
 import 'package:cotr_flutter_app/app/services.dart';
+import 'package:cotr_flutter_app/features/shared/ui/app_logo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_signin_button/button_list.dart';
+import 'package:flutter_signin_button/button_view.dart';
 import 'package:signals/signals_flutter.dart';
 
 @RoutePage()
@@ -26,12 +29,12 @@ class _SignInViewState extends State<SignInView> with SignalsMixin {
     try {
       isLoading.value = true;
       error.value = null;
-      
+
       await authService.loginWithEmailAndPassword(
         email: email.value,
         password: password.value,
       );
-      
+
       if (mounted) {
         // Navigate to home or intended screen after successful login
         router.replaceAll([const HomeRoute()]);
@@ -47,9 +50,9 @@ class _SignInViewState extends State<SignInView> with SignalsMixin {
     try {
       isLoading.value = true;
       error.value = null;
-      
+
       await authService.signInWithGoogle();
-      
+
       if (mounted) {
         // Navigate to home or intended screen after successful login
         router.replaceAll([const HomeRoute()]);
@@ -74,12 +77,15 @@ class _SignInViewState extends State<SignInView> with SignalsMixin {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                AppLogo(sideLength: 200),
+                gap24,
                 if (error.value != null)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 16.0),
                     child: Text(
                       error.value!,
-                      style: TextStyle(color: Theme.of(context).colorScheme.error),
+                      style:
+                          TextStyle(color: Theme.of(context).colorScheme.error),
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -132,20 +138,13 @@ class _SignInViewState extends State<SignInView> with SignalsMixin {
                       : const Text('Sign In'),
                 ),
                 gap16,
-                OutlinedButton(
-                  onPressed: isLoading.value ? null : _handleGoogleSignIn,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        'assets/google_logo.png',
-                        height: 24,
-                        width: 24,
-                      ),
-                      const SizedBox(width: 8),
-                      const Text('Sign in with Google'),
-                    ],
-                  ),
+                SignInButton(
+                  Buttons.Google,
+                  onPressed: () {
+                    isLoading.value
+                        ? null
+                        : () async => await _handleGoogleSignIn();
+                  },
                 ),
               ],
             ),
