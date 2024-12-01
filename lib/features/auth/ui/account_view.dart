@@ -15,7 +15,14 @@ class AccountView extends StatefulWidget {
 }
 
 class _AccountViewState extends State<AccountView> {
+  bool isSigningOut = false;
+
   Future<void> _handleSignOut() async {
+    if (isSigningOut) return;
+
+    setState(() {
+      isSigningOut = true;
+    });
     try {
       await authService.logout();
       if (mounted) {
@@ -27,6 +34,10 @@ class _AccountViewState extends State<AccountView> {
           SnackBar(content: Text('Failed to sign out: ${e.toString()}')),
         );
       }
+    } finally {
+      setState(() {
+        isSigningOut = false;
+      });
     }
   }
 
