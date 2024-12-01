@@ -38,6 +38,12 @@ class AuthService {
     // Sign up logic
   }
 
+  Future<void> updatePassword({
+    required String password,
+  }) async {
+    // Update password logic
+  }
+
   Future<void> resetPassword({
     required String email,
   }) async {

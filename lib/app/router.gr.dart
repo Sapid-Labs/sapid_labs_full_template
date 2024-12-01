@@ -29,6 +29,25 @@ class AccountRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [ChangePasswordView]
+class ChangePasswordRoute extends PageRouteInfo<void> {
+  const ChangePasswordRoute({List<PageRouteInfo>? children})
+      : super(
+          ChangePasswordRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'ChangePasswordRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const ChangePasswordView();
+    },
+  );
+}
+
+/// generated route for
 /// [HomeView]
 class HomeRoute extends PageRouteInfo<void> {
   const HomeRoute({List<PageRouteInfo>? children})
