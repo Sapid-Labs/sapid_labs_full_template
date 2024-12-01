@@ -6,6 +6,10 @@ class AuthService {
   final userId = signal<String?>('12345');
   final email = signal<String?>('test@test.com');
 
+  Future<void> setup() async {
+    // Setup logic
+  }
+
   Future<void> signUpAnonymously() async {
     // Sign up logic
   }
