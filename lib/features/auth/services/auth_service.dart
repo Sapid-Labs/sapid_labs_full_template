@@ -5,7 +5,10 @@ class AuthService {
   String? get userId => '12345';
   String? get email => 'test@test.com';
 
-  Future<void> loginWithEmailAndPassword(String email, String password) async {
+  Future<void> loginWithEmailAndPassword({
+    required String email,
+    required String password,
+  }) async {
     // Login logic
   }
 
@@ -13,7 +16,10 @@ class AuthService {
     // Sign up logic
   }
 
-  Future<void> signUpWithEmailAndPassword(String email, String password) async {
+  Future<void> signUpWithEmailAndPassword({
+    required String email,
+    required String password,
+  }) async {
     // Sign up logic
   }
 
