@@ -1,3 +1,4 @@
+import 'package:cotr_flutter_app/features/shared/utils/text_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -13,9 +14,7 @@ class AppVersion extends StatelessWidget {
           final PackageInfo packageInfo = snapshot.data as PackageInfo;
           return Text(
             'Version: ${packageInfo.version}',
-            style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                  color: Theme.of(context).colorScheme.primary,
-                ),
+            style: context.bodySmall.primary,
           );
         }
 
