@@ -1,4 +1,4 @@
-# Flutter Fast App
+# Fool's App Template
 
 This template repository is designed to kickstart your Flutter application while using an opinionated framework.
 
@@ -7,7 +7,7 @@ This template repository is designed to kickstart your Flutter application while
 To get started, clone the main branch:
 
 ```bash
-git clone --branch https://github.com/jtmuller5/flutter_fast_app
+git clone --branch https://github.com/jtmuller5/fools_app_template
 ```
 
 This branch will serve as your app's foundation and it contains generic features that are used by all Flutter apps.
@@ -22,7 +22,7 @@ git merge supabase_auth
 To pull future changes from this template into your project, add the template repository as a remote:
 
 ```bash
-git remote add template https://github.com/CodeOTR/flutter_fast_app
+git remote add template https://github.com/Fool-Script/fools_app_template
 ```
 
 To pull updates, simply run:
@@ -42,7 +42,7 @@ If you see the following error:
 
 ```
 remote: Write access to repository not granted.
-fatal: unable to access 'https://github.com/CodeOTR/flutter_fast_app/': The requested URL returned error: 403
+fatal: unable to access 'https://github.com/Fool-Script/flutter_fast_app/': The requested URL returned error: 403
 error: could not fetch template
 ``
 
