@@ -29,6 +29,13 @@ To pull updates, simply run:
 
 ```bash
 git fetch --all
+git merge template/main --allow-unrelated-histories
+```
+
+You can also run the `git merge` command for any branch in the template repo. For example:
+
+```bash
+git merge template/auth_supabase --allow-unrelated-histories
 ```
 
 If you see the following error:
