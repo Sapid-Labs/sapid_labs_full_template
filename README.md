@@ -17,6 +17,19 @@ Now for the fun part. To add support for a third-party service, like Supabase or
 ```bash
 git merge supabase_auth
 ```
+## Setup Updates
+
+To pull future changes from this template into your project, add the template repository as a remote:
+
+```bash
+git remote add template https://github.com/CodeOTR/flutter_fast_app
+```
+
+To pull updates, simply run:
+
+```bash
+git fetch --all
+```
 
 ## Branches
 
