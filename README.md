@@ -31,6 +31,20 @@ To pull updates, simply run:
 git fetch --all
 ```
 
+If you see the following error:
+
+```
+remote: Write access to repository not granted.
+fatal: unable to access 'https://github.com/CodeOTR/flutter_fast_app/': The requested URL returned error: 403
+error: could not fetch template
+``
+
+Reauthenticate with GitHub using this command:
+
+```bash
+gh auth login
+```
+
 ## Branches
 
 | Branch | Description |
