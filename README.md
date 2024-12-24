@@ -7,7 +7,7 @@ This template repository is designed to kickstart your Flutter application while
 To get started, clone the main branch:
 
 ```bash
-git clone --branch https://github.com/jtmuller5/fools_app_template
+git clone --branch https://github.com/Fool-Script/fools_app_template
 ```
 
 This branch will serve as your app's foundation and it contains generic features that are used by all Flutter apps.
