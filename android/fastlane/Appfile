@@ -1,4 +1,4 @@
 json_key_file("~josephmuller/Dev/keys/fastlane_key.json") # Path to the json secret file - Follow https://docs.fastlane.tools/actions/supply/#setup to get one
-package_name("com.example.cotr_flutter_app")
+package_name("com.example.fools_app_template")
 
 # "E:\\dev\\resources\\keys\\fastlane_key.json" # Windows

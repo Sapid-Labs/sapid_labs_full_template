@@ -1,8 +1,8 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:cotr_flutter_app/app/constants.dart';
-import 'package:cotr_flutter_app/app/router.dart';
-import 'package:cotr_flutter_app/app/services.dart';
-import 'package:cotr_flutter_app/features/shared/ui/app_logo.dart';
+import 'package:fools_app_template/app/constants.dart';
+import 'package:fools_app_template/app/router.dart';
+import 'package:fools_app_template/app/services.dart';
+import 'package:fools_app_template/features/shared/ui/app_logo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';

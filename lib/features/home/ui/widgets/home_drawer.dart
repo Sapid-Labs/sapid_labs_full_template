@@ -1,7 +1,7 @@
-import 'package:cotr_flutter_app/app/router.dart';
-import 'package:cotr_flutter_app/app/services.dart';
-import 'package:cotr_flutter_app/features/shared/ui/app_logo.dart';
-import 'package:cotr_flutter_app/features/shared/ui/app_version.dart';
+import 'package:fools_app_template/app/router.dart';
+import 'package:fools_app_template/app/services.dart';
+import 'package:fools_app_template/features/shared/ui/app_logo.dart';
+import 'package:fools_app_template/features/shared/ui/app_version.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 

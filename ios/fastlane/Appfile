@@ -1,4 +1,4 @@
-app_identifier("com.example.cotr_flutter_app") # The bundle identifier of your app
+app_identifier("com.example.fools_app_template") # The bundle identifier of your app
 apple_id("test@gmail.com") # Your Apple Developer Portal username
 
 itc_team_id("11111") # App Store Connect Team ID

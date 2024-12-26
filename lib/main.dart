@@ -1,6 +1,6 @@
-import 'package:cotr_flutter_app/app/get_it.dart';
-import 'package:cotr_flutter_app/app/router.dart';
-import 'package:cotr_flutter_app/app/services.dart';
+import 'package:fools_app_template/app/get_it.dart';
+import 'package:fools_app_template/app/router.dart';
+import 'package:fools_app_template/app/services.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';

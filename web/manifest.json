@@ -1,6 +1,6 @@
 {
-    "name": "cotr_flutter_app",
-    "short_name": "cotr_flutter_app",
+    "name": "fools_app_template",
+    "short_name": "fools_app_template",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

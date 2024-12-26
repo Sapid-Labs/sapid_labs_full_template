@@ -1,13 +1,13 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:cotr_flutter_app/features/auth/ui/account_view.dart';
-import 'package:cotr_flutter_app/features/auth/ui/change_password_view.dart';
-import 'package:cotr_flutter_app/features/auth/ui/reset_password_view.dart';
-import 'package:cotr_flutter_app/features/auth/ui/sign_in_view.dart';
-import 'package:cotr_flutter_app/features/auth/ui/sign_up_view.dart';
-import 'package:cotr_flutter_app/features/auth/utils/auth_guard.dart';
-import 'package:cotr_flutter_app/features/home/ui/home_view.dart';
-import 'package:cotr_flutter_app/features/settings/ui/settings_view.dart';
-import 'package:cotr_flutter_app/features/subscriptions/ui/subscription_view.dart';
+import 'package:fools_app_template/features/auth/ui/account_view.dart';
+import 'package:fools_app_template/features/auth/ui/change_password_view.dart';
+import 'package:fools_app_template/features/auth/ui/reset_password_view.dart';
+import 'package:fools_app_template/features/auth/ui/sign_in_view.dart';
+import 'package:fools_app_template/features/auth/ui/sign_up_view.dart';
+import 'package:fools_app_template/features/auth/utils/auth_guard.dart';
+import 'package:fools_app_template/features/home/ui/home_view.dart';
+import 'package:fools_app_template/features/settings/ui/settings_view.dart';
+import 'package:fools_app_template/features/subscriptions/ui/subscription_view.dart';
 
 part 'router.gr.dart';
 
