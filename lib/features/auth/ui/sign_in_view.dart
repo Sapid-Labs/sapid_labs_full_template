@@ -85,8 +85,8 @@ class _SignInViewState extends State<SignInView> with SignalsMixin {
                       padding: const EdgeInsets.only(bottom: 16.0),
                       child: Text(
                         error.value!,
-                        style:
-                            TextStyle(color: Theme.of(context).colorScheme.error),
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.error),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -146,6 +146,18 @@ class _SignInViewState extends State<SignInView> with SignalsMixin {
                           ? null
                           : () async => await _handleGoogleSignIn();
                     },
+                  ),
+                  gap16,
+                  gap24,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text('Don\'t have an account?'),
+                      TextButton(
+                        onPressed: () => router.replace(const SignUpRoute()),
+                        child: const Text('Sign Up'),
+                      ),
+                    ],
                   ),
                 ],
               ),
