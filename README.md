@@ -73,6 +73,16 @@ gh auth login
 
 ### Authentication
 
+### Firebase
+
+In the root of the project, run the following command to setup Firebase:
+
+```bash
+flutterfire config --project=my_project
+```
+
+You can [safely commit the firebase_config.dart to your git repo](https://github.com/firebase/flutterfire/discussions/7617#discussioncomment-2667871).
+
 ### Analytics
 
 ### Database
