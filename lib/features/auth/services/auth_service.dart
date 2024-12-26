@@ -53,4 +53,8 @@ class AuthService {
   Future<void> logout() async {
     // Logout logic
   }
+
+  Future<void> createUser() async {
+    // Create user in database
+  }
 }
