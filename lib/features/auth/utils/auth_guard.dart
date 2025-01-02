@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:fools_app_template/app/router.dart';
 import 'package:fools_app_template/app/services.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +14,7 @@ class AuthGuard extends AutoRouteGuard {
       if (isAuthenticated) {
         resolver.next(true); // Allow navigation
       } else {
-        resolver.next(false); // Stop navigation
+        router.push(SignInRoute());
       }
     } catch (e) {
       debugPrint('Basic observer - AuthGuard - error: $e');
