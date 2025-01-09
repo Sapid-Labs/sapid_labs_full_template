@@ -57,16 +57,11 @@ gh auth login
 | Branch | Description |
 | --- | --- |
 | main | The foundation of the app. |
-| supabase_auth | Adds Supabase authentication support. |
-| firebase_auth | Adds Firebase authentication support. |
-| supabase_analytics | Adds Supabase analytics support. |
-| firebase_analytics | Adds Firebase analytics support. |
-| supabase_database | Adds Supabase database support. |
-| firebase_database | Adds Firebase database support. |
-| supabase_push_notifications | Adds Supabase push notifications support. |
-| firebase_push_notifications | Adds Firebase push notifications support. |
-| supabase_storage | Adds Supabase storage support. |
-| firebase_storage | Adds Firebase storage support. |
+| supabase | Adds Supabase authentication, database, and storage. |
+| firebase | Adds Firebase authentication, database, analytics, and storage. |
+| pocketbase | Adds PocketBase authentication, database, and storage. |
+| appwrite | Adds AppWrite authentication, database, and storage. |
+| amplitude_analytics | Adds Amplitude analytics support. |
 | revenuecat_subscriptions | Adds RevenueCat subscriptions support. |
 
 ## State Strategy
@@ -79,6 +74,28 @@ Global signals typically exist in the same file as their corresponding service a
 
 ### Authentication
 
+### Analytics
+
+### Database
+
+### Push Notifications
+
+### Storage
+
+### Subscriptions
+Subscriptions are implemented using RevenueCat
+
+### Extras
+
+- Constant gaps
+- Flex Color Scheme setup
+- VS Code `tasks.json` file
+- App version widget
+- Reusable app logo and name widgets
+- Copilot instructions
+
+## Platforms
+
 ### Firebase
 
 In the root of the project, run the following command to setup Firebase:
@@ -89,24 +106,7 @@ flutterfire config --project=my_project
 
 You can [safely commit the firebase_config.dart to your git repo](https://github.com/firebase/flutterfire/discussions/7617#discussioncomment-2667871).
 
-### Analytics
-
-### Database
-
-### Push Notifications
-
-### Storage
-
-### Subscriptions
-
-### Extras
-
-- Constant gaps
-- Flex Color Scheme setup
-- VS Code `tasks.json` file
-- App version widget
-- Reusable app logo and name widgets
-- Copilot instructions
+### Supabase
 
 ## Assets
 
