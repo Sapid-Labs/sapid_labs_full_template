@@ -111,3 +111,5 @@ Google Sign-In Buttons: https://developers.google.com/identity/branding-guidelin
 Apple Sign-In Buttons: https://developer.apple.com/design/resources/
 
 ## Development
+
+We are all Fool Stack Developers 🃏
