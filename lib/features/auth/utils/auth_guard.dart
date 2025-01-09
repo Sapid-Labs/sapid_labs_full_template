@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:fools_app_template/app/router.dart';
-import 'package:fools_app_template/app/services.dart';
 import 'package:flutter/material.dart';
+import 'package:fools_app_template/features/auth/services/auth_service.dart';
 
 class AuthGuard extends AutoRouteGuard {
   @override
@@ -9,7 +9,7 @@ class AuthGuard extends AutoRouteGuard {
     debugPrint('Basic observer - AuthGuard: ${resolver.hashCode}');
     debugPrint('Basic observer - stack: ${router.stack.map((e) => e.name)}');
     try {
-      bool isAuthenticated = authService.isAuthenticated.value;
+      bool isAuthenticated = authIsAuthenticated.value;
 
       if (isAuthenticated) {
         resolver.next(true); // Allow navigation
@@ -18,7 +18,7 @@ class AuthGuard extends AutoRouteGuard {
       }
     } catch (e) {
       debugPrint('Basic observer - AuthGuard - error: $e');
-      resolver.next(false);
+      router.push(SignInRoute());
     }
   }
 }
