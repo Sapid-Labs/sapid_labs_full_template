@@ -1,16 +1,23 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:signals/signals_flutter.dart';
 
-final authUserId =
-    signal<String?>('1'); // TODO - set to null for real authentication
-final authEmail =
-    signal<String?>(null); // TODO - set to null for real authentication
+final authUserId = signal<String?>(null);
+final authEmail = signal<String?>(null);
 final authIsAuthenticated = computed(() => authUserId.value != null);
 
 @singleton
 class AuthService {
   Future<void> setup() async {
-    // TODO - Implement setup logic for AuthService
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      if (user == null) {
+        debugPrint('User is currently signed out!');
+      } else {
+        debugPrint('User is signed in!');
+      }
+    });
   }
 
   Future<void> signUpAnonymously() async {

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "16190533493",
+    "project_id": "stack-fool",
+    "storage_bucket": "stack-fool.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:16190533493:android:b19c625e3a41fb9cbaed3c",
+        "android_client_info": {
+          "package_name": "com.example.fools_app_template"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDy6B3CF6VwgabImcZiWoj2wv_eWnBJVZs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:16190533493:android:42a857facdd16840baed3c",
+        "android_client_info": {
+          "package_name": "com.fool.templ"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDy6B3CF6VwgabImcZiWoj2wv_eWnBJVZs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
