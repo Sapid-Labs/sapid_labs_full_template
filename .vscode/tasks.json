@@ -12,6 +12,26 @@
       "problemMatcher": []
     },
     {
+      "label": "Flutter Pub Get",
+      "type": "shell",
+      "command": "flutter pub get",
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Flutter Clean",
+      "type": "shell",
+      "command": "flutter clean",
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      },
+      "problemMatcher": []
+    },
+    {
       "label": "Ship Android",
       "type": "shell",
       "command": "fastlane internal",
