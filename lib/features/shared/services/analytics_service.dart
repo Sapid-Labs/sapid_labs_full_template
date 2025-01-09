@@ -1,13 +1,16 @@
 import 'package:injectable/injectable.dart';
 
-@injectable
+@LazySingleton()
 class AnalyticsService {
-
   Future<void> setup() async {
-    // Setup logic
+    // TODO: Implement setup logic for AnalyticsService
   }
-  
-  void logEvent(String name, {Map<String, dynamic>? parameters}) {
-    // Log event
+
+  Future<void> setUserProperties(Map<String, dynamic> properties) async {
+    // TODO: Implement setUserProperties
+  }
+
+  Future<void> logEvent(String name, {Map<String, dynamic>? parameters}) async {
+    // TODO: Implement logEvent
   }
 }

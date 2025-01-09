@@ -1,59 +1,61 @@
 import 'package:injectable/injectable.dart';
 import 'package:signals/signals_flutter.dart';
 
-final authUserId = signal<String?>('1'); // TODO - set to null for real authentication
-final authEmail = signal<String?>(null); // TODO - set to null for real authentication
+final authUserId =
+    signal<String?>('1'); // TODO - set to null for real authentication
+final authEmail =
+    signal<String?>(null); // TODO - set to null for real authentication
 final authIsAuthenticated = computed(() => authUserId.value != null);
 
 @singleton
 class AuthService {
   Future<void> setup() async {
-    // Setup logic
+    // TODO - Implement setup logic for AuthService
   }
 
   Future<void> signUpAnonymously() async {
-    // Sign up logic
+    // TODO - Implement signUpAnonymously logic
   }
 
   Future<void> signInWithGoogle() async {
-    // Sign in logic
+    // TODO - Implement signInWithGoogle logic
   }
 
   Future<void> signInWithApple() async {
-    // Sign in logic
+    // TODO - Implement signInWithApple logic
   }
 
   Future<void> loginWithEmailAndPassword({
     required String email,
     required String password,
   }) async {
-    // Login logic
+    // TODO - Implement loginWithEmailAndPassword logic
   }
 
   Future<void> signUpWithEmailAndPassword({
     required String email,
     required String password,
   }) async {
-    // Sign up logic
+    // TODO - Implement signUpWithEmailAndPassword logic
   }
 
   Future<void> updatePassword({
     required String password,
   }) async {
-    // Update password logic
+    // TODO - Implement updatePassword logic
   }
 
   Future<void> resetPassword({
     required String email,
   }) async {
-    // Reset password logic
+    // TODO - Implement resetPassword logic
   }
 
   Future<void> logout() async {
-    // Logout logic
+    // TODO - Implement logout logic
   }
 
   Future<void> createUser() async {
-    // Create user in database
+    // TODO - Implement createUser logic
   }
 }
