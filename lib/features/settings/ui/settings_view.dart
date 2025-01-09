@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:fools_app_template/app/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:fools_app_template/features/settings/services/settings_service.dart';
 import 'package:signals/signals_flutter.dart';
 import 'package:fools_app_template/app/services.dart';
 
@@ -19,16 +20,16 @@ class SettingsView extends StatelessWidget {
           ListTile(
             title: const Text('Theme Mode'),
             subtitle: Watch((context) {
-              final mode = settingsService.themeMode.value;
+              final mode = settingsThemeMode.value;
               return Text(mode.name.toUpperCase());
             }),
             trailing: Watch((context) {
-              final mode = settingsService.themeMode.value;
+              final mode = settingsThemeMode.value;
               return DropdownButton<ThemeMode>(
                 value: mode,
                 onChanged: (newMode) {
                   if (newMode != null) {
-                    settingsService.themeMode.value = newMode;
+                    settingsThemeMode.value = newMode;
                   }
                 },
                 items: ThemeMode.values.map((mode) {

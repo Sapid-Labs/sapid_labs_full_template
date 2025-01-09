@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:fools_app_template/app/constants.dart';
 import 'package:fools_app_template/app/router.dart';
 import 'package:fools_app_template/app/services.dart';
+import 'package:fools_app_template/features/auth/services/auth_service.dart';
 import 'package:fools_app_template/features/shared/utils/text_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:signals/signals_flutter.dart';
@@ -70,7 +71,7 @@ class _AccountViewState extends State<AccountView> {
                 radius: 50,
                 backgroundColor: Theme.of(context).colorScheme.primary,
                 child: Text(
-                  (authService.email.value ?? '?')[0].toUpperCase(),
+                  (authEmail.value ?? '?')[0].toUpperCase(),
                   style: context.displayMedium.white,
                 ),
               ),
@@ -81,7 +82,7 @@ class _AccountViewState extends State<AccountView> {
               child: ListTile(
                 leading: const Icon(Icons.email),
                 title: const Text('Email'),
-                subtitle: Text(authService.email.value ?? 'No email'),
+                subtitle: Text(authEmail.value ?? 'No email'),
               ),
             ),
             gap16,
@@ -89,7 +90,7 @@ class _AccountViewState extends State<AccountView> {
               child: ListTile(
                 leading: const Icon(Icons.person),
                 title: const Text('User ID'),
-                subtitle: Text(authService.userId.value ?? 'No ID'),
+                subtitle: Text(authUserId.value ?? 'No ID'),
               ),
             ),
             gap32,

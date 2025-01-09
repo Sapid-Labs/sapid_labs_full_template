@@ -69,6 +69,12 @@ gh auth login
 | firebase_storage | Adds Firebase storage support. |
 | revenuecat_subscriptions | Adds RevenueCat subscriptions support. |
 
+## State Strategy
+
+Global state exists in global signals. Services registered in get_it can be used to manipulate this state. For example, the `authService` contains functions that can update the `authUserId` and `authEmail` global signals.
+
+Global signals typically exist in the same file as their corresponding service and are prefixed with the service name. For example, `authUserId` exists in the same file as the `AuthService`
+
 ## Features
 
 ### Authentication

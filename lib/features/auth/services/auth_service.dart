@@ -1,14 +1,15 @@
 import 'package:injectable/injectable.dart';
 import 'package:signals/signals_flutter.dart';
 
+final authUserId = signal<String?>(null);
+final authEmail = signal<String?>(null);
+
 @singleton
 class AuthService {
-  final userId = signal<String?>('12345');
-  final email = signal<String?>('test@test.com');
   late final FlutterComputed isAuthenticated;
 
   Future<void> setup() async {
-    isAuthenticated = computed(() => userId.value != null);
+    isAuthenticated = computed(() => authUserId.value != null);
     // Setup logic
   }
 

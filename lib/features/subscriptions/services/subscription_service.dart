@@ -1,6 +1,7 @@
 import 'package:fools_app_template/app/constants.dart';
 import 'package:fools_app_template/app/router.dart';
 import 'package:fools_app_template/app/services.dart';
+import 'package:fools_app_template/features/auth/services/auth_service.dart';
 import 'package:fools_app_template/features/shared/ui/app_name.dart';
 import 'package:fools_app_template/features/shared/utils/text_utils.dart';
 import 'package:flutter/foundation.dart';
@@ -12,24 +13,20 @@ import 'dart:io' show Platform;
 
 import 'package:signals/signals_flutter.dart';
 
+final subscriptionPremium = signal<bool>(false);
+
+final subscriptionOffering = signal<Offering?>(null);
+
 @singleton
 class SubscriptionService extends ChangeNotifier {
   String _premiumId = 'premium';
 
-  final premium = signal<bool>(false);
-
-  final offering = signal<Offering?>(null);
-
-  final totalRecipes = signal<int>(0);
-
-  final countingRecipes = signal<bool>(true);
-
   void setOffering(Offering? val) {
-    offering.value = val;
+    subscriptionOffering.value = val;
   }
 
   void setPremium(bool val) {
-    premium.value = val;
+    subscriptionPremium.value = val;
     notifyListeners();
   }
 
@@ -54,8 +51,7 @@ class SubscriptionService extends ChangeNotifier {
           PurchasesConfiguration(const String.fromEnvironment('ios_sdk_key'));
     }
 
-    await Purchases.configure(
-        configuration..appUserID = authService.userId.value);
+    await Purchases.configure(configuration..appUserID = authUserId.value);
 
     await userSetup();
 
@@ -79,8 +75,6 @@ class SubscriptionService extends ChangeNotifier {
   }
 
   Future<void> userSetup() async {
-    countingRecipes.value = true;
-
     bool vip = isVip();
 
     if (vip) {
@@ -228,6 +222,6 @@ class SubscriptionService extends ChangeNotifier {
       'test@test.com',
     ];
 
-    return vipEmails.contains(authService.email);
+    return vipEmails.contains(authEmail.value);
   }
 }
