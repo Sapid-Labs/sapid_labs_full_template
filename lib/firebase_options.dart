@@ -45,17 +45,17 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions web = FirebaseOptions(
     apiKey: 'AIzaSyBw_0MVMIdZjDWBi0wyehxri3-fjIEGSXg',
-    appId: '1:16190533493:web:fc7122da32a26ccabaed3c',
+    appId: '1:16190533493:web:374c8ce71e2e601abaed3c',
     messagingSenderId: '16190533493',
     projectId: 'stack-fool',
     authDomain: 'stack-fool.firebaseapp.com',
     storageBucket: 'stack-fool.firebasestorage.app',
-    measurementId: 'G-BXMF6KR5L4',
+    measurementId: 'G-TEV4E8NMMS',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDy6B3CF6VwgabImcZiWoj2wv_eWnBJVZs',
-    appId: '1:16190533493:android:42a857facdd16840baed3c',
+    appId: '1:16190533493:android:508cae2ce16369babaed3c',
     messagingSenderId: '16190533493',
     projectId: 'stack-fool',
     storageBucket: 'stack-fool.firebasestorage.app',
@@ -67,6 +67,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '16190533493',
     projectId: 'stack-fool',
     storageBucket: 'stack-fool.firebasestorage.app',
+    iosClientId: '16190533493-rdj9k6catpdg5skmsfiodcojh873ht1m.apps.googleusercontent.com',
     iosBundleId: 'com.example.cotrFlutterApp',
   );
 
@@ -76,6 +77,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '16190533493',
     projectId: 'stack-fool',
     storageBucket: 'stack-fool.firebasestorage.app',
+    iosClientId: '16190533493-rdj9k6catpdg5skmsfiodcojh873ht1m.apps.googleusercontent.com',
     iosBundleId: 'com.example.cotrFlutterApp',
   );
+
 }
