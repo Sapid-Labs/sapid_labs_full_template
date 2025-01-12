@@ -1,10 +1,10 @@
-import 'package:fools_app_template/app/get_it.dart';
-import 'package:fools_app_template/app/router.dart';
-import 'package:fools_app_template/app/services.dart';
+import 'package:foolscript/app/get_it.dart';
+import 'package:foolscript/app/router.dart';
+import 'package:foolscript/app/services.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
-import 'package:fools_app_template/features/settings/services/settings_service.dart';
+import 'package:foolscript/features/settings/services/settings_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:signals/signals_flutter.dart';
 

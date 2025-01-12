@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:fools_app_template/app/router.dart';
+import 'package:foolscript/app/router.dart';
 import 'package:flutter/material.dart';
-import 'package:fools_app_template/features/auth/services/auth_service.dart';
+import 'package:foolscript/features/auth/services/auth_service.dart';
 
 class AuthGuard extends AutoRouteGuard {
   @override

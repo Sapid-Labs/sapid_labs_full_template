@@ -1,13 +1,13 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:fools_app_template/features/auth/ui/account_view.dart';
-import 'package:fools_app_template/features/auth/ui/change_password_view.dart';
-import 'package:fools_app_template/features/auth/ui/reset_password_view.dart';
-import 'package:fools_app_template/features/auth/ui/sign_in_view.dart';
-import 'package:fools_app_template/features/auth/ui/sign_up_view.dart';
-import 'package:fools_app_template/features/auth/utils/auth_guard.dart';
-import 'package:fools_app_template/features/home/ui/home_view.dart';
-import 'package:fools_app_template/features/settings/ui/settings_view.dart';
-import 'package:fools_app_template/features/subscriptions/ui/subscription_view.dart';
+import 'package:foolscript/features/auth/ui/account_view.dart';
+import 'package:foolscript/features/auth/ui/change_password_view.dart';
+import 'package:foolscript/features/auth/ui/reset_password_view.dart';
+import 'package:foolscript/features/auth/ui/sign_in_view.dart';
+import 'package:foolscript/features/auth/ui/sign_up_view.dart';
+import 'package:foolscript/features/auth/utils/auth_guard.dart';
+import 'package:foolscript/features/home/ui/home_view.dart';
+import 'package:foolscript/features/settings/ui/settings_view.dart';
+import 'package:foolscript/features/subscriptions/ui/subscription_view.dart';
 
 part 'router.gr.dart';
 

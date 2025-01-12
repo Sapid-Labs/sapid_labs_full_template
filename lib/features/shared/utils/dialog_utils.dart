@@ -1,4 +1,4 @@
-import 'package:fools_app_template/app/constants.dart';
+import 'package:foolscript/app/constants.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 

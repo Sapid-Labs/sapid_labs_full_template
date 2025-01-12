@@ -1,4 +1,4 @@
-import 'package:fools_app_template/features/shared/utils/text_utils.dart';
+import 'package:foolscript/features/shared/utils/text_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 

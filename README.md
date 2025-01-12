@@ -1,4 +1,4 @@
-# Fool's App Template
+# FoolScript Template
 
 This template repository is designed to kickstart your Flutter application while using an opinionated framework.
 
@@ -7,7 +7,7 @@ This template repository is designed to kickstart your Flutter application while
 To get started, clone the main branch:
 
 ```bash
-git clone --branch https://github.com/Fool-Script/fools_app_template
+git clone --branch https://github.com/Fool-Script/foolscript
 ```
 
 This branch will serve as your app's foundation and it contains generic features that are used by all Flutter apps.
@@ -22,7 +22,7 @@ git merge supabase_auth
 To pull future changes from this template into your project, add the template repository as a remote:
 
 ```bash
-git remote add template https://github.com/Fool-Script/fools_app_template
+git remote add template https://github.com/Fool-Script/foolscript
 ```
 
 To pull updates, simply run:

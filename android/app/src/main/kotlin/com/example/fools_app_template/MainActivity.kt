@@ -1,4 +1,4 @@
-package com.example.fools_app_template
+package com.example.foolscript
 
 import io.flutter.embedding.android.FlutterActivity
 

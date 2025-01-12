@@ -1,4 +1,4 @@
-import 'package:fools_app_template/features/analytics/services/analytics_service_interface.dart';
+import 'package:foolscript/features/analytics/services/analytics_service_interface.dart';
 import 'package:injectable/injectable.dart';
 
 @LazySingleton()
