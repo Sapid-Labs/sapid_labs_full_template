@@ -1,42 +1,20 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:fools_app_template/features/auth/services/auth_service_interface.dart';
-import 'package:injectable/injectable.dart';
-import 'package:signals/signals_flutter.dart';
-
-final authUserId = signal<String?>(null);
-final authEmail = signal<String?>(null);
-final authIsAuthenticated = computed(() => authUserId.value != null);
-
-@singleton
-class AuthService implements AuthServiceInterface {
-  @override
+class AuthServiceInterface {
   Future<void> setup() async {
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
-      if (user == null) {
-        debugPrint('User is currently signed out!');
-      } else {
-        debugPrint('User is signed in!');
-      }
-    });
+    // TODO - Implement setup logic for AuthService
   }
 
-  @override
   Future<void> signUpAnonymously() async {
     // TODO - Implement signUpAnonymously logic
   }
 
-  @override
   Future<void> signInWithGoogle() async {
     // TODO - Implement signInWithGoogle logic
   }
 
-  @override
   Future<void> signInWithApple() async {
     // TODO - Implement signInWithApple logic
   }
 
-  @override
   Future<void> loginWithEmailAndPassword({
     required String email,
     required String password,
@@ -44,7 +22,6 @@ class AuthService implements AuthServiceInterface {
     // TODO - Implement loginWithEmailAndPassword logic
   }
 
-  @override
   Future<void> signUpWithEmailAndPassword({
     required String email,
     required String password,
@@ -52,26 +29,22 @@ class AuthService implements AuthServiceInterface {
     // TODO - Implement signUpWithEmailAndPassword logic
   }
 
-  @override
   Future<void> updatePassword({
     required String password,
   }) async {
     // TODO - Implement updatePassword logic
   }
 
-  @override
   Future<void> resetPassword({
     required String email,
   }) async {
     // TODO - Implement resetPassword logic
   }
 
-  @override
   Future<void> logout() async {
     // TODO - Implement logout logic
   }
 
-  @override
   Future<void> createUser() async {
     // TODO - Implement createUser logic
   }

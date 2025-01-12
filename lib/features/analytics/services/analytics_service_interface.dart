@@ -1,7 +1,4 @@
-import 'package:injectable/injectable.dart';
-
-@LazySingleton()
-class AnalyticsService {
+class AnalyticsServiceInterface {
   Future<void> setup() async {
     // TODO: Implement setup logic for AnalyticsService
   }
