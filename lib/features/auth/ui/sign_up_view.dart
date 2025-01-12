@@ -213,6 +213,8 @@ class _SignUpViewState extends State<SignUpView> with SignalsMixin {
                       ],
                     ),
                     gap16,
+                    OutlinedButton(onPressed: (){}, child: Text('Sign Up Anonymously'),),
+                    gap8,
                     SignInButton(
                       Buttons.Google,
                       onPressed: () {

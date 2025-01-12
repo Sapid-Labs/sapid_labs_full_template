@@ -36,10 +36,10 @@ Future<_i174.GetIt> $initGetIt(
     () => registerModule.sharedPrefs,
     preResolve: true,
   );
-  gh.factory<_i751.AnalyticsService>(() => _i751.AnalyticsService());
   gh.singleton<_i542.SettingsService>(() => _i542.SettingsService());
   gh.singleton<_i413.AuthService>(() => _i413.AuthService());
   gh.singleton<_i506.SubscriptionService>(() => _i506.SubscriptionService());
+  gh.lazySingleton<_i751.AnalyticsService>(() => _i751.AnalyticsService());
   return getIt;
 }
 

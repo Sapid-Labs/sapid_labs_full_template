@@ -18,6 +18,8 @@ class SignInView extends StatefulWidget {
 
 class _SignInViewState extends State<SignInView> with SignalsMixin {
   final _formKey = GlobalKey<FormState>();
+
+  // https://dartsignals.dev/core/signal/#flutter
   late final email = createSignal('');
   late final password = createSignal('');
   late final isLoading = createSignal(false);

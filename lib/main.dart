@@ -32,11 +32,21 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Watch((context) {
       return MaterialApp.router(
-        theme: FlexThemeData.light(scheme: FlexScheme.blueWhale),
-        darkTheme: FlexThemeData.dark(scheme: FlexScheme.blueWhale),
+        theme: FlexThemeData.light(
+          scheme: FlexScheme.blueWhale,
+          subThemesData: subThemesData,
+        ),
+        darkTheme: FlexThemeData.dark(
+          scheme: FlexScheme.blueWhale,
+          subThemesData: subThemesData,
+        ),
         themeMode: settingsThemeMode.value,
         routerConfig: router.config(),
       );
     });
   }
 }
+
+FlexSubThemesData get subThemesData => FlexSubThemesData(
+      defaultRadius: 24,
+    );
