@@ -14,7 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart' as _i460;
 
 import '../features/auth/services/auth_service.dart' as _i413;
 import '../features/settings/services/settings_service.dart' as _i542;
-import '../features/shared/services/analytics_service.dart' as _i751;
+import '../features/analytics/services/analytics_service.dart' as _i751;
 import '../features/shared/services/modules.dart' as _i176;
 import '../features/shared/services/permission_service.dart' as _i901;
 import '../features/subscriptions/services/subscription_service.dart' as _i506;
