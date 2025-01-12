@@ -113,7 +113,6 @@ class _SignUpViewState extends State<SignUpView> with SignalsMixin {
                     TextFormField(
                       decoration: const InputDecoration(
                         labelText: 'Email',
-                        border: OutlineInputBorder(),
                         prefixIcon: Icon(Icons.email_outlined),
                       ),
                       keyboardType: TextInputType.emailAddress,
@@ -133,7 +132,6 @@ class _SignUpViewState extends State<SignUpView> with SignalsMixin {
                     TextFormField(
                       decoration: InputDecoration(
                         labelText: 'Password',
-                        border: const OutlineInputBorder(),
                         prefixIcon: const Icon(Icons.lock_outlined),
                         suffixIcon: IconButton(
                           icon: Icon(
@@ -162,7 +160,6 @@ class _SignUpViewState extends State<SignUpView> with SignalsMixin {
                     TextFormField(
                       decoration: InputDecoration(
                         labelText: 'Confirm Password',
-                        border: const OutlineInputBorder(),
                         prefixIcon: const Icon(Icons.lock_outlined),
                         suffixIcon: IconButton(
                           icon: Icon(

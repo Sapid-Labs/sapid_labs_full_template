@@ -49,4 +49,5 @@ class MainApp extends StatelessWidget {
 
 FlexSubThemesData get subThemesData => FlexSubThemesData(
       defaultRadius: 24,
+      inputDecoratorBorderType: FlexInputBorderType.outline,
     );

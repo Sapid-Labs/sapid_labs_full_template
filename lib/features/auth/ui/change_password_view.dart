@@ -114,7 +114,6 @@ class _ChangePasswordViewState extends State<ChangePasswordView> with SignalsMix
                 TextFormField(
                   decoration: InputDecoration(
                     labelText: 'New Password',
-                    border: const OutlineInputBorder(),
                     prefixIcon: const Icon(Icons.lock_outlined),
                     suffixIcon: IconButton(
                       icon: Icon(
@@ -142,7 +141,6 @@ class _ChangePasswordViewState extends State<ChangePasswordView> with SignalsMix
                 TextFormField(
                   decoration: InputDecoration(
                     labelText: 'Confirm New Password',
-                    border: const OutlineInputBorder(),
                     prefixIcon: const Icon(Icons.lock_outlined),
                     suffixIcon: IconButton(
                       icon: Icon(

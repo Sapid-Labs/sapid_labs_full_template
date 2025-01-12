@@ -117,7 +117,6 @@ class _ResetPasswordViewState extends State<ResetPasswordView>
                 TextFormField(
                   decoration: const InputDecoration(
                     labelText: 'Email',
-                    border: OutlineInputBorder(),
                     prefixIcon: Icon(Icons.email_outlined),
                   ),
                   keyboardType: TextInputType.emailAddress,

@@ -95,7 +95,6 @@ class _SignInViewState extends State<SignInView> with SignalsMixin {
                   TextFormField(
                     decoration: const InputDecoration(
                       labelText: 'Email',
-                      border: OutlineInputBorder(),
                     ),
                     keyboardType: TextInputType.emailAddress,
                     enabled: !isLoading.value,
@@ -114,7 +113,6 @@ class _SignInViewState extends State<SignInView> with SignalsMixin {
                   TextFormField(
                     decoration: const InputDecoration(
                       labelText: 'Password',
-                      border: OutlineInputBorder(),
                     ),
                     obscureText: true,
                     enabled: !isLoading.value,
