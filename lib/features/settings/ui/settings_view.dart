@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:fools_app_template/app/constants.dart';
+import 'package:foolscript/app/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:fools_app_template/features/settings/services/settings_service.dart';
+import 'package:foolscript/features/settings/services/settings_service.dart';
 import 'package:signals/signals_flutter.dart';
 
 @RoutePage()

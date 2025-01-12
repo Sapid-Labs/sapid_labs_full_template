@@ -2,19 +2,19 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "fools_app_template",
+      "name": "foolscript",
       "request": "launch",
       "type": "dart",
       "args": ["--dart-define-from-file=assets/config.json", "--web-port=5000"]
     },
     {
-      "name": "fools_app_template (profile mode)",
+      "name": "foolscript (profile mode)",
       "request": "launch",
       "type": "dart",
       "flutterMode": "profile"
     },
     {
-      "name": "fools_app_template (release mode)",
+      "name": "foolscript (release mode)",
       "request": "launch",
       "type": "dart",
       "flutterMode": "release",

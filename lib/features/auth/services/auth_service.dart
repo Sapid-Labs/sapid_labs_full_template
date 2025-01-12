@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:fools_app_template/features/auth/services/auth_service_interface.dart';
+import 'package:foolscript/features/auth/services/auth_service_interface.dart';
 import 'package:injectable/injectable.dart';
 import 'package:signals/signals_flutter.dart';
 

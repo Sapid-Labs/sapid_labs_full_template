@@ -1,9 +1,9 @@
-import 'package:fools_app_template/app/constants.dart';
-import 'package:fools_app_template/app/router.dart';
-import 'package:fools_app_template/app/services.dart';
-import 'package:fools_app_template/features/auth/services/auth_service.dart';
-import 'package:fools_app_template/features/shared/ui/app_name.dart';
-import 'package:fools_app_template/features/shared/utils/text_utils.dart';
+import 'package:foolscript/app/constants.dart';
+import 'package:foolscript/app/router.dart';
+import 'package:foolscript/app/services.dart';
+import 'package:foolscript/features/auth/services/auth_service.dart';
+import 'package:foolscript/features/shared/ui/app_name.dart';
+import 'package:foolscript/features/shared/utils/text_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:fools_app_template/app/services.dart';
+import 'package:foolscript/app/services.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:recase/recase.dart';

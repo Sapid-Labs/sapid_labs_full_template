@@ -1,4 +1,4 @@
-import 'package:fools_app_template/app/config.dart';
+import 'package:foolscript/app/config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
