@@ -1,4 +1,3 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:foolscript/app/get_it.dart';
 import 'package:foolscript/app/router.dart';
 import 'package:foolscript/app/services.dart';
@@ -15,8 +14,6 @@ Future<void> main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
   usePathUrlStrategy();
-
-  await Firebase.initializeApp();
 
   GetIt.instance.registerSingleton(AppRouter());
 
