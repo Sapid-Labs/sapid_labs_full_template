@@ -11,7 +11,7 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  int selectedIndex = 0;
+
 
   @override
   Widget build(BuildContext context) {
@@ -20,26 +20,7 @@ class _HomeViewState extends State<HomeView> {
         title: const Text('Home'),
       ),
       drawer: HomeDrawer(),
-      body: Center(
-        child: selectedIndex == 0 ? Text('Hot') : Text('Cold'),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-          currentIndex: selectedIndex,
-          onTap: (value) {
-            setState(() {
-              selectedIndex = value;
-            });
-          },
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.whatshot),
-              label: 'One',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.snowing),
-              label: 'Two',
-            ),
-          ]),
+      body: ListView()
     );
   }
 }
