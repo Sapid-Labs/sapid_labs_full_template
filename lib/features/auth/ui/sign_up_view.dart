@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
 import 'package:foolscript/features/shared/ui/loading_overlay.dart';
+import 'package:foolscript/features/shared/ui/loading_stack.dart';
 import 'package:signals/signals_flutter.dart';
 
 @RoutePage()
@@ -97,179 +98,177 @@ class _SignUpViewState extends State<SignUpView> with SignalsMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Scaffold(
-          appBar: AppBar(
-            title: const Text('Create Account'),
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () => router.maybePop(),
-            ),
+    return LoadingStack(
+      isLoading: isLoading.value,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Create Account'),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => router.maybePop(),
           ),
-          body: Watch((context) {
-            return SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Form(
-                  key: _formKey,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        AppLogo(sideLength: 200),
-                        gap24,
-                        Text(
-                          'Join Us',
-                          style: Theme.of(context).textTheme.headlineMedium,
-                          textAlign: TextAlign.center,
+        ),
+        body: Watch((context) {
+          return SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Form(
+                key: _formKey,
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      AppLogo(sideLength: 200),
+                      gap24,
+                      Text(
+                        'Join Us',
+                        style: Theme.of(context).textTheme.headlineMedium,
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Create an account to get started',
+                        style: Theme.of(context).textTheme.bodyLarge,
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 32),
+                      TextFormField(
+                        decoration: const InputDecoration(
+                          labelText: 'Email',
+                          prefixIcon: Icon(Icons.email_outlined),
                         ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Create an account to get started',
-                          style: Theme.of(context).textTheme.bodyLarge,
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 32),
-                        TextFormField(
-                          decoration: const InputDecoration(
-                            labelText: 'Email',
-                            prefixIcon: Icon(Icons.email_outlined),
-                          ),
-                          keyboardType: TextInputType.emailAddress,
-                          enabled: !isLoading.value,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter your email';
-                            }
-                            if (!value.contains('@')) {
-                              return 'Please enter a valid email';
-                            }
-                            return null;
-                          },
-                          onChanged: (value) => email.value = value,
-                        ),
-                        gap16,
-                        TextFormField(
-                          decoration: InputDecoration(
-                            labelText: 'Password',
-                            prefixIcon: const Icon(Icons.lock_outlined),
-                            suffixIcon: IconButton(
-                              icon: Icon(
-                                showPassword.value
-                                    ? Icons.visibility_off
-                                    : Icons.visibility,
-                              ),
-                              onPressed: () =>
-                                  showPassword.value = !showPassword.value,
+                        keyboardType: TextInputType.emailAddress,
+                        enabled: !isLoading.value,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your email';
+                          }
+                          if (!value.contains('@')) {
+                            return 'Please enter a valid email';
+                          }
+                          return null;
+                        },
+                        onChanged: (value) => email.value = value,
+                      ),
+                      gap16,
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText: 'Password',
+                          prefixIcon: const Icon(Icons.lock_outlined),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              showPassword.value
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
                             ),
-                          ),
-                          obscureText: !showPassword.value,
-                          enabled: !isLoading.value,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter a password';
-                            }
-                            if (value.length < 6) {
-                              return 'Password must be at least 6 characters';
-                            }
-                            return null;
-                          },
-                          onChanged: (value) => password.value = value,
-                        ),
-                        gap16,
-                        TextFormField(
-                          decoration: InputDecoration(
-                            labelText: 'Confirm Password',
-                            prefixIcon: const Icon(Icons.lock_outlined),
-                            suffixIcon: IconButton(
-                              icon: Icon(
-                                showPassword.value
-                                    ? Icons.visibility_off
-                                    : Icons.visibility,
-                              ),
-                              onPressed: () =>
-                                  showPassword.value = !showPassword.value,
-                            ),
-                          ),
-                          obscureText: !showPassword.value,
-                          enabled: !isLoading.value,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please confirm your password';
-                            }
-                            if (value != password.value) {
-                              return 'Passwords do not match';
-                            }
-                            return null;
-                          },
-                          onChanged: (value) => confirmPassword.value = value,
-                        ),
-                        gap24,
-                        ElevatedButton(
-                          onPressed: isLoading.value ? null : signUpWithEmail,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                            child: isLoading.value
-                                ? const SizedBox(
-                                    height: 20,
-                                    width: 20,
-                                    child: CircularProgressIndicator(
-                                        strokeWidth: 2),
-                                  )
-                                : const Text('Create Account'),
+                            onPressed: () =>
+                                showPassword.value = !showPassword.value,
                           ),
                         ),
-                        gap16,
-                        Row(
-                          children: const [
-                            Expanded(child: Divider()),
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 16),
-                              child: Text('OR'),
+                        obscureText: !showPassword.value,
+                        enabled: !isLoading.value,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter a password';
+                          }
+                          if (value.length < 6) {
+                            return 'Password must be at least 6 characters';
+                          }
+                          return null;
+                        },
+                        onChanged: (value) => password.value = value,
+                      ),
+                      gap16,
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText: 'Confirm Password',
+                          prefixIcon: const Icon(Icons.lock_outlined),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              showPassword.value
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
                             ),
-                            Expanded(child: Divider()),
-                          ],
+                            onPressed: () =>
+                                showPassword.value = !showPassword.value,
+                          ),
                         ),
-                        gap16,
-                        OutlinedButton(
-                          onPressed: () async {
-                            if (isLoading.value) return;
-                            await signUpAnonymously();
-                          },
-                          child: Text('Sign Up Anonymously'),
+                        obscureText: !showPassword.value,
+                        enabled: !isLoading.value,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please confirm your password';
+                          }
+                          if (value != password.value) {
+                            return 'Passwords do not match';
+                          }
+                          return null;
+                        },
+                        onChanged: (value) => confirmPassword.value = value,
+                      ),
+                      gap24,
+                      ElevatedButton(
+                        onPressed: isLoading.value ? null : signUpWithEmail,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          child: isLoading.value
+                              ? const SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child:
+                                      CircularProgressIndicator(strokeWidth: 2),
+                                )
+                              : const Text('Create Account'),
                         ),
-                        gap8,
-                        SignInButton(
-                          Buttons.Google,
-                          onPressed: () {
-                            isLoading.value
-                                ? null
-                                : () async => await signUpWithGoogle();
-                          },
-                        ),
-                        gap24,
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text('Already have an account?'),
-                            TextButton(
-                              onPressed: () =>
-                                  router.replace(const SignInRoute()),
-                              child: const Text('Sign In'),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                      ),
+                      gap16,
+                      Row(
+                        children: const [
+                          Expanded(child: Divider()),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 16),
+                            child: Text('OR'),
+                          ),
+                          Expanded(child: Divider()),
+                        ],
+                      ),
+                      gap16,
+                      OutlinedButton(
+                        onPressed: () async {
+                          if (isLoading.value) return;
+                          await signUpAnonymously();
+                        },
+                        child: Text('Sign Up Anonymously'),
+                      ),
+                      gap8,
+                      SignInButton(
+                        Buttons.Google,
+                        onPressed: () {
+                          isLoading.value
+                              ? null
+                              : () async => await signUpWithGoogle();
+                        },
+                      ),
+                      gap24,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text('Already have an account?'),
+                          TextButton(
+                            onPressed: () =>
+                                router.replace(const SignInRoute()),
+                            child: const Text('Sign In'),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ),
-            );
-          }),
-        ),
-        if (isLoading.value) LoadingOverlay()
-      ],
+            ),
+          );
+        }),
+      ),
     );
   }
 }
