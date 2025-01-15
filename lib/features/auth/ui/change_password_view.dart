@@ -36,6 +36,9 @@ class _ChangePasswordViewState extends State<ChangePasswordView> with SignalsMix
       isSuccess.value = true;
     } catch (e) {
       error.value = 'Failed to update password: ${e.toString()}';
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.toString())),
+      );
     } finally {
       isLoading.value = false;
     }
@@ -103,14 +106,6 @@ class _ChangePasswordViewState extends State<ChangePasswordView> with SignalsMix
                   textAlign: TextAlign.center,
                 ),
                 gap32,
-                if (error.value != null) ...[
-                  Text(
-                    error.value!,
-                    style: context.bodyMedium.error,
-                    textAlign: TextAlign.center,
-                  ),
-                  gap16,
-                ],
                 TextFormField(
                   decoration: InputDecoration(
                     labelText: 'New Password',

@@ -43,6 +43,9 @@ class _SignUpViewState extends State<SignUpView> with SignalsMixin {
       }
     } catch (e) {
       error.value = 'Failed to sign up: ${e.toString()}';
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.toString())),
+      );
     } finally {
       isLoading.value = false;
     }
@@ -61,6 +64,9 @@ class _SignUpViewState extends State<SignUpView> with SignalsMixin {
       }
     } catch (e) {
       error.value = 'Failed to sign up with Google: ${e.toString()}';
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.toString())),
+      );
     } finally {
       isLoading.value = false;
     }
@@ -100,16 +106,6 @@ class _SignUpViewState extends State<SignUpView> with SignalsMixin {
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 32),
-                    if (error.value != null)
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 16.0),
-                        child: Text(
-                          error.value!,
-                          style: TextStyle(
-                              color: Theme.of(context).colorScheme.error),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
                     TextFormField(
                       decoration: const InputDecoration(
                         labelText: 'Email',
@@ -193,7 +189,8 @@ class _SignUpViewState extends State<SignUpView> with SignalsMixin {
                             ? const SizedBox(
                                 height: 20,
                                 width: 20,
-                                child: CircularProgressIndicator(strokeWidth: 2),
+                                child:
+                                    CircularProgressIndicator(strokeWidth: 2),
                               )
                             : const Text('Create Account'),
                       ),
@@ -210,7 +207,10 @@ class _SignUpViewState extends State<SignUpView> with SignalsMixin {
                       ],
                     ),
                     gap16,
-                    OutlinedButton(onPressed: (){}, child: Text('Sign Up Anonymously'),),
+                    OutlinedButton(
+                      onPressed: () {},
+                      child: Text('Sign Up Anonymously'),
+                    ),
                     gap8,
                     SignInButton(
                       Buttons.Google,

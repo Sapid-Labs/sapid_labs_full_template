@@ -48,6 +48,9 @@ class _SignInViewState extends State<SignInView> with SignalsMixin {
     } catch (e) {
       debugPrint('e: $e');
       error.value = e.toString();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.toString())),
+      );
     } finally {
       isLoading.value = false;
     }
@@ -70,6 +73,9 @@ class _SignInViewState extends State<SignInView> with SignalsMixin {
     } catch (e) {
       debugPrint('e: $e');
       error.value = e.toString();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.toString())),
+      );
     } finally {
       isLoading.value = false;
     }
@@ -91,16 +97,6 @@ class _SignInViewState extends State<SignInView> with SignalsMixin {
                 children: [
                   AppLogo(sideLength: 200),
                   gap24,
-                  if (error.value != null)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0),
-                      child: Text(
-                        error.value!,
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.error),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
                   TextFormField(
                     decoration: const InputDecoration(
                       labelText: 'Email',

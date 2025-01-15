@@ -35,6 +35,9 @@ class _ResetPasswordViewState extends State<ResetPasswordView>
       isSuccess.value = true;
     } catch (e) {
       error.value = 'Failed to send reset email: ${e.toString()}';
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.toString())),
+      );
     } finally {
       isLoading.value = false;
     }
@@ -106,14 +109,6 @@ class _ResetPasswordViewState extends State<ResetPasswordView>
                   textAlign: TextAlign.center,
                 ),
                 gap32,
-                if (error.value != null) ...[
-                  Text(
-                    error.value!,
-                    style: context.bodyMedium.error,
-                    textAlign: TextAlign.center,
-                  ),
-                  gap16,
-                ],
                 TextFormField(
                   decoration: const InputDecoration(
                     labelText: 'Email',
