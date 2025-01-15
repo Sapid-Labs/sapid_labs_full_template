@@ -10,6 +10,9 @@ import 'package:get_it/get_it.dart';
 import 'package:signals/signals_flutter.dart';
 
 Future<void> main() async {
+  // Comment to activate Signals logging
+  SignalsObserver.instance = null;
+
   WidgetsFlutterBinding.ensureInitialized();
   usePathUrlStrategy();
 

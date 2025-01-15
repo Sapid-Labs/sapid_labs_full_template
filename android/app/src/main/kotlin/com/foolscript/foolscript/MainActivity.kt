@@ -1,4 +1,4 @@
-package com.example.foolscript
+package com.foolscript.foolscript
 
 import io.flutter.embedding.android.FlutterActivity
 

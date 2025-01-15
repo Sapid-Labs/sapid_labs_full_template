@@ -6,7 +6,6 @@ import 'package:foolscript/features/auth/services/auth_service.dart';
 class AuthGuard extends AutoRouteGuard {
   @override
   void onNavigation(NavigationResolver resolver, StackRouter router) async {
-    debugPrint('Basic observer - AuthGuard: ${resolver.hashCode}');
     debugPrint('Basic observer - stack: ${router.stack.map((e) => e.name)}');
     try {
       bool isAuthenticated = authIsAuthenticated.value;

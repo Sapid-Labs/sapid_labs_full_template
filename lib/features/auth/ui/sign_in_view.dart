@@ -26,8 +26,10 @@ class _SignInViewState extends State<SignInView> with SignalsMixin {
   late final error = createSignal<String?>(null);
 
   Future<void> _handleEmailSignIn() async {
+    debugPrint('Sign In');
     if (!_formKey.currentState!.validate()) return;
 
+    debugPrint('email: ${email.value}');
     try {
       isLoading.value = true;
       error.value = null;
@@ -40,9 +42,12 @@ class _SignInViewState extends State<SignInView> with SignalsMixin {
       if (mounted) {
         // Navigate to home or intended screen after successful login
         router.replaceAll([const HomeRoute()]);
+      } else {
+        debugPrint('Not mounted');
       }
     } catch (e) {
-      error.value = 'Failed to sign in: ${e.toString()}';
+      debugPrint('e: $e');
+      error.value = e.toString();
     } finally {
       isLoading.value = false;
     }
@@ -53,14 +58,18 @@ class _SignInViewState extends State<SignInView> with SignalsMixin {
       isLoading.value = true;
       error.value = null;
 
+      debugPrint('Signing in with Google');
       await authService.signInWithGoogle();
 
       if (mounted) {
         // Navigate to home or intended screen after successful login
         router.replaceAll([const HomeRoute()]);
+      } else {
+        debugPrint('Not mounted');
       }
     } catch (e) {
-      error.value = 'Failed to sign in with Google: ${e.toString()}';
+      debugPrint('e: $e');
+      error.value = e.toString();
     } finally {
       isLoading.value = false;
     }
@@ -139,14 +148,9 @@ class _SignInViewState extends State<SignInView> with SignalsMixin {
                         : const Text('Sign In'),
                   ),
                   gap16,
-                  SignInButton(
-                    Buttons.Google,
-                    onPressed: () {
-                      isLoading.value
-                          ? null
-                          : () async => await _handleGoogleSignIn();
-                    },
-                  ),
+                  SignInButton(Buttons.Google, onPressed: () {
+                    if (!isLoading.value) _handleGoogleSignIn();
+                  }),
                   gap16,
                   gap24,
                   Row(

@@ -45,12 +45,12 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions web = FirebaseOptions(
     apiKey: 'AIzaSyBw_0MVMIdZjDWBi0wyehxri3-fjIEGSXg',
-    appId: '1:16190533493:web:374c8ce71e2e601abaed3c',
+    appId: '1:16190533493:web:e00963ff4557e31cbaed3c',
     messagingSenderId: '16190533493',
     projectId: 'stack-fool',
     authDomain: 'stack-fool.firebaseapp.com',
     storageBucket: 'stack-fool.firebasestorage.app',
-    measurementId: 'G-TEV4E8NMMS',
+    measurementId: 'G-E5JLBKB7G7',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
@@ -63,22 +63,22 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyB14bWP07rgBZRj48bElAkvY6vtv3aJnbo',
-    appId: '1:16190533493:ios:14f8dbb6ba577a12baed3c',
+    appId: '1:16190533493:ios:c9aab911c69d80d7baed3c',
     messagingSenderId: '16190533493',
     projectId: 'stack-fool',
     storageBucket: 'stack-fool.firebasestorage.app',
-    iosClientId: '16190533493-rdj9k6catpdg5skmsfiodcojh873ht1m.apps.googleusercontent.com',
-    iosBundleId: 'com.example.cotrFlutterApp',
+    iosClientId: '16190533493-ma7a2ik90j4j83sa4sqt5vn5abhanjj6.apps.googleusercontent.com',
+    iosBundleId: 'com.foolscript.foolscript',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyB14bWP07rgBZRj48bElAkvY6vtv3aJnbo',
-    appId: '1:16190533493:ios:14f8dbb6ba577a12baed3c',
+    appId: '1:16190533493:ios:c9aab911c69d80d7baed3c',
     messagingSenderId: '16190533493',
     projectId: 'stack-fool',
     storageBucket: 'stack-fool.firebasestorage.app',
-    iosClientId: '16190533493-rdj9k6catpdg5skmsfiodcojh873ht1m.apps.googleusercontent.com',
-    iosBundleId: 'com.example.cotrFlutterApp',
+    iosClientId: '16190533493-ma7a2ik90j4j83sa4sqt5vn5abhanjj6.apps.googleusercontent.com',
+    iosBundleId: 'com.foolscript.foolscript',
   );
 
 }
