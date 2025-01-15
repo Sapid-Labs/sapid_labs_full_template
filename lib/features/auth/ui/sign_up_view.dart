@@ -25,7 +25,7 @@ class _SignUpViewState extends State<SignUpView> with SignalsMixin {
   late final error = createSignal<String?>(null);
   late final showPassword = createSignal(false);
 
-  Future<void> _handleEmailSignUp() async {
+  Future<void> signUpWithEmail() async {
     if (!_formKey.currentState!.validate()) return;
 
     try {
@@ -51,7 +51,7 @@ class _SignUpViewState extends State<SignUpView> with SignalsMixin {
     }
   }
 
-  Future<void> _handleGoogleSignUp() async {
+  Future<void> signUpWithGoogle() async {
     try {
       isLoading.value = true;
       error.value = null;
@@ -64,6 +64,28 @@ class _SignUpViewState extends State<SignUpView> with SignalsMixin {
       }
     } catch (e) {
       error.value = 'Failed to sign up with Google: ${e.toString()}';
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.toString())),
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> signUpAnonymously() async {
+    debugPrint('Sign Up Anonymously');
+    try {
+      isLoading.value = true;
+      error.value = null;
+
+      await authService.signUpAnonymously();
+
+      if (mounted) {
+        // Navigate to home or intended screen after successful signup
+        router.replaceAll([const HomeRoute()]);
+      }
+    } catch (e) {
+      error.value = 'Failed to sign up anonymously: ${e.toString()}';
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(e.toString())),
       );
@@ -182,7 +204,7 @@ class _SignUpViewState extends State<SignUpView> with SignalsMixin {
                     ),
                     gap24,
                     ElevatedButton(
-                      onPressed: isLoading.value ? null : _handleEmailSignUp,
+                      onPressed: isLoading.value ? null : signUpWithEmail,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 12),
                         child: isLoading.value
@@ -208,7 +230,10 @@ class _SignUpViewState extends State<SignUpView> with SignalsMixin {
                     ),
                     gap16,
                     OutlinedButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        if (isLoading.value) return;
+                        await signUpAnonymously();
+                      },
                       child: Text('Sign Up Anonymously'),
                     ),
                     gap8,
@@ -217,7 +242,7 @@ class _SignUpViewState extends State<SignUpView> with SignalsMixin {
                       onPressed: () {
                         isLoading.value
                             ? null
-                            : () async => await _handleGoogleSignUp();
+                            : () async => await signUpWithGoogle();
                       },
                     ),
                     gap24,
