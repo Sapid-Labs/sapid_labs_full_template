@@ -149,23 +149,23 @@ class ColorUtils {
 }
 
 extension FastColor on BuildContext {
-  Color get primaryColor => Theme.of(this).colorScheme.primary;
+  Color get colorPrimary => Theme.of(this).colorScheme.primary;
 
-  Color get secondaryColor => Theme.of(this).colorScheme.secondary;
+  Color get colorSecondary => Theme.of(this).colorScheme.secondary;
 
-  Color get tertiaryColor => Theme.of(this).colorScheme.tertiary;
+  Color get colorTertiary => Theme.of(this).colorScheme.tertiary;
 
-  Color get errorColor => Theme.of(this).colorScheme.error;
+  Color get colorError => Theme.of(this).colorScheme.error;
 
-  Color get surfaceColor => Theme.of(this).colorScheme.surface;
+  Color get colorSurface => Theme.of(this).colorScheme.surface;
 
-  Color get onPrimaryColor => Theme.of(this).colorScheme.onPrimary;
+  Color get colorOnPrimary => Theme.of(this).colorScheme.onPrimary;
 
-  Color get onSecondaryColor => Theme.of(this).colorScheme.onSecondary;
+  Color get colorOnSecondary => Theme.of(this).colorScheme.onSecondary;
 
-  Color get onTertiaryColor => Theme.of(this).colorScheme.onTertiary;
+  Color get colorOnTertiary => Theme.of(this).colorScheme.onTertiary;
 
-  Color get onErrorColor => Theme.of(this).colorScheme.onError;
+  Color get colorOnError => Theme.of(this).colorScheme.onError;
 
-  Color get onSurfaceColor => Theme.of(this).colorScheme.onSurface;
+  Color get colorOnSurface => Theme.of(this).colorScheme.onSurface;
 }
