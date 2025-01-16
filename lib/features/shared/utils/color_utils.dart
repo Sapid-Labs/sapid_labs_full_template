@@ -35,7 +35,8 @@ class ColorUtils {
   static Color lighten(Color color, [double amount = .1]) {
     assert(amount >= 0 && amount <= 1);
     final hsl = HSLColor.fromColor(color);
-    final hslLight = hsl.withLightness((hsl.lightness + amount).clamp(0.0, 1.0));
+    final hslLight =
+        hsl.withLightness((hsl.lightness + amount).clamp(0.0, 1.0));
     return hslLight.toColor();
   }
 
@@ -75,7 +76,8 @@ class ColorUtils {
   }
 
   // Gradient Generation
-  static List<Color> generateGradient(Color startColor, Color endColor, int steps) {
+  static List<Color> generateGradient(
+      Color startColor, Color endColor, int steps) {
     List<Color> colors = [];
     for (int i = 0; i < steps; i++) {
       colors.add(blend(startColor, endColor, i / (steps - 1)));
@@ -144,4 +146,26 @@ class ColorUtils {
   static HSVColor toHSV(Color color) {
     return HSVColor.fromColor(color);
   }
+}
+
+extension FastColor on BuildContext {
+  Color get primaryColor => Theme.of(this).colorScheme.primary;
+
+  Color get secondaryColor => Theme.of(this).colorScheme.secondary;
+
+  Color get tertiaryColor => Theme.of(this).colorScheme.tertiary;
+
+  Color get errorColor => Theme.of(this).colorScheme.error;
+
+  Color get surfaceColor => Theme.of(this).colorScheme.surface;
+
+  Color get onPrimaryColor => Theme.of(this).colorScheme.onPrimary;
+
+  Color get onSecondaryColor => Theme.of(this).colorScheme.onSecondary;
+
+  Color get onTertiaryColor => Theme.of(this).colorScheme.onTertiary;
+
+  Color get onErrorColor => Theme.of(this).colorScheme.onError;
+
+  Color get onSurfaceColor => Theme.of(this).colorScheme.onSurface;
 }
