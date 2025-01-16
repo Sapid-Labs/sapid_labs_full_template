@@ -202,7 +202,7 @@ class SubscriptionService extends ChangeNotifier {
                   ),
                   child: Text(
                     'Get Premium',
-                    style: context.titleLarge.onPrimary.bold,
+                    style: context.titleLarge.colorOnPrimary.bold,
                   ),
                 ),
               ],

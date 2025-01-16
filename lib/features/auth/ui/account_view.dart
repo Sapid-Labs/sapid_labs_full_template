@@ -72,7 +72,7 @@ class _AccountViewState extends State<AccountView> {
                 backgroundColor: Theme.of(context).colorScheme.primary,
                 child: Text(
                   (authEmail.value ?? '?')[0].toUpperCase(),
-                  style: context.displayMedium.white,
+                  style: context.displayMedium.colorWhite,
                 ),
               ),
             ),

@@ -168,4 +168,18 @@ extension FastColor on BuildContext {
   Color get colorOnError => Theme.of(this).colorScheme.onError;
 
   Color get colorOnSurface => Theme.of(this).colorScheme.onSurface;
+
+  Color get colorSurfaceTint => Theme.of(this).colorScheme.surfaceTint;
+
+  Color get colorBackground => Theme.of(this).colorScheme.background;
+
+  Color get colorOnBackground => Theme.of(this).colorScheme.onBackground;
+
+  Color get colorInversePrimary => Theme.of(this).colorScheme.inversePrimary;
+
+  Color get colorInverseSurface => Theme.of(this).colorScheme.inverseSurface;
+
+  Color get colorOnInverseSurface => Theme.of(this).colorScheme.onInverseSurface;
+
+  Color get colorOutline => Theme.of(this).colorScheme.onSurface.withOpacity(0.12);
 }
