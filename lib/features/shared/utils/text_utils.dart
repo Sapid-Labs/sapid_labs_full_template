@@ -110,7 +110,8 @@ class TextUtils {
 }
 
 extension FastTextStyle on BuildContext {
-  TextTheme get textTheme => GoogleFonts.figtreeTextTheme();
+  TextTheme get textTheme =>
+      GoogleFonts.figtreeTextTheme(Theme.of(this).textTheme);
 
   TextStyle get bodySmall => textTheme.bodySmall!;
 
