@@ -3,6 +3,14 @@ import 'package:injectable/injectable.dart';
 
 import 'get_it.config.dart';
 
+const firebase = Environment('firebase');
+const supabase = Environment('supabase');
+const appwrite = Environment('appwrite');
+const pocketbase = Environment('pocketbase');
+const amplitude = Environment('amplitude');
+const posthog = Environment('posthog');
+const firebaseAnalytics = Environment('firebaseAnalytics');
+
 final getIt = GetIt.instance;
 
 @InjectableInit(
@@ -10,4 +18,14 @@ final getIt = GetIt.instance;
   preferRelativeImports: true, // default
   asExtension: false, // default
 )
-Future<void> configureDependencies() async => await $initGetIt(getIt);
+Future<void> configureDependencies() async => await $initGetIt(
+      getIt,
+      environmentFilter: NoEnvOrContainsAny(
+        {
+          // firebase, supabase, pocketbase, appwrite
+          const String.fromEnvironment('STACK_PAAS', defaultValue: 'firebase'),
+          // amplitude, posthog, firebaseAnalytics
+          const String.fromEnvironment('STACK_ANALYTICS', defaultValue: 'amplitude'),
+        },
+      ),
+    );

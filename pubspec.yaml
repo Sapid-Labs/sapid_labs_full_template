@@ -8,6 +8,7 @@ environment:
 
 dependencies:
   auto_route: ^9.2.2
+  cloud_firestore: ^5.6.2
   collection: ^1.17.1
   csv: ^6.0.0
   device_info_plus: ^11.1.1
@@ -19,6 +20,8 @@ dependencies:
   flutter_web_plugins:
     sdk: flutter 
   flutter_svg: ^2.0.14  
+  firebase_auth: ^5.4.1
+  firebase_core: ^3.10.1
   get_it: ^8.0.3 
   google_fonts: ^6.2.1 
   google_sign_in: ^6.2.2
