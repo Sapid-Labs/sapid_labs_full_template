@@ -4,7 +4,6 @@ import 'package:foolscript/app/get_it.dart';
 import 'package:foolscript/features/auth/services/auth_service.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:injectable/injectable.dart';
-import 'package:signals/signals_flutter.dart';
 
 @firebase
 @Singleton(as: AuthService)

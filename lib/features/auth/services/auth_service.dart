@@ -1,3 +1,6 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:foolscript/features/auth/services/firebase_auth_service.dart';
+import 'package:foolscript/features/auth/services/supabase_auth_service.dart';
 import 'package:signals/signals_flutter.dart';
 
 final authUserId = signal<String?>(null);
@@ -6,52 +9,62 @@ final authIsAuthenticated = computed(() => authUserId.value != null);
 
 abstract class AuthService {
   Future<void> setup() async {
-    // TODO - Implement setup logic for AuthService
+    FirebaseAuthService().setup();
+    SupabaseAuthService().setup();
   }
 
   Future<void> signUpAnonymously() async {
-    // TODO - Implement signUpAnonymously logic
+    FirebaseAuthService().signUpAnonymously();
+    SupabaseAuthService().signUpAnonymously();
   }
 
   Future<void> signInWithGoogle() async {
-    // TODO - Implement signInWithGoogle logic
+    FirebaseAuthService().signInWithGoogle();
+    SupabaseAuthService().signInWithGoogle();
   }
 
   Future<void> signInWithApple() async {
-    // TODO - Implement signInWithApple logic
+    FirebaseAuthService().signInWithApple();
+    SupabaseAuthService().signInWithApple();
   }
 
   Future<void> loginWithEmailAndPassword({
     required String email,
     required String password,
   }) async {
-    // TODO - Implement loginWithEmailAndPassword logic
+    FirebaseAuthService().loginWithEmailAndPassword(email: email, password: password);
+    SupabaseAuthService().loginWithEmailAndPassword(email: email, password: password);
   }
 
   Future<void> signUpWithEmailAndPassword({
     required String email,
     required String password,
   }) async {
-    // TODO - Implement signUpWithEmailAndPassword logic
+    FirebaseAuthService().signUpWithEmailAndPassword(email: email, password: password);
+    SupabaseAuthService().signUpWithEmailAndPassword(email: email, password: password);
   }
 
   Future<void> updatePassword({
     required String password,
   }) async {
-    // TODO - Implement updatePassword logic
+    FirebaseAuthService().updatePassword(password: password);
+    SupabaseAuthService().updatePassword(password: password);
   }
 
   Future<void> resetPassword({
     required String email,
   }) async {
-    // TODO - Implement resetPassword logic
+    FirebaseAuthService().resetPassword(email: email);
+    SupabaseAuthService().resetPassword(email: email);
   }
 
   Future<void> logout() async {
-    // TODO - Implement logout logic
+    FirebaseAuthService().logout();
+    SupabaseAuthService().logout();
   }
 
   Future<void> createUser() async {
-    // TODO - Implement createUser logic
+    FirebaseAuthService().createUser();
+    SupabaseAuthService().createUser();
   }
 }
