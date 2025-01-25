@@ -31,6 +31,13 @@ assets/*.config
 .project
 .settings/
 
+# Fastlane related
+ios/fastlane/report.xml
+ios/fastlane/Preview.html
+android/fastlane/report.xml
+android/fastlane/Preview.html
+.env*
+
 # Flutter repo-specific
 /bin/cache/
 /bin/internal/bootstrap.bat
