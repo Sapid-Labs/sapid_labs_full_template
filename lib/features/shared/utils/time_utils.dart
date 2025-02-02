@@ -1,6 +1,6 @@
 import 'package:intl/intl.dart';
 
-class DateUtils {
+class TimeUtils {
   static String getFormattedDate(DateTime date) {
     return "${date.day}/${date.month}/${date.year}";
   }
