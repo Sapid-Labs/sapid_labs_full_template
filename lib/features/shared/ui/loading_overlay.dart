@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sapid_labs/features/shared/ui/loading_indicator.dart';
+import 'package:slapp/features/shared/ui/loading_indicator.dart';
 
 class LoadingOverlay extends StatelessWidget {
   const LoadingOverlay({super.key});

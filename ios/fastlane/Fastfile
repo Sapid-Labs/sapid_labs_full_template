@@ -29,7 +29,7 @@ platform :ios do
     versionCode = bump_version_code
     version_name = bump_version_name 
     sh("flutter","build","ipa","--build-name", "100.0.#{version_name}","--dart-define-from-file=assets/config.json")
-    upload_to_app_store(ipa: "../build/ios/ipa/sapid_labs.ipa",
+    upload_to_app_store(ipa: "../build/ios/ipa/sapidlabs.ipa",
     submit_for_review: true,
     automatic_release: true,
     force: true,
@@ -46,7 +46,7 @@ platform :ios do
     versionCode = bump_version_code
     version_name = bump_version_name
     sh("flutter","build","ipa","--build-name", "100.0.#{version_name}","--dart-define-from-file=assets/config.json")
-    upload_to_testflight(ipa: "../build/ios/ipa/sapid_labs.ipa")
+    upload_to_testflight(ipa: "../build/ios/ipa/sapidlabs.ipa")
     
     send_slack_notification(message: "New internal version #{versionCode} has been pushed to TestFlight!")
     

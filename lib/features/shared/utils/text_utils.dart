@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:sapid_labs/app/services.dart';
+import 'package:slapp/app/services.dart';
 import 'package:flutter/material.dart';
-import 'package:sapid_labs/features/shared/utils/color_utils.dart';
+import 'package:slapp/features/shared/utils/color_utils.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:recase/recase.dart';
 

@@ -1,4 +1,4 @@
-import 'package:sapid_labs/app/constants.dart';
+import 'package:slapp/app/constants.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 

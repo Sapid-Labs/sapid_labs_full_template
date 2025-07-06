@@ -2,19 +2,19 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "sapid_labs",
+      "name": "sapidlabs",
       "request": "launch",
       "type": "dart",
       "args": ["--dart-define-from-file=assets/config.json", "--web-port=5000"]
     },
     {
-      "name": "sapid_labs (profile mode)",
+      "name": "sapidlabs (profile mode)",
       "request": "launch",
       "type": "dart",
       "flutterMode": "profile"
     },
     {
-      "name": "sapid_labs (release mode)",
+      "name": "sapidlabs (release mode)",
       "request": "launch",
       "type": "dart",
       "flutterMode": "release",

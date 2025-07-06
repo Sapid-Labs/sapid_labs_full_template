@@ -1,9 +1,9 @@
-import 'package:sapid_labs/app/get_it.dart';
-import 'package:sapid_labs/app/router.dart';
-import 'package:sapid_labs/features/analytics/services/analytics_service.dart';
-import 'package:sapid_labs/features/auth/services/auth_service.dart';
-import 'package:sapid_labs/features/settings/services/settings_service.dart';
-import 'package:sapid_labs/features/shared/services/permission_service.dart';
+import 'package:slapp/app/get_it.dart';
+import 'package:slapp/app/router.dart';
+import 'package:slapp/features/analytics/services/analytics_service.dart';
+import 'package:slapp/features/auth/services/auth_service.dart';
+import 'package:slapp/features/settings/services/settings_service.dart';
+import 'package:slapp/features/shared/services/permission_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 AnalyticsService get analyticsService => getIt.get<AnalyticsService>();

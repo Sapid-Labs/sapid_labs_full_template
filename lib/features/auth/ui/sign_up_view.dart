@@ -1,13 +1,13 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:sapid_labs/app/constants.dart';
-import 'package:sapid_labs/app/router.dart';
-import 'package:sapid_labs/app/services.dart';
-import 'package:sapid_labs/features/shared/ui/app_logo.dart';
+import 'package:slapp/app/constants.dart';
+import 'package:slapp/app/router.dart';
+import 'package:slapp/app/services.dart';
+import 'package:slapp/features/shared/ui/app_logo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
-import 'package:sapid_labs/features/shared/ui/loading_overlay.dart';
-import 'package:sapid_labs/features/shared/ui/loading_stack.dart';
+import 'package:slapp/features/shared/ui/loading_overlay.dart';
+import 'package:slapp/features/shared/ui/loading_stack.dart';
 import 'package:signals/signals_flutter.dart';
 
 @RoutePage()

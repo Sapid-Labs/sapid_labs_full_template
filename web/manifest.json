@@ -1,6 +1,6 @@
 {
-    "name": "sapid_labs",
-    "short_name": "sapid_labs",
+    "name": "sapidlabs",
+    "short_name": "sapidlabs",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

@@ -1,6 +1,8 @@
-import 'package:firebase_core/firebase_core.dart';
-import 'package:sapid_labs/features/auth/services/firebase_auth_service.dart';
-import 'package:sapid_labs/features/auth/services/supabase_auth_service.dart';
+import 'dart:async';
+
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:slapp/features/auth/services/firebase_auth_service.dart';
+import 'package:slapp/features/auth/services/supabase_auth_service.dart';
 import 'package:signals/signals_flutter.dart';
 
 final authUserId = signal<String?>(null);
@@ -32,16 +34,20 @@ abstract class AuthService {
     required String email,
     required String password,
   }) async {
-    FirebaseAuthService().loginWithEmailAndPassword(email: email, password: password);
-    SupabaseAuthService().loginWithEmailAndPassword(email: email, password: password);
+    FirebaseAuthService()
+        .loginWithEmailAndPassword(email: email, password: password);
+    SupabaseAuthService()
+        .loginWithEmailAndPassword(email: email, password: password);
   }
 
   Future<void> signUpWithEmailAndPassword({
     required String email,
     required String password,
   }) async {
-    FirebaseAuthService().signUpWithEmailAndPassword(email: email, password: password);
-    SupabaseAuthService().signUpWithEmailAndPassword(email: email, password: password);
+    FirebaseAuthService()
+        .signUpWithEmailAndPassword(email: email, password: password);
+    SupabaseAuthService()
+        .signUpWithEmailAndPassword(email: email, password: password);
   }
 
   Future<void> updatePassword({
@@ -67,4 +73,6 @@ abstract class AuthService {
     FirebaseAuthService().createUser();
     SupabaseAuthService().createUser();
   }
+
+
 }

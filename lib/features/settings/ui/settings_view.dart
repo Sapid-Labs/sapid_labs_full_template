@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:sapid_labs/app/constants.dart';
+import 'package:slapp/app/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:sapid_labs/features/settings/services/settings_service.dart';
+import 'package:slapp/features/settings/services/settings_service.dart';
 import 'package:signals/signals_flutter.dart';
 
 @RoutePage()

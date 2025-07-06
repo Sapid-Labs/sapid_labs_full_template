@@ -7,7 +7,7 @@ This template repository is designed to kickstart your Flutter application while
 To get started, clone the main branch:
 
 ```bash
-git clone --branch https://github.com/Sapid-Labs/sapid_labs_flutter_template
+git clone --branch https://github.com/Sapid-Labs/sapidlabs_flutter_template
 ```
 
 This branch will serve as your app's foundation and it contains generic features that are used by all Flutter apps.
@@ -17,12 +17,13 @@ Now for the fun part. To add support for a third-party service, like Supabase or
 ```bash
 git merge supabase_auth
 ```
+
 ## Setup Updates
 
 To pull future changes from this template into your project, add the template repository as a remote:
 
 ```bash
-git remote add template https://github.com/Sapid-Labs/sapid_labs_flutter_template
+git remote add template https://github.com/Sapid-Labs/sapidlabs_flutter_template
 ```
 
 To pull updates, simply run:
@@ -40,9 +41,9 @@ git merge template/auth_supabase --allow-unrelated-histories
 
 If you see the following error:
 
-```
+````
 remote: Write access to repository not granted.
-fatal: unable to access 'https://github.com/Sapid-Labs/sapid_labs_flutter_template/': The requested URL returned error: 403
+fatal: unable to access 'https://github.com/Sapid-Labs/sapidlabs_flutter_template/': The requested URL returned error: 403
 error: could not fetch template
 ``
 
@@ -50,19 +51,18 @@ Reauthenticate with GitHub using this command:
 
 ```bash
 gh auth login
-```
+````
 
-## Branches
+## Environments
 
-| Branch | Description |
-| --- | --- |
-| main | The foundation of the app. |
-| supabase | Adds Supabase authentication, database, and storage. |
-| firebase | Adds Firebase authentication, database, analytics, and storage. |
-| pocketbase | Adds PocketBase authentication, database, and storage. |
-| appwrite | Adds AppWrite authentication, database, and storage. |
-| amplitude_analytics | Adds Amplitude analytics support. |
-| revenuecat_subscriptions | Adds RevenueCat subscriptions support. |
+| Environment       | Description                                                     | Type                |
+| ----------------- | --------------------------------------------------------------- | ------------------- |
+| supabase          | Adds Supabase authentication, database, and storage.            | STACK_PAAS          |
+| firebase          | Adds Firebase authentication, database, analytics, and storage. | STACK_PAAS          |
+| pocketbase        | Adds PocketBase authentication, database, and storage.          | STACK_PAAS          |
+| amplitude         | Adds Amplitude analytics support.                               | STACK_ANALYTICS     |
+| firebaseAnalytics | Adds Firebase analytics support.                                | STACK_ANALYTICS     |
+| revenuecat        | Adds RevenueCat subscriptions support.                          | STACK_SUBSCRIPTIONS |
 
 ## State Strategy
 
@@ -83,6 +83,7 @@ Global signals typically exist in the same file as their corresponding service a
 ### Storage
 
 ### Subscriptions
+
 Subscriptions are implemented using RevenueCat
 
 ### Extras

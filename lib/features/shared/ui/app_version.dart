@@ -1,4 +1,4 @@
-import 'package:sapid_labs/features/shared/utils/text_utils.dart';
+import 'package:slapp/features/shared/utils/text_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 

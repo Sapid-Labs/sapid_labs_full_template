@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:sapid_labs/app/router.dart';
+import 'package:slapp/app/router.dart';
 import 'package:flutter/material.dart';
-import 'package:sapid_labs/features/auth/services/auth_service.dart';
+import 'package:slapp/features/auth/services/auth_service.dart';
 
 class AuthGuard extends AutoRouteGuard {
   @override

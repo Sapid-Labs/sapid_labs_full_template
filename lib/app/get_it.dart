@@ -5,7 +5,6 @@ import 'get_it.config.dart';
 
 const firebase = Environment('firebase');
 const supabase = Environment('supabase');
-const appwrite = Environment('appwrite');
 const pocketbase = Environment('pocketbase');
 const amplitude = Environment('amplitude');
 const posthog = Environment('posthog');
@@ -22,10 +21,11 @@ Future<void> configureDependencies() async => await $initGetIt(
       getIt,
       environmentFilter: NoEnvOrContainsAny(
         {
-          // firebase, supabase, pocketbase, appwrite
+          // firebase, supabase, pocketbase
           const String.fromEnvironment('STACK_PAAS', defaultValue: 'firebase'),
           // amplitude, posthog, firebaseAnalytics
-          const String.fromEnvironment('STACK_ANALYTICS', defaultValue: 'amplitude'),
+          const String.fromEnvironment('STACK_ANALYTICS',
+              defaultValue: 'amplitude'),
         },
       ),
     );

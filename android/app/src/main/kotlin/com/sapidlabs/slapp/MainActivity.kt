@@ -1,4 +1,4 @@
-package com.sapid_labs.sapid_labs
+package com.sapidlabs.slapp
 
 import io.flutter.embedding.android.FlutterActivity
 
