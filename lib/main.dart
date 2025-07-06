@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:slapp/app/firebase_options.dart';
 import 'package:slapp/app/get_it.dart';
 import 'package:slapp/app/router.dart';
 import 'package:slapp/app/services.dart';
@@ -25,7 +26,8 @@ Future<void> main() async {
 
 Future<void> setup() async {
   if (const String.fromEnvironment('STACK_PAAS') == 'firebase') {
-    await Firebase.initializeApp();
+    await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform);
   } else if (const String.fromEnvironment('STACK_PAAS') == 'supabase') {}
   await configureDependencies();
   await authService.setup();
