@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/material.dart';
 import 'package:slapp/features/auth/ui/account_view.dart';
 import 'package:slapp/features/auth/ui/change_password_view.dart';
 import 'package:slapp/features/auth/ui/reset_password_view.dart';
@@ -6,6 +7,7 @@ import 'package:slapp/features/auth/ui/sign_in_view.dart';
 import 'package:slapp/features/auth/ui/sign_up_view.dart';
 import 'package:slapp/features/auth/utils/auth_guard.dart';
 import 'package:slapp/features/feedback/ui/feedback_view.dart';
+import 'package:slapp/features/feedback/ui/new_feedback/new_feedback_view.dart';
 import 'package:slapp/features/home/ui/home_view.dart';
 import 'package:slapp/features/onboarding/ui/onboarding_view.dart';
 import 'package:slapp/features/settings/ui/settings_view.dart';
@@ -53,6 +55,11 @@ class AppRouter extends RootStackRouter {
     AutoRoute(
       page: FeedbackRoute.page,
       path: '/feedback',
+      guards: [AuthGuard()],
+    ),
+     AutoRoute(
+      page: NewFeedbackRoute.page,
+      path: '/new-feedback',
       guards: [AuthGuard()],
     ),
     AutoRoute(

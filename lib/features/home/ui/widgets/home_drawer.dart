@@ -38,7 +38,14 @@ class HomeDrawer extends StatelessWidget {
                       router.push(const AccountRoute());
                     },
                   ),
-                   ListTile(
+                  ListTile(
+                    title: Text('Feedback'),
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      router.push(const FeedbackRoute());
+                    },
+                  ),
+                  ListTile(
                     title: Text('Settings'),
                     onTap: () {
                       Navigator.of(context).pop();

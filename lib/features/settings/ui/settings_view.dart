@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:slapp/app/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:slapp/app/services.dart';
 import 'package:slapp/features/settings/services/settings_service.dart';
 import 'package:signals/signals_flutter.dart';
 
@@ -23,12 +24,11 @@ class SettingsView extends StatelessWidget {
               return Text(mode.name.toUpperCase());
             }),
             trailing: Watch((context) {
-              final mode = settingsThemeMode.value;
               return DropdownButton<ThemeMode>(
-                value: mode,
+                value: settingsThemeMode.value,
                 onChanged: (newMode) {
                   if (newMode != null) {
-                    settingsThemeMode.value = newMode;
+                    settingsService.setThemeMode(newMode);
                   }
                 },
                 items: ThemeMode.values.map((mode) {

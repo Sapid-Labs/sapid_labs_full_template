@@ -75,6 +75,50 @@ class HomeRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [NewFeedbackView]
+class NewFeedbackRoute extends PageRouteInfo<NewFeedbackRouteArgs> {
+  NewFeedbackRoute({Key? key, List<PageRouteInfo>? children})
+      : super(
+          NewFeedbackRoute.name,
+          args: NewFeedbackRouteArgs(key: key),
+          initialChildren: children,
+        );
+
+  static const String name = 'NewFeedbackRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<NewFeedbackRouteArgs>(
+        orElse: () => const NewFeedbackRouteArgs(),
+      );
+      return NewFeedbackView(key: args.key);
+    },
+  );
+}
+
+class NewFeedbackRouteArgs {
+  const NewFeedbackRouteArgs({this.key});
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'NewFeedbackRouteArgs{key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! NewFeedbackRouteArgs) return false;
+    return key == other.key;
+  }
+
+  @override
+  int get hashCode => key.hashCode;
+}
+
+/// generated route for
 /// [OnboardingView]
 class OnboardingRoute extends PageRouteInfo<void> {
   const OnboardingRoute({List<PageRouteInfo>? children})

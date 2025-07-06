@@ -8,6 +8,7 @@ import 'package:slapp/app/services.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
+import 'package:slapp/app/theme.dart';
 import 'package:slapp/features/settings/services/settings_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:signals/signals_flutter.dart';
@@ -51,11 +52,13 @@ class MainApp extends StatelessWidget {
           fontFamily: fontFamily,
           scheme: FlexScheme.blueWhale,
           subThemesData: subThemesData,
+          pageTransitionsTheme: pageTransitionsTheme,
         ),
         darkTheme: FlexThemeData.dark(
           fontFamily: fontFamily,
           scheme: FlexScheme.blueWhale,
           subThemesData: subThemesData,
+          pageTransitionsTheme: pageTransitionsTheme,
         ),
         themeMode: settingsThemeMode.value,
         routerConfig: router.config(),

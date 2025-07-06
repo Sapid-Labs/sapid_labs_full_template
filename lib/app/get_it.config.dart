@@ -13,6 +13,8 @@ import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:shared_preferences/shared_preferences.dart' as _i460;
 
+import '../features/analytics/services/amplitude_analytics_service.dart'
+    as _i798;
 import '../features/analytics/services/analytics_service.dart' as _i546;
 import '../features/analytics/services/firebase_analytics_service.dart'
     as _i1072;
@@ -33,6 +35,7 @@ const String _pocketbase = 'pocketbase';
 const String _firebase = 'firebase';
 const String _supabase = 'supabase';
 const String _firebaseAnalytics = 'firebaseAnalytics';
+const String _amplitude = 'amplitude';
 
 // initializes the registration of main-scope dependencies inside of GetIt
 Future<_i174.GetIt> $initGetIt(
@@ -76,6 +79,10 @@ Future<_i174.GetIt> $initGetIt(
   gh.lazySingleton<_i136.FeedbackService>(
     () => _i565.FirebaseFeedbackService(),
     registerFor: {_firebase},
+  );
+  gh.lazySingleton<_i546.AnalyticsService>(
+    () => _i798.AmplitudeAnalyticsService(),
+    registerFor: {_amplitude},
   );
   return getIt;
 }

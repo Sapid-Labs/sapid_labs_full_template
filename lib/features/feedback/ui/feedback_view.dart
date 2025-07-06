@@ -1,6 +1,7 @@
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart' hide Feedback;
 import 'package:slapp/app/constants.dart';
+import 'package:slapp/app/router.dart';
 import 'package:slapp/app/services.dart';
 import 'package:slapp/features/feedback/models/feedback.dart';
 import 'package:slapp/features/shared/ui/layout.dart';
@@ -73,6 +74,11 @@ class _FeedbackViewState extends State<FeedbackView> {
                 },
               ),
       ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: (){
+        router.push(NewFeedbackRoute());
+      }),
     );
   }
 }
