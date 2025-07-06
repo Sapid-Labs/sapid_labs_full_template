@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:slapp/features/auth/services/firebase_auth_service.dart';
 import 'package:slapp/features/auth/services/supabase_auth_service.dart';
 import 'package:signals/signals_flutter.dart';
@@ -10,6 +8,7 @@ final authEmail = signal<String?>(null);
 final authIsAuthenticated = computed(() => authUserId.value != null);
 
 abstract class AuthService {
+  // all implementations are linked here for easy dev navigation
   Future<void> setup() async {
     FirebaseAuthService().setup();
     SupabaseAuthService().setup();
@@ -73,6 +72,4 @@ abstract class AuthService {
     FirebaseAuthService().createUser();
     SupabaseAuthService().createUser();
   }
-
-
 }

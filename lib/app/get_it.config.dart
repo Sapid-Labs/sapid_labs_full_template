@@ -19,14 +19,20 @@ import '../features/analytics/services/firebase_analytics_service.dart'
 import '../features/auth/services/auth_service.dart' as _i413;
 import '../features/auth/services/firebase_auth_service.dart' as _i969;
 import '../features/auth/services/supabase_auth_service.dart' as _i57;
+import '../features/feedback/services/feedback_service.dart' as _i136;
+import '../features/feedback/services/firebase_feedback_service.dart' as _i565;
+import '../features/feedback/services/pocketbase_feedback_service.dart'
+    as _i145;
+import '../features/feedback/services/supabase_feedback_service.dart' as _i891;
 import '../features/settings/services/settings_service.dart' as _i542;
 import '../features/shared/services/modules.dart' as _i176;
 import '../features/shared/services/permission_service.dart' as _i901;
 import '../features/subscriptions/services/subscription_service.dart' as _i506;
 
+const String _pocketbase = 'pocketbase';
 const String _firebase = 'firebase';
-const String _firebaseAnalytics = 'firebaseAnalytics';
 const String _supabase = 'supabase';
+const String _firebaseAnalytics = 'firebaseAnalytics';
 
 // initializes the registration of main-scope dependencies inside of GetIt
 Future<_i174.GetIt> $initGetIt(
@@ -47,9 +53,17 @@ Future<_i174.GetIt> $initGetIt(
   );
   gh.singleton<_i542.SettingsService>(() => _i542.SettingsService());
   gh.singleton<_i506.SubscriptionService>(() => _i506.SubscriptionService());
+  gh.lazySingleton<_i136.FeedbackService>(
+    () => _i145.PocketbaseFeedbackService(),
+    registerFor: {_pocketbase},
+  );
   gh.singleton<_i413.AuthService>(
     () => _i969.FirebaseAuthService(),
     registerFor: {_firebase},
+  );
+  gh.lazySingleton<_i136.FeedbackService>(
+    () => _i891.SupabaseFeedbackService(),
+    registerFor: {_supabase},
   );
   gh.lazySingleton<_i546.AnalyticsService>(
     () => _i1072.FirebaseAnalyticsService(),
@@ -58,6 +72,10 @@ Future<_i174.GetIt> $initGetIt(
   gh.singleton<_i413.AuthService>(
     () => _i57.SupabaseAuthService(),
     registerFor: {_supabase},
+  );
+  gh.lazySingleton<_i136.FeedbackService>(
+    () => _i565.FirebaseFeedbackService(),
+    registerFor: {_firebase},
   );
   return getIt;
 }

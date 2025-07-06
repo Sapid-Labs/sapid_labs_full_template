@@ -14,7 +14,7 @@ class AppVersion extends StatelessWidget {
           final PackageInfo packageInfo = snapshot.data as PackageInfo;
           return Text(
             'Version: ${packageInfo.version}',
-            style: context.bodySmall.colorPrimary,
+            style: context.bodySmall.primary,
           );
         }
 

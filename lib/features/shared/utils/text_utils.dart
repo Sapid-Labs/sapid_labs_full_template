@@ -2,8 +2,6 @@ import 'dart:convert';
 
 import 'package:slapp/app/services.dart';
 import 'package:flutter/material.dart';
-import 'package:slapp/features/shared/utils/color_utils.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:recase/recase.dart';
 
 class TextUtils {
@@ -110,8 +108,7 @@ class TextUtils {
 }
 
 extension FastTextStyle on BuildContext {
-  TextTheme get textTheme =>
-      GoogleFonts.figtreeTextTheme(Theme.of(this).textTheme);
+  TextTheme get textTheme => Theme.of(this).textTheme;
 
   TextStyle get bodySmall => textTheme.bodySmall!;
 
@@ -147,46 +144,59 @@ extension FastTextStyle on BuildContext {
 extension FastTextColor on TextStyle {
   BuildContext get context => router.navigatorKey.currentContext!;
 
-  TextStyle get colorPrimary => copyWith(color: context.colorPrimary);
+  TextStyle get white => copyWith(color: Colors.white);
 
-  TextStyle get colorSecondary => copyWith(color: context.colorSecondary);
+  TextStyle get black => copyWith(color: Colors.black);
 
-  TextStyle get colorTertiary => copyWith(color: context.colorTertiary);
+  TextStyle get primary =>
+      copyWith(color: Theme.of(context).colorScheme.primary);
 
-  TextStyle get colorOnPrimary => copyWith(color: context.colorOnPrimary);
+  TextStyle get secondary =>
+      copyWith(color: Theme.of(context).colorScheme.secondary);
 
-  TextStyle get colorOnSecondary => copyWith(color: context.colorOnSecondary);
+  TextStyle get tertiary =>
+      copyWith(color: Theme.of(context).colorScheme.tertiary);
 
-  TextStyle get colorOnTertiary => copyWith(color: context.colorOnTertiary);
+  TextStyle get onPrimary =>
+      copyWith(color: Theme.of(context).colorScheme.onPrimary);
 
-  TextStyle get colorBackground => copyWith(color: context.colorBackground);
+  TextStyle get onSecondary =>
+      copyWith(color: Theme.of(context).colorScheme.onSecondary);
 
-  TextStyle get colorOnBackground => copyWith(color: context.colorOnBackground);
+  TextStyle get onTertiary =>
+      copyWith(color: Theme.of(context).colorScheme.onTertiary);
 
-  TextStyle get colorSurface => copyWith(color: context.colorSurface);
+  TextStyle get background =>
+      copyWith(color: Theme.of(context).colorScheme.background);
 
-  TextStyle get colorOnSurface => copyWith(color: context.colorOnSurface);
+  TextStyle get onBackground =>
+      copyWith(color: Theme.of(context).colorScheme.onBackground);
 
-  TextStyle get colorSurfaceTint => copyWith(color: context.colorSurfaceTint);
+  TextStyle get surface =>
+      copyWith(color: Theme.of(context).colorScheme.surface);
 
-  TextStyle get colorError => copyWith(color: context.colorError);
+  TextStyle get onSurface =>
+      copyWith(color: Theme.of(context).colorScheme.onSurface);
 
-  TextStyle get colorOnError => copyWith(color: context.colorOnError);
+  TextStyle get surfaceTint =>
+      copyWith(color: Theme.of(context).colorScheme.surfaceTint);
 
-  TextStyle get colorOutline => copyWith(color: context.colorOutline);
+  TextStyle get error => copyWith(color: Theme.of(context).colorScheme.error);
 
-  TextStyle get colorInversePrimary =>
-      copyWith(color: context.colorInversePrimary);
+  TextStyle get onError =>
+      copyWith(color: Theme.of(context).colorScheme.onError);
 
-  TextStyle get colorInverseSurface =>
-      copyWith(color: context.colorInverseSurface);
+  TextStyle get outline =>
+      copyWith(color: Theme.of(context).colorScheme.outline);
 
-  TextStyle get colorOnInverseSurface =>
-      copyWith(color: context.colorOnInverseSurface);
+  TextStyle get inversePrimary =>
+      copyWith(color: Theme.of(context).colorScheme.inversePrimary);
 
-  TextStyle get colorWhite => copyWith(color: Colors.white);
+  TextStyle get inverseSurface =>
+      copyWith(color: Theme.of(context).colorScheme.inverseSurface);
 
-  TextStyle get colorBlack => copyWith(color: Colors.black);
+  TextStyle get onInverseSurface =>
+      copyWith(color: Theme.of(context).colorScheme.onInverseSurface);
 
   TextStyle get bold => copyWith(fontWeight: FontWeight.bold);
 

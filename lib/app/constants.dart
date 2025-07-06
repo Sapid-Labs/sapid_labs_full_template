@@ -1,9 +1,8 @@
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
-bool kIsWideDesktopWeb(BuildContext context) => kIsWeb && Layout.screenWidth(context) >= 1000;
+bool kIsWideDesktopWeb(BuildContext context) => kIsWeb && LayoutUtils.screenWidth(context) >= 1000;
 
 bool kIsWideScreen(BuildContext context) => (MediaQuery.sizeOf(context).width) >= 600;
 
@@ -69,7 +68,7 @@ extension SliverExtension on Widget {
   SliverToBoxAdapter toSliver() => SliverToBoxAdapter(child: this);
 }
 
-class Layout {
+class LayoutUtils {
   static double screenWidth(BuildContext context) => MediaQuery.maybeOf(context)?.size.width ?? 0;
 
   static double screenHeight(BuildContext context) => MediaQuery.maybeOf(context)?.size.height ?? 0;

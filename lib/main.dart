@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:slapp/app/firebase_options.dart';
 import 'package:slapp/app/get_it.dart';
 import 'package:slapp/app/router.dart';
@@ -37,6 +38,8 @@ Future<void> setup() async {
   await analyticsService.setup();
 }
 
+String? fontFamily = GoogleFonts.quicksand().fontFamily;
+
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
 
@@ -45,10 +48,12 @@ class MainApp extends StatelessWidget {
     return Watch((context) {
       return MaterialApp.router(
         theme: FlexThemeData.light(
+          fontFamily: fontFamily,
           scheme: FlexScheme.blueWhale,
           subThemesData: subThemesData,
         ),
         darkTheme: FlexThemeData.dark(
+          fontFamily: fontFamily,
           scheme: FlexScheme.blueWhale,
           subThemesData: subThemesData,
         ),

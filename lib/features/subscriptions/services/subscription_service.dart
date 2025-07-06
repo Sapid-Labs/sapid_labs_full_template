@@ -14,7 +14,6 @@ import 'dart:io' show Platform;
 import 'package:signals/signals_flutter.dart';
 
 final subscriptionPremium = signal<bool>(false);
-
 final subscriptionOffering = signal<Offering?>(null);
 
 @singleton
@@ -202,7 +201,7 @@ class SubscriptionService extends ChangeNotifier {
                   ),
                   child: Text(
                     'Get Premium',
-                    style: context.titleLarge.colorOnPrimary.bold,
+                    style: context.titleLarge.onPrimary.bold,
                   ),
                 ),
               ],

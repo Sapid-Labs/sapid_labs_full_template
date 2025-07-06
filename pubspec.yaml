@@ -25,13 +25,16 @@ dependencies:
   firebase_crashlytics: ^4.3.9
   get_it: ^8.0.3 
   google_fonts: ^6.2.1 
+  google_mobile_ads: ^6.0.0
   google_sign_in: ^6.2.2
   http: ^1.2.2
   injectable: ^2.5.0
   intl: ^0.20.2
   json_annotation: ^4.9.0
+  transparent_image: ^2.0.1
   package_info_plus: ^8.3.0
   permission_handler: ^12.0.1
+  pocketbase: ^0.23.0
   purchases_flutter: ^8.2.1
   recase: 4.1.0
   shared_preferences: ^2.3.5

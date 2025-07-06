@@ -6,7 +6,7 @@ import 'package:slapp/features/shared/ui/app_logo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
-import 'package:slapp/features/shared/ui/loading_overlay.dart';
+
 import 'package:slapp/features/shared/ui/loading_stack.dart';
 import 'package:signals/signals_flutter.dart';
 

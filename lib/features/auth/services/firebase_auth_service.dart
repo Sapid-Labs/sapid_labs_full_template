@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:slapp/app/get_it.dart';
@@ -127,19 +128,36 @@ class FirebaseAuthService implements AuthService {
   Future<void> updatePassword({
     required String password,
   }) async {
-    // TODO - Implement updatePassword logic
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+
+      user?.updatePassword(password);
+    } catch (error, stack) {
+      log('Error updating Firebase password: ' + error.toString());
+      FirebaseCrashlytics.instance.recordError(error, stack, fatal: false);
+    }
   }
 
   @override
   Future<void> resetPassword({
     required String email,
   }) async {
-    // TODO - Implement resetPassword logic
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+    } catch (error, stack) {
+      FirebaseCrashlytics.instance.recordError(error, stack);
+    }
   }
 
   @override
   Future<void> logout() async {
-    // TODO - Implement logout logic
+    try {
+      await FirebaseAuth.instance.signOut();
+      authUserId.value = null;
+      authEmail.value = null;
+    } catch (error, stack) {
+      FirebaseCrashlytics.instance.recordError(error, stack);
+    }
   }
 
   @override

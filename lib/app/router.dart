@@ -5,6 +5,7 @@ import 'package:slapp/features/auth/ui/reset_password_view.dart';
 import 'package:slapp/features/auth/ui/sign_in_view.dart';
 import 'package:slapp/features/auth/ui/sign_up_view.dart';
 import 'package:slapp/features/auth/utils/auth_guard.dart';
+import 'package:slapp/features/feedback/ui/feedback_view.dart';
 import 'package:slapp/features/home/ui/home_view.dart';
 import 'package:slapp/features/onboarding/ui/onboarding_view.dart';
 import 'package:slapp/features/settings/ui/settings_view.dart';
@@ -47,6 +48,11 @@ class AppRouter extends RootStackRouter {
     AutoRoute(
       page: SettingsRoute.page,
       path: '/settings',
+      guards: [AuthGuard()],
+    ),
+    AutoRoute(
+      page: FeedbackRoute.page,
+      path: '/feedback',
       guards: [AuthGuard()],
     ),
     AutoRoute(
