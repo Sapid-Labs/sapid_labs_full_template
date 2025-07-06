@@ -2,19 +2,19 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "foolscript",
+      "name": "sapid_labs",
       "request": "launch",
       "type": "dart",
       "args": ["--dart-define-from-file=assets/config.json", "--web-port=5000"]
     },
     {
-      "name": "foolscript (profile mode)",
+      "name": "sapid_labs (profile mode)",
       "request": "launch",
       "type": "dart",
       "flutterMode": "profile"
     },
     {
-      "name": "foolscript (release mode)",
+      "name": "sapid_labs (release mode)",
       "request": "launch",
       "type": "dart",
       "flutterMode": "release",

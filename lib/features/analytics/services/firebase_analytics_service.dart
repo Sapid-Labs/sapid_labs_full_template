@@ -1,5 +1,5 @@
-import 'package:foolscript/app/get_it.dart';
-import 'package:foolscript/features/analytics/services/analytics_service.dart';
+import 'package:sapid_labs/app/get_it.dart';
+import 'package:sapid_labs/features/analytics/services/analytics_service.dart';
 import 'package:injectable/injectable.dart';
 
 @firebaseAnalytics

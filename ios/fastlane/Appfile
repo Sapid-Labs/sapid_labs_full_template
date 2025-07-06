@@ -1,4 +1,4 @@
-app_identifier("com.foolscript.foolscript") # The bundle identifier of your app
+app_identifier("com.sapid_labs.sapid_labs") # The bundle identifier of your app
 apple_id("test@gmail.com") # Your Apple Developer Portal username
 
 itc_team_id("11111") # App Store Connect Team ID

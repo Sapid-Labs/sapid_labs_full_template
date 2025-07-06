@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:foolscript/features/shared/ui/loading_overlay.dart';
+import 'package:sapid_labs/features/shared/ui/loading_overlay.dart';
 
 class LoadingStack extends StatelessWidget {
   const LoadingStack({

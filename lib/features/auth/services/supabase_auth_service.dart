@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
-import 'package:foolscript/app/get_it.dart';
-import 'package:foolscript/features/auth/services/auth_service.dart';
+import 'package:sapid_labs/app/get_it.dart';
+import 'package:sapid_labs/features/auth/services/auth_service.dart';
 import 'package:injectable/injectable.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 

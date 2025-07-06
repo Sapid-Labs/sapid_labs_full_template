@@ -1,7 +1,7 @@
-import 'package:foolscript/app/router.dart';
-import 'package:foolscript/app/services.dart';
-import 'package:foolscript/features/shared/ui/app_logo.dart';
-import 'package:foolscript/features/shared/ui/app_version.dart';
+import 'package:sapid_labs/app/router.dart';
+import 'package:sapid_labs/app/services.dart';
+import 'package:sapid_labs/features/shared/ui/app_logo.dart';
+import 'package:sapid_labs/features/shared/ui/app_version.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 

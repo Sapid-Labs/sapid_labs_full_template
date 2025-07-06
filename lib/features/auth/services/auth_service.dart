@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:foolscript/features/auth/services/firebase_auth_service.dart';
-import 'package:foolscript/features/auth/services/supabase_auth_service.dart';
+import 'package:sapid_labs/features/auth/services/firebase_auth_service.dart';
+import 'package:sapid_labs/features/auth/services/supabase_auth_service.dart';
 import 'package:signals/signals_flutter.dart';
 
 final authUserId = signal<String?>(null);
