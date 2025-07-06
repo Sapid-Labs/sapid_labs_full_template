@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:slapp/app/firebase_options.dart';
 import 'package:slapp/app/get_it.dart';
 import 'package:slapp/app/router.dart';
@@ -28,6 +29,8 @@ Future<void> setup() async {
   if (const String.fromEnvironment('STACK_PAAS') == 'firebase') {
     await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform);
+
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
   } else if (const String.fromEnvironment('STACK_PAAS') == 'supabase') {}
   await configureDependencies();
   await authService.setup();

@@ -1,3 +1,4 @@
+// dart format width=80
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
 // **************************************************************************
@@ -13,10 +14,7 @@ part of 'router.dart';
 /// [AccountView]
 class AccountRoute extends PageRouteInfo<void> {
   const AccountRoute({List<PageRouteInfo>? children})
-      : super(
-          AccountRoute.name,
-          initialChildren: children,
-        );
+      : super(AccountRoute.name, initialChildren: children);
 
   static const String name = 'AccountRoute';
 
@@ -32,10 +30,7 @@ class AccountRoute extends PageRouteInfo<void> {
 /// [ChangePasswordView]
 class ChangePasswordRoute extends PageRouteInfo<void> {
   const ChangePasswordRoute({List<PageRouteInfo>? children})
-      : super(
-          ChangePasswordRoute.name,
-          initialChildren: children,
-        );
+      : super(ChangePasswordRoute.name, initialChildren: children);
 
   static const String name = 'ChangePasswordRoute';
 
@@ -51,10 +46,7 @@ class ChangePasswordRoute extends PageRouteInfo<void> {
 /// [HomeView]
 class HomeRoute extends PageRouteInfo<void> {
   const HomeRoute({List<PageRouteInfo>? children})
-      : super(
-          HomeRoute.name,
-          initialChildren: children,
-        );
+      : super(HomeRoute.name, initialChildren: children);
 
   static const String name = 'HomeRoute';
 
@@ -67,13 +59,26 @@ class HomeRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [OnboardingView]
+class OnboardingRoute extends PageRouteInfo<void> {
+  const OnboardingRoute({List<PageRouteInfo>? children})
+      : super(OnboardingRoute.name, initialChildren: children);
+
+  static const String name = 'OnboardingRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const OnboardingView();
+    },
+  );
+}
+
+/// generated route for
 /// [ResetPasswordView]
 class ResetPasswordRoute extends PageRouteInfo<void> {
   const ResetPasswordRoute({List<PageRouteInfo>? children})
-      : super(
-          ResetPasswordRoute.name,
-          initialChildren: children,
-        );
+      : super(ResetPasswordRoute.name, initialChildren: children);
 
   static const String name = 'ResetPasswordRoute';
 
@@ -89,10 +94,7 @@ class ResetPasswordRoute extends PageRouteInfo<void> {
 /// [SettingsView]
 class SettingsRoute extends PageRouteInfo<void> {
   const SettingsRoute({List<PageRouteInfo>? children})
-      : super(
-          SettingsRoute.name,
-          initialChildren: children,
-        );
+      : super(SettingsRoute.name, initialChildren: children);
 
   static const String name = 'SettingsRoute';
 
@@ -108,10 +110,7 @@ class SettingsRoute extends PageRouteInfo<void> {
 /// [SignInView]
 class SignInRoute extends PageRouteInfo<void> {
   const SignInRoute({List<PageRouteInfo>? children})
-      : super(
-          SignInRoute.name,
-          initialChildren: children,
-        );
+      : super(SignInRoute.name, initialChildren: children);
 
   static const String name = 'SignInRoute';
 
@@ -127,10 +126,7 @@ class SignInRoute extends PageRouteInfo<void> {
 /// [SignUpView]
 class SignUpRoute extends PageRouteInfo<void> {
   const SignUpRoute({List<PageRouteInfo>? children})
-      : super(
-          SignUpRoute.name,
-          initialChildren: children,
-        );
+      : super(SignUpRoute.name, initialChildren: children);
 
   static const String name = 'SignUpRoute';
 
@@ -146,10 +142,7 @@ class SignUpRoute extends PageRouteInfo<void> {
 /// [SubscriptionView]
 class SubscriptionRoute extends PageRouteInfo<void> {
   const SubscriptionRoute({List<PageRouteInfo>? children})
-      : super(
-          SubscriptionRoute.name,
-          initialChildren: children,
-        );
+      : super(SubscriptionRoute.name, initialChildren: children);
 
   static const String name = 'SubscriptionRoute';
 

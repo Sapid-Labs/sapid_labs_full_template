@@ -11,8 +11,10 @@ class AuthGuard extends AutoRouteGuard {
       bool isAuthenticated = authIsAuthenticated.value;
 
       if (isAuthenticated) {
+        debugPrint("Authenticated, navigating to home");
         resolver.next(true); // Allow navigation
       } else {
+        debugPrint("Not authenticated, navigating to sign in");
         router.push(SignInRoute());
       }
     } catch (e) {

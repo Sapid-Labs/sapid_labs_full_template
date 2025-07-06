@@ -1,3 +1,4 @@
+// dart format width=80
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
 // **************************************************************************
@@ -17,6 +18,7 @@ import '../features/analytics/services/firebase_analytics_service.dart'
     as _i1072;
 import '../features/auth/services/auth_service.dart' as _i413;
 import '../features/auth/services/firebase_auth_service.dart' as _i969;
+import '../features/auth/services/supabase_auth_service.dart' as _i57;
 import '../features/settings/services/settings_service.dart' as _i542;
 import '../features/shared/services/modules.dart' as _i176;
 import '../features/shared/services/permission_service.dart' as _i901;
@@ -24,6 +26,7 @@ import '../features/subscriptions/services/subscription_service.dart' as _i506;
 
 const String _firebase = 'firebase';
 const String _firebaseAnalytics = 'firebaseAnalytics';
+const String _supabase = 'supabase';
 
 // initializes the registration of main-scope dependencies inside of GetIt
 Future<_i174.GetIt> $initGetIt(
@@ -51,6 +54,10 @@ Future<_i174.GetIt> $initGetIt(
   gh.lazySingleton<_i546.AnalyticsService>(
     () => _i1072.FirebaseAnalyticsService(),
     registerFor: {_firebaseAnalytics},
+  );
+  gh.singleton<_i413.AuthService>(
+    () => _i57.SupabaseAuthService(),
+    registerFor: {_supabase},
   );
   return getIt;
 }

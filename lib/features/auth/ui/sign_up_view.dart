@@ -41,7 +41,7 @@ class _SignUpViewState extends State<SignUpView> with SignalsMixin {
 
       if (mounted) {
         // Navigate to home or intended screen after successful signup
-        router.replaceAll([const HomeRoute()]);
+        router.replaceAll([const OnboardingRoute()]);
       }
     } catch (e) {
       error.value = 'Failed to sign up: ${e.toString()}';

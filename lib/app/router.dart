@@ -6,6 +6,7 @@ import 'package:slapp/features/auth/ui/sign_in_view.dart';
 import 'package:slapp/features/auth/ui/sign_up_view.dart';
 import 'package:slapp/features/auth/utils/auth_guard.dart';
 import 'package:slapp/features/home/ui/home_view.dart';
+import 'package:slapp/features/onboarding/ui/onboarding_view.dart';
 import 'package:slapp/features/settings/ui/settings_view.dart';
 import 'package:slapp/features/subscriptions/ui/subscription_view.dart';
 
@@ -23,6 +24,11 @@ class AppRouter extends RootStackRouter {
       initial: true,
       page: HomeRoute.page,
       path: '/home',
+      guards: [AuthGuard()],
+    ),
+    AutoRoute(
+      page: OnboardingRoute.page,
+      path: '/onboarding',
       guards: [AuthGuard()],
     ),
     AutoRoute(

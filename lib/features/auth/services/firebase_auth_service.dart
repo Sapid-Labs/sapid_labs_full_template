@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:slapp/app/get_it.dart';
 import 'package:slapp/features/auth/services/auth_service.dart';
@@ -102,7 +105,22 @@ class FirebaseAuthService implements AuthService {
     required String email,
     required String password,
   }) async {
-    // TODO - Implement signUpWithEmailAndPassword logic
+    try {
+      UserCredential user =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      authUserId.value = user.user?.uid;
+      authEmail.value = user.user?.email;
+    } on FirebaseAuthException catch (e) {
+      debugPrint('Firebase auth exception: ${e.code} - ${e.message}');
+      throw Exception(e.message ?? 'Failed to sign in');
+    } catch (error, stack) {
+      log('Error creating Firebase account: ' + error.toString());
+      FirebaseCrashlytics.instance.recordError(error, stack, fatal: false);
+    }
   }
 
   @override
