@@ -1,9 +1,9 @@
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:slapp/app/get_it.dart';
 import 'package:slapp/features/auth/services/auth_service.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -79,7 +79,20 @@ class FirebaseAuthService implements AuthService {
 
   @override
   Future<void> signInWithApple() async {
-    // TODO - Implement signInWithApple logic
+      try {
+      final appleProvider = AppleAuthProvider();
+      if (kIsWeb) {
+        await FirebaseAuth.instance.signInWithPopup(appleProvider);
+      } else {
+        await FirebaseAuth.instance.signInWithProvider(appleProvider);
+      }
+    } on SignInWithAppleAuthorizationException catch (e) {
+      debugPrint('Error signing in with Apple: $e');
+      throw e.message;
+    } catch (e) {
+      debugPrint('Error signing in with Apple: $e');
+      rethrow;
+    }
   }
 
   @override

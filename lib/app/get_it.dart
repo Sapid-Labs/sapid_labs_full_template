@@ -6,7 +6,7 @@ import 'get_it.config.dart';
 const firebase = Environment('firebase');
 const supabase = Environment('supabase');
 const pocketbase = Environment('pocketbase');
-const amplitude = Environment('amplitude');
+const amplitudeAnalytics = Environment('amplitude');
 const posthog = Environment('posthog');
 const firebaseAnalytics = Environment('firebaseAnalytics');
 
