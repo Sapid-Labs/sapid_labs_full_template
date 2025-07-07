@@ -68,8 +68,8 @@ class FirebaseAuthService implements AuthService {
           idToken: googleAuth?.idToken,
         );
 
-        // Once signed in, return the UserCredential
-        UserCredential userCredential =await FirebaseAuth.instance.signInWithCredential(credential);
+        UserCredential userCredential =
+            await FirebaseAuth.instance.signInWithCredential(credential);
 
         debugPrint('User signed in with Google');
 
@@ -83,7 +83,7 @@ class FirebaseAuthService implements AuthService {
 
   @override
   Future<void> signInWithApple() async {
-      try {
+    try {
       final appleProvider = AppleAuthProvider();
       if (kIsWeb) {
         await FirebaseAuth.instance.signInWithPopup(appleProvider);
