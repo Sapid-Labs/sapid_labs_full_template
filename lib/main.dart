@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:slapp/app/firebase_options.dart';
 import 'package:slapp/app/get_it.dart';
 import 'package:slapp/app/router.dart';
@@ -23,6 +24,8 @@ Future<void> main() async {
   GetIt.instance.registerSingleton(AppRouter());
 
   await setup();
+
+  // MobileAds.instance.initialize();
 
   runApp(const MainApp());
 }

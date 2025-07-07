@@ -12,7 +12,9 @@ import 'package:signals/signals_flutter.dart';
 
 @RoutePage()
 class SignUpView extends StatefulWidget {
-  const SignUpView({super.key});
+  const SignUpView({super.key, this.email});
+
+  final String? email;
 
   @override
   State<SignUpView> createState() => _SignUpViewState();
@@ -20,7 +22,7 @@ class SignUpView extends StatefulWidget {
 
 class _SignUpViewState extends State<SignUpView> with SignalsMixin {
   final _formKey = GlobalKey<FormState>();
-  late final email = createSignal('');
+  late final email = createSignal(widget.email ?? '');
   late final password = createSignal('');
   late final confirmPassword = createSignal('');
   late final isLoading = createSignal(false);

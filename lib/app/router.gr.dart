@@ -184,18 +184,48 @@ class SignInRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [SignUpView]
-class SignUpRoute extends PageRouteInfo<void> {
-  const SignUpRoute({List<PageRouteInfo>? children})
-      : super(SignUpRoute.name, initialChildren: children);
+class SignUpRoute extends PageRouteInfo<SignUpRouteArgs> {
+  SignUpRoute({Key? key, String? email, List<PageRouteInfo>? children})
+      : super(
+          SignUpRoute.name,
+          args: SignUpRouteArgs(key: key, email: email),
+          initialChildren: children,
+        );
 
   static const String name = 'SignUpRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const SignUpView();
+      final args = data.argsAs<SignUpRouteArgs>(
+        orElse: () => const SignUpRouteArgs(),
+      );
+      return SignUpView(key: args.key, email: args.email);
     },
   );
+}
+
+class SignUpRouteArgs {
+  const SignUpRouteArgs({this.key, this.email});
+
+  final Key? key;
+
+  final String? email;
+
+  @override
+  String toString() {
+    return 'SignUpRouteArgs{key: $key, email: $email}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! SignUpRouteArgs) return false;
+    return key == other.key && email == other.email;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ email.hashCode;
 }
 
 /// generated route for

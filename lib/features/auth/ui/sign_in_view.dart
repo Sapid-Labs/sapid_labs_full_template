@@ -167,7 +167,7 @@ class _SignInViewState extends State<SignInView> with SignalsMixin {
                           const Text('Don\'t have an account?'),
                           TextButton(
                             onPressed: () =>
-                                router.replace(const SignUpRoute()),
+                                router.replace(SignUpRoute(email: email.value)),
                             child: const Text('Sign Up'),
                           ),
                         ],

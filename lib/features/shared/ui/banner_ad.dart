@@ -10,7 +10,7 @@ class BannerAdWidget extends StatefulWidget {
 
 class BannerAdWidgetState extends State<BannerAdWidget> {
   final testAdUnitId = Platform.isAndroid
-      ? 'ca-app-pub-3940256099942544/6300978111'
+      ? 'ca-app-pub-3940256099942544~3347511713'
       : 'ca-app-pub-3940256099942544/2934735716';
 
   final BannerAd myBanner = BannerAd(
