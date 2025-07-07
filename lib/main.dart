@@ -51,6 +51,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Watch((context) {
       return MaterialApp.router(
+        debugShowCheckedModeBanner: false,
         theme: FlexThemeData.light(
           fontFamily: fontFamily,
           scheme: FlexScheme.blueWhale,

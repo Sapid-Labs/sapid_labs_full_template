@@ -20,3 +20,7 @@ Paste the following code into the `head` tag of your html:
 ```bash
 firebase init hosting
 ```
+
+In the Firebase Console, add a custom domain to your website. This will take a few seconds. Once finished, copy the value next to the TXT record type and paste that into NameCheap under the Advanced DNS tab.
+
+For full instructions on hosting on NameCheap, follow the guide here: https://firebase.google.com/docs/hosting/custom-domain#dns-records-namecheap
