@@ -54,13 +54,15 @@ class SupabaseAuthService implements AuthService {
   }
 
   @override
-  Future<void> signInWithGoogle() async {
+  Future<bool> signInWithGoogle() async {
     try {
       await supabase.auth.signInWithOAuth(
         OAuthProvider.google,
         redirectTo:
             kIsWeb ? null : 'io.supabase.flutterquickstart://login-callback/',
       );
+
+      return true;
     } catch (e) {
       rethrow;
     }

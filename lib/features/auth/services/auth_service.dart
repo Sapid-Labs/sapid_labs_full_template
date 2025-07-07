@@ -19,9 +19,10 @@ abstract class AuthService {
     SupabaseAuthService().signUpAnonymously();
   }
 
-  Future<void> signInWithGoogle() async {
+  Future<bool> signInWithGoogle() async {
     FirebaseAuthService().signInWithGoogle();
     SupabaseAuthService().signInWithGoogle();
+    return true;
   }
 
   Future<void> signInWithApple() async {

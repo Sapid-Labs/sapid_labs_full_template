@@ -39,13 +39,15 @@ class FirebaseAuthService implements AuthService {
   }
 
   @override
-  Future<void> signInWithGoogle() async {
+  Future<bool> signInWithGoogle() async {
     if (kIsWeb) {
       try {
         UserCredential userCredential =
             await FirebaseAuth.instance.signInWithPopup(
           GoogleAuthProvider(),
         );
+
+        return userCredential.additionalUserInfo?.isNewUser ?? false;
       } catch (e) {
         debugPrint('e: $e');
         throw Exception('Failed to sign in with Google: ${e.toString()}');
@@ -67,9 +69,11 @@ class FirebaseAuthService implements AuthService {
         );
 
         // Once signed in, return the UserCredential
-        await FirebaseAuth.instance.signInWithCredential(credential);
+        UserCredential userCredential =await FirebaseAuth.instance.signInWithCredential(credential);
 
         debugPrint('User signed in with Google');
+
+        return userCredential.additionalUserInfo?.isNewUser ?? false;
       } catch (e) {
         debugPrint('e: $e');
         throw Exception('Failed to sign in with Google: ${e.toString()}');

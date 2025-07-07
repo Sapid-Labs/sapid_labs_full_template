@@ -21,6 +21,7 @@ dependencies:
   flutter_web_plugins:
     sdk: flutter 
   flutter_svg: ^2.0.14  
+  firebase_ai: ^2.2.1
   firebase_analytics: ^11.5.2
   firebase_auth: ^5.4.1
   firebase_core: ^3.10.1

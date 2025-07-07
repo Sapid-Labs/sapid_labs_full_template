@@ -25,6 +25,7 @@ class HomeDrawer extends StatelessWidget {
                 children: [
                   if (kDebugMode)
                     ListTile(
+                      leading: Icon(Icons.badge),
                       title: Text('Sign In'),
                       onTap: () {
                         Navigator.of(context).pop();
@@ -32,6 +33,7 @@ class HomeDrawer extends StatelessWidget {
                       },
                     ),
                   ListTile(
+                    leading: Icon(Icons.person),
                     title: Text('Account'),
                     onTap: () {
                       Navigator.of(context).pop();
@@ -39,6 +41,7 @@ class HomeDrawer extends StatelessWidget {
                     },
                   ),
                   ListTile(
+                    leading: Icon(Icons.thumb_up),
                     title: Text('Feedback'),
                     onTap: () {
                       Navigator.of(context).pop();
@@ -46,6 +49,7 @@ class HomeDrawer extends StatelessWidget {
                     },
                   ),
                   ListTile(
+                    leading: Icon(Icons.settings),
                     title: Text('Settings'),
                     onTap: () {
                       Navigator.of(context).pop();
