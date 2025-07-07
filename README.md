@@ -4,19 +4,15 @@ This template repository is designed to kickstart your Flutter application while
 
 ## Start
 
-To get started, clone the main branch:
+To get started, clone the template repo using the Github UI or run the following command:
 
 ```bash
-git clone --branch https://github.com/Sapid-Labs/sapidlabs_flutter_template
+git clone https://github.com/Sapid-Labs/sapidlabs_flutter_template
 ```
 
-This branch will serve as your app's foundation and it contains generic features that are used by all Flutter apps.
+Now for the fun part. To add support for a third-party service, like Supabase or Firebase, create a `config.json` file in the `assets` folder and change the STACK environment variables to the values you want to use. For example, to use Supabase for authentication and storage, set `STACK_PAAS` to "supabase".
 
-Now for the fun part. To add support for a third-party service, like Supabase or Firebase, merge the branch with the service name into the main branch. For example, to add Supabase authentication support to your app, run the following command:
-
-```bash
-git merge supabase_auth
-```
+To update the app name, use the search tool to search for `slapp` and replace it with your app name. To update the package name, search for `com.sapidlabs` and replace it with your package name.
 
 ## Setup Updates
 
@@ -31,12 +27,6 @@ To pull updates, simply run:
 ```bash
 git fetch --all
 git merge template/main --allow-unrelated-histories
-```
-
-You can also run the `git merge` command for any branch in the template repo. For example:
-
-```bash
-git merge template/auth_supabase --allow-unrelated-histories
 ```
 
 If you see the following error:
@@ -60,7 +50,7 @@ gh auth login
 | supabase          | Adds Supabase authentication, database, and storage.            | STACK_PAAS          |
 | firebase          | Adds Firebase authentication, database, analytics, and storage. | STACK_PAAS          |
 | pocketbase        | Adds PocketBase authentication, database, and storage.          | STACK_PAAS          |
-| amplitude         | Adds Amplitude analytics support.                               | STACK_ANALYTICS     |
+| amplitudeAnalytics         | Adds Amplitude analytics support.                               | STACK_ANALYTICS     |
 | firebaseAnalytics | Adds Firebase analytics support.                                | STACK_ANALYTICS     |
 | revenuecat        | Adds RevenueCat subscriptions support.                          | STACK_SUBSCRIPTIONS |
 

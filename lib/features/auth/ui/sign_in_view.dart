@@ -6,7 +6,6 @@ import 'package:slapp/features/shared/ui/app_logo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
-import 'package:slapp/features/shared/ui/loading_overlay.dart';
 import 'package:slapp/features/shared/ui/loading_stack.dart';
 import 'package:signals/signals_flutter.dart';
 
@@ -137,7 +136,14 @@ class _SignInViewState extends State<SignInView> with SignalsMixin {
                         },
                         onChanged: (value) => password.value = value,
                       ),
-                      const SizedBox(height: 24),
+                      Align(
+                          alignment: Alignment.centerRight,
+                          child: TextButton(
+                              onPressed: () {
+                                router.push(ResetPasswordRoute());
+                              },
+                              child: Text("Forgot Password?"))),
+                      gap24,
                       ElevatedButton(
                         onPressed: isLoading.value ? null : _handleEmailSignIn,
                         child: isLoading.value

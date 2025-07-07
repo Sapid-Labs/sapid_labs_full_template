@@ -29,8 +29,7 @@ class _ResetPasswordViewState extends State<ResetPasswordView>
       isLoading.value = true;
       error.value = null;
 
-      // TODO: Add reset password method to AuthService
-      // await authService.resetPassword(email: email.value);
+      await authService.resetPassword(email: email.value);
 
       isSuccess.value = true;
     } catch (e) {
