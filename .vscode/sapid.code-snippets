@@ -1,0 +1,28 @@
+{
+    "Sapid Labs View": {
+        "prefix": "slView",
+        "scope": "dart",
+        "body": [
+            "import 'package:auto_route/auto_route.dart';",
+            "import 'package:flutter/material.dart';",
+            "",
+            "@RoutePage()",
+            "class ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/} extends StatefulWidget {",
+            "  const ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}({super.key});",
+            "",
+            "  @override",
+            "  State<${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}> createState() => _${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}State();",
+            "}",
+            "",
+            "class _${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}State extends State<${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}> {",
+            "  @override",
+            "  Widget build(BuildContext context) {",
+            "    return const Placeholder();",
+            "  }",
+            "}",
+            "",
+            ""
+        ],
+        "description": "Create a new Stateless Widget"
+    }
+}
