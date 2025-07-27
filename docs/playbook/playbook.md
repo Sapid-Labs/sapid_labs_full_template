@@ -69,6 +69,8 @@ If you don't want to send Slack notifications for new releases, delete or commen
 
 You can use the [Device art generator](https://developer.android.com/distribute/marketing-tools/device-art-generator) provided by Google to create nice looking mockups.
 
+This also creates simple mockups although the devices are a bit out of date: https://beta.app-mockup.com/
+
 #### Launch Icons
 
 > Your app icon must be a PNG or JPEG, up to 1 MB, 512 px by 512 px, and meet our design specifications and metadata policy

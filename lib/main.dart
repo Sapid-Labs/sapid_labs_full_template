@@ -1,3 +1,5 @@
+import 'package:amplitude_flutter/amplitude.dart';
+import 'package:amplitude_flutter/configuration.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -13,6 +15,12 @@ import 'package:slapp/app/theme.dart';
 import 'package:slapp/features/settings/services/settings_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:signals/signals_flutter.dart';
+import 'package:slapp/features/shared/utils/navigation_observers.dart';
+
+final Amplitude amplitude = Amplitude(Configuration(
+  apiKey: "ff2f485bec7b3432c7a6ed352cc6420c",
+  flushQueueSize: 1,
+));
 
 Future<void> main() async {
   // Comment to activate Signals logging
@@ -65,7 +73,13 @@ class MainApp extends StatelessWidget {
           pageTransitionsTheme: pageTransitionsTheme,
         ),
         themeMode: settingsThemeMode.value,
-        routerConfig: router.config(),
+        routerConfig: router.config(
+          navigatorObservers: () {
+            return [
+              AmplitudeNavigationObserver(),
+            ];
+          },
+        ),
       );
     });
   }

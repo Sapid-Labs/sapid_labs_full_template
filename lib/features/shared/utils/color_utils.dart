@@ -149,37 +149,37 @@ class ColorUtils {
 }
 
 extension FastColor on BuildContext {
-  Color get colorPrimary => Theme.of(this).colorScheme.primary;
+  Color get primary => Theme.of(this).colorScheme.primary;
 
-  Color get colorSecondary => Theme.of(this).colorScheme.secondary;
+  Color get secondary => Theme.of(this).colorScheme.secondary;
 
-  Color get colorTertiary => Theme.of(this).colorScheme.tertiary;
+  Color get tertiary => Theme.of(this).colorScheme.tertiary;
 
-  Color get colorError => Theme.of(this).colorScheme.error;
+  Color get error => Theme.of(this).colorScheme.error;
 
-  Color get colorSurface => Theme.of(this).colorScheme.surface;
+  Color get surface => Theme.of(this).colorScheme.surface;
 
-  Color get colorOnPrimary => Theme.of(this).colorScheme.onPrimary;
+  Color get onPrimary => Theme.of(this).colorScheme.onPrimary;
 
-  Color get colorOnSecondary => Theme.of(this).colorScheme.onSecondary;
+  Color get onSecondary => Theme.of(this).colorScheme.onSecondary;
 
-  Color get colorOnTertiary => Theme.of(this).colorScheme.onTertiary;
+  Color get onTertiary => Theme.of(this).colorScheme.onTertiary;
 
-  Color get colorOnError => Theme.of(this).colorScheme.onError;
+  Color get onError => Theme.of(this).colorScheme.onError;
 
-  Color get colorOnSurface => Theme.of(this).colorScheme.onSurface;
+  Color get onSurface => Theme.of(this).colorScheme.onSurface;
 
-  Color get colorSurfaceTint => Theme.of(this).colorScheme.surfaceTint;
+  Color get surfaceTint => Theme.of(this).colorScheme.surfaceTint;
 
-  Color get colorBackground => Theme.of(this).colorScheme.background;
+  Color get background => Theme.of(this).colorScheme.background;
 
-  Color get colorOnBackground => Theme.of(this).colorScheme.onBackground;
+  Color get onBackground => Theme.of(this).colorScheme.onBackground;
 
-  Color get colorInversePrimary => Theme.of(this).colorScheme.inversePrimary;
+  Color get inversePrimary => Theme.of(this).colorScheme.inversePrimary;
 
-  Color get colorInverseSurface => Theme.of(this).colorScheme.inverseSurface;
+  Color get inverseSurface => Theme.of(this).colorScheme.inverseSurface;
 
-  Color get colorOnInverseSurface => Theme.of(this).colorScheme.onInverseSurface;
+  Color get onInverseSurface => Theme.of(this).colorScheme.onInverseSurface;
 
-  Color get colorOutline => Theme.of(this).colorScheme.onSurface.withOpacity(0.12);
+  Color get outline => Theme.of(this).colorScheme.onSurface.withOpacity(0.12);
 }

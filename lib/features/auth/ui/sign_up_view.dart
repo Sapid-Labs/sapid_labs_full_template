@@ -103,8 +103,9 @@ class _SignUpViewState extends State<SignUpView> with SignalsMixin {
     return LoadingStack(
       isLoading: isLoading.value,
       child: Scaffold(
+        extendBodyBehindAppBar: true,
         appBar: AppBar(
-          title: const Text('Create Account'),
+          backgroundColor: Colors.transparent,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () => router.maybePop(),
@@ -120,6 +121,7 @@ class _SignUpViewState extends State<SignUpView> with SignalsMixin {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
+                      gap24,
                       AppLogo(sideLength: 200),
                       gap24,
                       Text(
@@ -236,6 +238,16 @@ class _SignUpViewState extends State<SignUpView> with SignalsMixin {
                       ),
                       gap16,
                       OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(24),
+                            side: BorderSide(
+                              color: Colors.grey,
+                              width: 1,
+                            ),
+                          ),
+                        ),
                         onPressed: () async {
                           if (isLoading.value) return;
                           await signUpAnonymously();

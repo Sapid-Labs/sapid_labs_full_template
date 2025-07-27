@@ -135,6 +135,22 @@ class OnboardingRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [ProfileView]
+class ProfileRoute extends PageRouteInfo<void> {
+  const ProfileRoute({List<PageRouteInfo>? children})
+      : super(ProfileRoute.name, initialChildren: children);
+
+  static const String name = 'ProfileRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const ProfileView();
+    },
+  );
+}
+
+/// generated route for
 /// [ResetPasswordView]
 class ResetPasswordRoute extends PageRouteInfo<void> {
   const ResetPasswordRoute({List<PageRouteInfo>? children})
@@ -146,6 +162,22 @@ class ResetPasswordRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return const ResetPasswordView();
+    },
+  );
+}
+
+/// generated route for
+/// [RssView]
+class RssRoute extends PageRouteInfo<void> {
+  const RssRoute({List<PageRouteInfo>? children})
+      : super(RssRoute.name, initialChildren: children);
+
+  static const String name = 'RssRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const RssView();
     },
   );
 }

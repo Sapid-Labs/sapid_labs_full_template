@@ -88,7 +88,6 @@ class _SignInViewState extends State<SignInView> with SignalsMixin {
       return LoadingStack(
         isLoading: isLoading.value,
         child: Scaffold(
-          appBar: AppBar(title: const Text('Sign In')),
           body: Watch((context) {
             return Padding(
               padding: const EdgeInsets.all(16.0),
@@ -99,6 +98,7 @@ class _SignInViewState extends State<SignInView> with SignalsMixin {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
+                      gap48,
                       AppLogo(sideLength: 200),
                       gap24,
                       TextFormField(
@@ -167,7 +167,7 @@ class _SignInViewState extends State<SignInView> with SignalsMixin {
                           const Text('Don\'t have an account?'),
                           TextButton(
                             onPressed: () =>
-                                router.replace(SignUpRoute(email: email.value)),
+                                router.push(SignUpRoute(email: email.value)),
                             child: const Text('Sign Up'),
                           ),
                         ],

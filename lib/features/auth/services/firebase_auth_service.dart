@@ -14,6 +14,8 @@ import 'package:injectable/injectable.dart';
 class FirebaseAuthService implements AuthService {
   @override
   Future<void> setup() async {
+    await GoogleSignIn.instance.initialize(
+        serverClientId: const String.fromEnvironment("SERVER_CLIENT_ID"));
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       if (user == null) {
         debugPrint('User is currently signed out!');
@@ -49,34 +51,37 @@ class FirebaseAuthService implements AuthService {
 
         return userCredential.additionalUserInfo?.isNewUser ?? false;
       } catch (e) {
-        debugPrint('e: $e');
-        throw Exception('Failed to sign in with Google: ${e.toString()}');
+        rethrow;
       }
     } else {
       try {
         debugPrint('Signing in with Google');
-        // Trigger the authentication flow
-        final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+        if (GoogleSignIn.instance.supportsAuthenticate()) {
+          // Trigger the authentication flow
+          final GoogleSignInAccount? googleUser =
+              await GoogleSignIn.instance.authenticate();
 
-        // Obtain the auth details from the request
-        final GoogleSignInAuthentication? googleAuth =
-            await googleUser?.authentication;
+          // Obtain the auth details from the request
+          final GoogleSignInAuthentication? googleAuth =
+              googleUser?.authentication;
 
-        // Create a new credential
-        final credential = GoogleAuthProvider.credential(
-          accessToken: googleAuth?.accessToken,
-          idToken: googleAuth?.idToken,
-        );
+          // Create a new credential
+          final credential = GoogleAuthProvider.credential(
+            idToken: googleAuth?.idToken,
+          );
 
-        UserCredential userCredential =
-            await FirebaseAuth.instance.signInWithCredential(credential);
+          UserCredential userCredential =
+              await FirebaseAuth.instance.signInWithCredential(credential);
 
-        debugPrint('User signed in with Google');
+          debugPrint('User signed in with Google');
 
-        return userCredential.additionalUserInfo?.isNewUser ?? false;
+          return userCredential.additionalUserInfo?.isNewUser ?? false;
+        } else {
+          debugPrint('Google Sign-In is not supported on this platform.');
+          throw Exception('Google Sign-In is not supported on this platform.');
+        }
       } catch (e) {
-        debugPrint('e: $e');
-        throw Exception('Failed to sign in with Google: ${e.toString()}');
+        rethrow;
       }
     }
   }

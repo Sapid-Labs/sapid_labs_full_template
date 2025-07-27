@@ -30,56 +30,66 @@ class SubscriptionService extends ChangeNotifier {
   }
 
   Future<void> initPlatformState() async {
-    if (kIsWeb) {
-      return;
-    }
-    await Purchases.setDebugLogsEnabled(true);
+    try {
+      if (kIsWeb) {
+        return;
+      }
+      await Purchases.setDebugLogsEnabled(true);
 
-    late PurchasesConfiguration configuration;
-    if (Platform.isAndroid) {
-      configuration = PurchasesConfiguration(
-          const String.fromEnvironment('google_sdk_key'));
-      if (false) {
-        // use your preferred way to determine if this build is for Amazon store
-        // checkout our MagicWeather sample for a suggestion
+      late PurchasesConfiguration configuration;
+      if (Platform.isAndroid) {
+        configuration = PurchasesConfiguration(
+            const String.fromEnvironment('google_sdk_key'));
+        if (false) {
+          // use your preferred way to determine if this build is for Amazon store
+          // checkout our MagicWeather sample for a suggestion
+          configuration = AmazonConfiguration(
+              const String.fromEnvironment('amazon_sdk_key'));
+        }
+      } else if (Platform.isIOS) {
         configuration =
-            AmazonConfiguration(const String.fromEnvironment('amazon_sdk_key'));
+            PurchasesConfiguration(const String.fromEnvironment('ios_sdk_key'));
       }
-    } else if (Platform.isIOS) {
-      configuration =
-          PurchasesConfiguration(const String.fromEnvironment('ios_sdk_key'));
+
+      await Purchases.configure(configuration..appUserID = authUserId.value);
+
+      await userSetup();
+
+      Purchases.addCustomerInfoUpdateListener((purchaserInfo) {
+        debugPrint(
+            'purchaserInfo.activeSubscriptions: ${purchaserInfo.activeSubscriptions}');
+        debugPrint(
+            'purchaserInfo.entitlements.all: ${purchaserInfo.entitlements.all}');
+        debugPrint(
+            'purchaserInfo.entitlements.active: ${purchaserInfo.entitlements.active}');
+        debugPrint(
+            'purchaserInfo.entitlements.all[_premiumId]: ${purchaserInfo.entitlements.all[_premiumId]}');
+        debugPrint(
+            'purchaserInfo.allExpirationDates: ${purchaserInfo.allExpirationDates}');
+        // handle any changes to purchaserInfo
+        if (purchaserInfo.entitlements.all[_premiumId]?.isActive ?? false) {
+          setPremium(
+              purchaserInfo.entitlements.all[_premiumId]?.isActive ?? false);
+        }
+      });
+    } catch (e) {
+      debugPrint('Error initializing Purchases: $e');
+      // Handle initialization error
     }
-
-    await Purchases.configure(configuration..appUserID = authUserId.value);
-
-    await userSetup();
-
-    Purchases.addCustomerInfoUpdateListener((purchaserInfo) {
-      debugPrint(
-          'purchaserInfo.activeSubscriptions: ${purchaserInfo.activeSubscriptions}');
-      debugPrint(
-          'purchaserInfo.entitlements.all: ${purchaserInfo.entitlements.all}');
-      debugPrint(
-          'purchaserInfo.entitlements.active: ${purchaserInfo.entitlements.active}');
-      debugPrint(
-          'purchaserInfo.entitlements.all[_premiumId]: ${purchaserInfo.entitlements.all[_premiumId]}');
-      debugPrint(
-          'purchaserInfo.allExpirationDates: ${purchaserInfo.allExpirationDates}');
-      // handle any changes to purchaserInfo
-      if (purchaserInfo.entitlements.all[_premiumId]?.isActive ?? false) {
-        setPremium(
-            purchaserInfo.entitlements.all[_premiumId]?.isActive ?? false);
-      }
-    });
   }
 
   Future<void> userSetup() async {
-    bool vip = isVip();
+    if (await Purchases.isConfigured) {
+      bool vip = isVip();
 
-    if (vip) {
-      setPremium(true);
+      if (vip) {
+        setPremium(true);
+      } else {
+        await checkSubscription();
+      }
     } else {
-      await checkSubscription();
+      debugPrint(
+          'Purchases is not configured yet. Please call initPlatformState first.');
     }
   }
 

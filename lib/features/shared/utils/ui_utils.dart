@@ -1,4 +1,26 @@
+import 'dart:typed_data';
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+
+/**
+ * Utility class for fast access to screen dimensions and media query data.
+ * Sample usage:
+ * final screenSize = context.screenSize;
+ */
+extension FastDimensions on BuildContext {
+  MediaQueryData get mediaQuery => MediaQuery.of(this);
+
+  Size get screenSize => mediaQuery.size;
+
+  double get screenWidth => mediaQuery.size.width;
+
+  double get screenHeight => mediaQuery.size.height;
+
+  EdgeInsets get padding => mediaQuery.padding;
+
+  double get textScaleFactor => mediaQuery.textScaler.scale(1);
+}
 
 class UiUtils {
   // Screen Dimensions
@@ -76,6 +98,31 @@ class UiUtils {
     return Rect.fromLTWH(position.dx, position.dy, size.width, size.height);
   }
 
+  /// Captures a widget as a PNG image using a GlobalKey
+  /// Returns the image data as Uint8List
+  ///
+  /// Example usage:
+  /// ```dart
+  /// final GlobalKey globalKey = GlobalKey();
+  ///
+  /// // Wrap your widget with RepaintBoundary
+  /// RepaintBoundary(
+  ///   key: globalKey,
+  ///   child: YourWidget(),
+  /// )
+  ///
+  /// // Capture the image
+  /// final imageBytes = await UiUtils.captureWidgetAsImage(globalKey);
+  /// ```
+  static Future<Uint8List> captureWidgetAsImage(GlobalKey globalKey) async {
+    final RenderRepaintBoundary boundary =
+        globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+    final ui.Image image = await boundary.toImage();
+    final ByteData? byteData =
+        await image.toByteData(format: ui.ImageByteFormat.png);
+    return byteData!.buffer.asUint8List();
+  }
+
   // Safe Area
   static double safeAreaTop(BuildContext context) {
     return MediaQuery.of(context).padding.top;
@@ -94,7 +141,8 @@ class UiUtils {
     return screenWidth(context) * (percentage / 100);
   }
 
-  static double heightPercentageOfScreen(BuildContext context, double percentage) {
+  static double heightPercentageOfScreen(
+      BuildContext context, double percentage) {
     return screenHeight(context) * (percentage / 100);
   }
 
@@ -170,7 +218,9 @@ class UiUtils {
     double? tablet,
     double? desktop,
   }) {
-    return SizedBox(width: responsiveWidth(context, mobile: mobile, tablet: tablet, desktop: desktop));
+    return SizedBox(
+        width: responsiveWidth(context,
+            mobile: mobile, tablet: tablet, desktop: desktop));
   }
 
   static Widget addResponsiveVerticalSpace(
@@ -179,7 +229,9 @@ class UiUtils {
     double? tablet,
     double? desktop,
   }) {
-    return SizedBox(height: responsiveHeight(context, mobile: mobile, tablet: tablet, desktop: desktop));
+    return SizedBox(
+        height: responsiveHeight(context,
+            mobile: mobile, tablet: tablet, desktop: desktop));
   }
 
   // Keyboard Utilities
@@ -192,7 +244,8 @@ class UiUtils {
   }
 
   // Custom Dialog Position
-  static RelativeRect getOptimalDialogPosition(BuildContext context, Size dialogSize) {
+  static RelativeRect getOptimalDialogPosition(
+      BuildContext context, Size dialogSize) {
     final screen = getScreenSize(context);
     final center = Offset(screen.width / 2, screen.height / 2);
 

@@ -24,5 +24,50 @@
             ""
         ],
         "description": "Create a new Stateless Widget"
+    },
+    "Stateless Signal": {
+        "prefix": "slStateless",
+        "scope": "dart",
+        "body": [
+            "import 'package:flutter/material.dart';",
+            "import 'package:signals/signals.dart';",
+            "",
+            "class ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/} extends StatelessWidget {",
+            "  ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}({super.key});",
+            "",
+            "  final counter = signal(0);",
+            "",
+            "  @override",
+            "  Widget build(BuildContext context) {",
+            "    return const Placeholder();",
+            "  }",
+            "}"
+        ],
+        "description": "Stateless widget with signal"
+    },
+    "Stateful Signal": {
+        "prefix": "slStateful",
+        "scope": "dart",
+        "body": [
+            "import 'package:flutter/material.dart';",
+            "import 'package:signals/signals_flutter.dart';",
+            "",
+            "class ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/} extends StatefulWidget {",
+            "  const ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}({super.key});",
+            "",
+            "  @override",
+            "  State<${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}> createState() => _${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}State();",
+            "}",
+            "",
+            "class _${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}State extends State<${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}> with SignalsMixin {",
+            "  late final counter = createSignal(0);",
+            "",
+            "  @override",
+            "  Widget build(BuildContext context) {",
+            "    return Text('Counter: ${counter.value}');",
+            "  }",
+            "}"
+        ],
+        "description": "Stateful widget with signal"
     }
 }
