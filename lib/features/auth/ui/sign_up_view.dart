@@ -141,6 +141,7 @@ class _SignUpViewState extends State<SignUpView> with SignalsMixin {
                           labelText: 'Email',
                           prefixIcon: Icon(Icons.email_outlined),
                         ),
+                        initialValue: email.value,
                         keyboardType: TextInputType.emailAddress,
                         enabled: !isLoading.value,
                         validator: (value) {

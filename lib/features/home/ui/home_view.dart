@@ -1,4 +1,7 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:slapp/features/auth/ui/account_view.dart';
+import 'package:slapp/features/dashboard/ui/dashboard_view.dart';
+import 'package:slapp/features/feed/ui/feed_view.dart';
 import 'package:slapp/features/home/ui/widgets/home_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:signals/signals_flutter.dart';
@@ -17,42 +20,37 @@ class _HomeViewState extends State<HomeView> with SignalsMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home'),
-      ),
-      drawer: HomeDrawer(),
-      body: IndexedStack(
-        index: index.value,
-        children: [
-          Text("Home"),
-          Text("Chat"),
-          Text("RSS"),
-          Text("AI")
-        ],
+      body: SafeArea(
+        child: IndexedStack(
+          index: index.value,
+          children: [
+            DashboardView(),
+            FeedView(),
+            AccountView(),
+          ],
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: index.value,
-        onTap: (value){
+        showUnselectedLabels: false,
+        onTap: (value) {
           index.value = value;
         },
         items: [
-        BottomNavigationBarItem(
-          label: "Home",
-          icon: Icon(Icons.home_outlined),
-        ),
-        BottomNavigationBarItem(
-          label: "Chat",
-          icon: Icon(Icons.chat_bubble_outline),
-        ),
-         BottomNavigationBarItem(
-          label: "RSS",
-          icon: Icon(Icons.rss_feed_outlined),
-        ),
-        BottomNavigationBarItem(
-          label: "AI",
-          icon: Icon(Icons.android_outlined),
-        )
-      ]),
+          BottomNavigationBarItem(
+            label: "Home",
+            icon: Icon(Icons.home_outlined),
+          ),
+          BottomNavigationBarItem(
+            label: "Feed",
+            icon: Icon(Icons.list),
+          ),
+          BottomNavigationBarItem(
+            label: "Settings",
+            icon: Icon(Icons.settings),
+          )
+        ],
+      ),
     );
   }
 }

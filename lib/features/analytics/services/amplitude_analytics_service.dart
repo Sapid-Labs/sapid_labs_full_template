@@ -8,7 +8,7 @@ import 'package:slapp/app/get_it.dart';
 import 'package:slapp/features/analytics/services/analytics_service.dart';
 import 'package:injectable/injectable.dart';
 
-@amplitudeAnalytics
+@amplitudeAnalyticsEnv
 @LazySingleton(as: AnalyticsService)
 class AmplitudeAnalyticsService implements AnalyticsService {
   final Amplitude amplitude = Amplitude(

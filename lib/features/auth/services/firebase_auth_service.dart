@@ -9,13 +9,14 @@ import 'package:slapp/features/auth/services/auth_service.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:injectable/injectable.dart';
 
-@firebase
+@firebaseEnv
 @Singleton(as: AuthService)
 class FirebaseAuthService implements AuthService {
   @override
   Future<void> setup() async {
     await GoogleSignIn.instance.initialize(
-        serverClientId: const String.fromEnvironment("SERVER_CLIENT_ID"));
+      serverClientId: const String.fromEnvironment("SERVER_CLIENT_ID"),
+    );
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       if (user == null) {
         debugPrint('User is currently signed out!');

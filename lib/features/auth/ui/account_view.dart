@@ -1,7 +1,9 @@
+import 'package:slapp/app/config.dart';
 import 'package:slapp/app/constants.dart';
 import 'package:slapp/app/router.dart';
 import 'package:slapp/app/services.dart';
 import 'package:slapp/features/auth/services/auth_service.dart';
+import 'package:slapp/features/shared/ui/app_version.dart';
 import 'package:slapp/features/shared/utils/color_utils.dart';
 import 'package:slapp/features/shared/utils/text_utils.dart';
 import 'package:auto_route/auto_route.dart';
@@ -106,11 +108,11 @@ class _AccountViewState extends State<AccountView> {
                   color: context.primary,
                 ),
                 title: Text(
-                  'Bakedown Premium',
+                  '${AppConfig.appName} Premium',
                   style: context.titleMedium.bold.primary,
                 ),
                 subtitle: Text(
-                  'Unlimited recipes, components, and more',
+                  'Unlimited access, features, and more',
                   style: context.bodyMedium.bold,
                 ),
                 trailing: const Icon(Icons.arrow_forward_ios),
@@ -124,8 +126,19 @@ class _AccountViewState extends State<AccountView> {
             gap8,
             Card(
               child: ListTile(
+                leading: const Icon(Icons.thumbs_up_down),
+                title: const Text('Suggest a Feature'),
+                trailing: const Icon(Icons.arrow_forward_ios),
+                onTap: () {
+                  router.push(FeedbackRoute());
+                },
+              ),
+            ),
+            gap8,
+            Card(
+              child: ListTile(
                 leading: const Icon(Icons.star_rate),
-                title: const Text('Rate Bakedown'),
+                title: const Text('Rate ${AppConfig.appName}'),
                 trailing: const Icon(Icons.arrow_forward_ios),
                 onTap: () {
                   final InAppReview inAppReview = InAppReview.instance;
@@ -143,10 +156,11 @@ class _AccountViewState extends State<AccountView> {
               child: ListTile(
                 leading: const Icon(Icons.camera_alt_outlined),
                 title: const Text('Instagram'),
-                subtitle: const Text('@bakedownapp'),
+                subtitle: const Text('@' + AppConfig.instagramUsername),
                 trailing: const Icon(Icons.arrow_forward_ios),
                 onTap: () {
-                  launchUrl(Uri.parse('https://instagram.com/bakedownapp'));
+                  launchUrl(Uri.parse(
+                      'https://instagram.com/${AppConfig.instagramUsername}'));
                 },
               ),
             ),
@@ -155,14 +169,16 @@ class _AccountViewState extends State<AccountView> {
               child: ListTile(
                 leading: const Icon(Icons.chat_bubble_outline),
                 title: const Text('Threads'),
-                subtitle: const Text('@bakedownapp'),
+                subtitle: const Text('@' + AppConfig.threadsUsername),
                 trailing: const Icon(Icons.arrow_forward_ios),
                 onTap: () {
-                  launchUrl(Uri.parse('https://www.threads.com/@bakedownapp'));
+                  launchUrl(Uri.parse(
+                      'https://www.threads.com/@${AppConfig.threadsUsername}'));
                 },
               ),
             ),
             gap16,
+
             OutlinedButton.icon(
               onPressed: handleUpdatePassword,
               icon: const Icon(Icons.lock),
@@ -174,6 +190,9 @@ class _AccountViewState extends State<AccountView> {
               icon: const Icon(Icons.logout),
               label: const Text('Sign Out'),
             ),
+            gap24,
+            Center(child: AppVersion()),
+            gap16,
           ],
         );
       }),

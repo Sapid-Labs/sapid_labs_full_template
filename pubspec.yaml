@@ -12,6 +12,8 @@ dependencies:
   cloud_firestore: ^5.6.2
   collection: ^1.17.1
   csv: ^6.0.0
+  dartantic_ai: ^1.0.2
+  dartantic_interface: ^1.0.2
   device_info_plus: ^11.1.1
   flex_color_scheme: ^8.0.0
   flutter:
@@ -21,7 +23,6 @@ dependencies:
   flutter_web_plugins:
     sdk: flutter 
   flutter_svg: ^2.0.14  
-  firebase_ai: ^2.2.1
   firebase_analytics: ^11.5.2
   firebase_auth: ^5.4.1
   firebase_core: ^3.10.1
@@ -35,6 +36,7 @@ dependencies:
   injectable: ^2.5.0
   intl: ^0.20.2
   json_annotation: ^4.9.0
+  json_schema: ^5.2.1
   package_info_plus: ^8.3.0
   permission_handler: ^12.0.1
   pocketbase: ^0.23.0
@@ -49,6 +51,9 @@ dependencies:
   universal_html: ^2.2.4
   universal_io: 2.2.2 
   url_launcher: ^6.3.1
+
+dependency_overrides:
+  openai_dart: 0.5.2
 
 dev_dependencies:
   auto_route_generator: ^10.2.3

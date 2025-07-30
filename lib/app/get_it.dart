@@ -3,12 +3,12 @@ import 'package:injectable/injectable.dart';
 
 import 'get_it.config.dart';
 
-const firebase = Environment('firebase');
-const supabase = Environment('supabase');
-const pocketbase = Environment('pocketbase');
-const amplitudeAnalytics = Environment('amplitude');
-const posthog = Environment('posthog');
-const firebaseAnalytics = Environment('firebaseAnalytics');
+const firebaseEnv = Environment('firebase');
+const supabaseEnv = Environment('supabase');
+const pocketbaseEnv = Environment('pocketbase');
+const amplitudeAnalyticsEnv = Environment('amplitude');
+const posthogEnv = Environment('posthog');
+const firebaseAnalyticsEnv = Environment('firebaseAnalytics');
 
 final getIt = GetIt.instance;
 

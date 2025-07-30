@@ -57,8 +57,9 @@ class ProfileView extends StatelessWidget {
                         gap24,
                         ElevatedButton(
                           onPressed: model.saveProfile,
-                          child: const Text('Save Profile',
-                              style: TextStyle(color: Colors.white)),
+                          child: const Text(
+                            'Save Profile',
+                          ),
                         ),
                       ],
                     ),

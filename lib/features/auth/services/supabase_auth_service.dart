@@ -4,7 +4,7 @@ import 'package:slapp/features/auth/services/auth_service.dart';
 import 'package:injectable/injectable.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-@supabase
+@supabaseEnv
 @Singleton(as: AuthService)
 class SupabaseAuthService implements AuthService {
   late final SupabaseClient supabase;

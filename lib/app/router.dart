@@ -50,6 +50,11 @@ class AppRouter extends RootStackRouter {
       guards: [AuthGuard()],
     ),
     AutoRoute(
+      page: ProfileRoute.page,
+      path: '/profile',
+      guards: [AuthGuard()],
+    ),
+    AutoRoute(
       page: SettingsRoute.page,
       path: '/settings',
       guards: [AuthGuard()],
@@ -59,7 +64,7 @@ class AppRouter extends RootStackRouter {
       path: '/feedback',
       guards: [AuthGuard()],
     ),
-     AutoRoute(
+    AutoRoute(
       page: NewFeedbackRoute.page,
       path: '/new-feedback',
       guards: [AuthGuard()],

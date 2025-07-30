@@ -6,10 +6,12 @@ import 'package:slapp/features/auth/services/auth_service.dart';
 import 'package:slapp/features/feedback/services/feedback_service.dart';
 import 'package:slapp/features/onboarding%20copy/ui/services/onboarding_service.dart';
 import 'package:slapp/features/settings/services/settings_service.dart';
+import 'package:slapp/features/shared/services/ai_service.dart';
 import 'package:slapp/features/shared/services/permission_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:slapp/features/subscriptions/services/subscription_service.dart';
 
+AIService get aiService => getIt.get<AIService>();
 AnalyticsService get analyticsService => getIt.get<AnalyticsService>();
 AppRouter get router => getIt.get<AppRouter>();
 AuthService get authService => getIt.get<AuthService>();

@@ -6,7 +6,7 @@ import 'package:slapp/features/auth/services/auth_service.dart';
 import 'package:slapp/features/feedback/models/feedback.dart';
 import 'package:slapp/features/feedback/services/feedback_service.dart';
 
-@firebase
+@firebaseEnv
 @LazySingleton(as: FeedbackService)
 class FirebaseFeedbackService extends FeedbackService {
   @override

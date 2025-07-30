@@ -1,4 +1,6 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:slapp/app/constants.dart';
 import 'package:slapp/app/router.dart';
 import 'package:slapp/app/services.dart';
@@ -63,14 +65,41 @@ class _SignInViewState extends State<SignInView> with SignalsMixin {
       error.value = null;
 
       debugPrint('Signing in with Google');
-      await authService.signInWithGoogle();
+      bool newUser = await authService.signInWithGoogle();
 
       if (mounted) {
-        // Navigate to home or intended screen after successful login
-        router.replaceAll([const HomeRoute()]);
+        if (newUser) {
+          router.replaceAll([OnboardingRoute()]);
+        } else {
+          // Navigate to home or intended screen after successful login
+          router.replaceAll([const HomeRoute()]);
+        }
       } else {
         debugPrint('Not mounted');
       }
+    } on GoogleSignInException catch (e) {
+      debugPrint('GoogleSignInException here: $e');
+      error.value = e.description;
+
+      if (e.code == GoogleSignInExceptionCode.canceled) {
+        return;
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text('Failed to sign in with Google: ${e.description}')),
+      );
+    } on FirebaseAuthException catch (e) {
+      debugPrint('FirebaseAuthException: $e');
+      error.value = e.message;
+
+      if (e.code == 'auth/user-cancelled') {
+        return;
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to sign in with Google: ${e.message}')),
+      );
     } catch (e) {
       debugPrint('e: $e');
       error.value = e.toString();

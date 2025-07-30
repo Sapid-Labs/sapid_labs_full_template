@@ -6,14 +6,21 @@ part of 'feedback.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Feedback _$FeedbackFromJson(Map<String, dynamic> json) => Feedback(
-      id: json['id'] as String?,
-      content: json['content'] as String,
-      userId: json['userId'] as String?,
-      type: $enumDecodeNullable(_$FeedbackTypeEnumMap, json['type']),
-      createdAt: json['createdAt'] == null
-          ? null
-          : DateTime.parse(json['createdAt'] as String),
+Feedback _$FeedbackFromJson(Map<String, dynamic> json) => $checkedCreate(
+      'Feedback',
+      json,
+      ($checkedConvert) {
+        final val = Feedback(
+          id: $checkedConvert('id', (v) => v as String?),
+          content: $checkedConvert('content', (v) => v as String),
+          userId: $checkedConvert('userId', (v) => v as String?),
+          type: $checkedConvert(
+              'type', (v) => $enumDecodeNullable(_$FeedbackTypeEnumMap, v)),
+          createdAt: $checkedConvert('createdAt',
+              (v) => v == null ? null : DateTime.parse(v as String)),
+        );
+        return val;
+      },
     );
 
 Map<String, dynamic> _$FeedbackToJson(Feedback instance) => <String, dynamic>{

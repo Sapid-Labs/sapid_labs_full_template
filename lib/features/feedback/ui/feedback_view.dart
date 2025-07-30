@@ -45,34 +45,62 @@ class _FeedbackViewState extends State<FeedbackView> {
             ? const Center(
                 child: CircularProgressIndicator(),
               )
-            : ListView.builder(
-                padding: const EdgeInsets.all(8.0),
-                itemCount: allFeedback.length,
-                itemBuilder: (BuildContext context, int index) {
-                  Feedback feedback = allFeedback[index];
-                  return Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            feedback.content,
-                            style: context.bodyLarge,
+            : allFeedback.isEmpty
+                ? Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.feedback_outlined,
+                          size: 64,
+                          color: Theme.of(context).colorScheme.outline,
+                        ),
+                        gap24,
+                        Text(
+                          'No feedback available',
+                          style: context.headlineSmall.copyWith(
+                            color: Theme.of(context).colorScheme.onSurfaceVariant,
                           ),
-                          gap8,
-                          Text(
-                            MaterialLocalizations.of(context)
-                                .formatFullDate(feedback.createdAt!)
-                                .toString(),
-                            style: context.bodySmall,
-                          )
-                        ],
-                      ),
+                        ),
+                        gap8,
+                        Text(
+                          'Be the first to share your thoughts and help improve the experience',
+                          style: context.bodyMedium.copyWith(
+                            color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
                     ),
-                  );
-                },
-              ),
+                  )
+                : ListView.builder(
+                    padding: const EdgeInsets.all(8.0),
+                    itemCount: allFeedback.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      Feedback feedback = allFeedback[index];
+                      return Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                feedback.content,
+                                style: context.bodyLarge,
+                              ),
+                              gap8,
+                              Text(
+                                MaterialLocalizations.of(context)
+                                    .formatFullDate(feedback.createdAt!)
+                                    .toString(),
+                                style: context.bodySmall,
+                              )
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),

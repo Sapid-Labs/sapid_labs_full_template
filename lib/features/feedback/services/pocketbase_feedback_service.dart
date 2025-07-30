@@ -7,7 +7,7 @@ import 'package:slapp/features/feedback/models/feedback.dart';
 
 import 'feedback_service.dart';
 
-@pocketbase
+@pocketbaseEnv
 @LazySingleton(as: FeedbackService)
 class PocketbaseFeedbackService extends FeedbackService {
   PocketBase pb = PocketBase(const String.fromEnvironment('POCKETBASE_URL'));
