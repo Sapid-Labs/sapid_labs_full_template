@@ -84,24 +84,6 @@ class _AccountViewState extends State<AccountView> {
                       sectionTitle('Account'),
                       gap4,
                       ListTile(
-                        leading: const Icon(Icons.email),
-                        title: const Text('Email'),
-                        subtitle: Text(authEmail.value ?? 'No email'),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: circular8,
-                        ),
-                      ),
-                      Divider(height: 2),
-                      ListTile(
-                        leading: const Icon(Icons.person),
-                        title: const Text('Profile Information'),
-                        trailing: const Icon(Icons.arrow_forward_ios),
-                        onTap: () {
-                          router.push(ProfileRoute());
-                        },
-                      ),
-                      Divider(height: 2),
-                      ListTile(
                         leading: Icon(
                           Icons.auto_awesome,
                           color: context.primary,
@@ -110,9 +92,17 @@ class _AccountViewState extends State<AccountView> {
                           '${AppConfig.appName} Premium',
                           style: context.titleMedium.bold.primary,
                         ),
-                        trailing: const Icon(Icons.arrow_forward_ios),
                         onTap: () {
                           router.push(const SubscriptionRoute());
+                        },
+                      ),
+                      Divider(height: 2),
+                      ListTile(
+                        leading: const Icon(Icons.person),
+                        title: const Text('Profile Information'),
+                        subtitle: Text(authEmail.value ?? 'No email'),
+                        onTap: () {
+                          router.push(ProfileRoute());
                         },
                       ),
                       Divider(height: 2),
@@ -129,7 +119,6 @@ class _AccountViewState extends State<AccountView> {
                           'Settings',
                           style: context.titleMedium.bold,
                         ),
-                        trailing: const Icon(Icons.arrow_forward_ios),
                         onTap: () {
                           router.push(const SettingsRoute());
                         },
@@ -152,7 +141,6 @@ class _AccountViewState extends State<AccountView> {
                       ListTile(
                         leading: const Icon(Icons.thumbs_up_down),
                         title: const Text('Suggest a Feature'),
-                        trailing: const Icon(Icons.arrow_forward_ios),
                         onTap: () {
                           router.push(FeedbackRoute());
                         },
@@ -161,7 +149,6 @@ class _AccountViewState extends State<AccountView> {
                       ListTile(
                         leading: const Icon(Icons.star_rate),
                         title: const Text('Rate ${AppConfig.appName}'),
-                        trailing: const Icon(Icons.arrow_forward_ios),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.vertical(
                             bottom: Radius.circular(16),
@@ -194,7 +181,6 @@ class _AccountViewState extends State<AccountView> {
                         leading: const Icon(Icons.camera_alt_outlined),
                         title: const Text('Instagram'),
                         subtitle: const Text('@' + AppConfig.instagramUsername),
-                        trailing: const Icon(Icons.arrow_forward_ios),
                         onTap: () {
                           launchUrl(Uri.parse(
                               'https://instagram.com/${AppConfig.instagramUsername}'));
@@ -205,10 +191,56 @@ class _AccountViewState extends State<AccountView> {
                         leading: const Icon(Icons.chat_bubble_outline),
                         title: const Text('Threads'),
                         subtitle: const Text('@' + AppConfig.threadsUsername),
-                        trailing: const Icon(Icons.arrow_forward_ios),
                         onTap: () {
                           launchUrl(Uri.parse(
-                              'https://www.threads.com/@${AppConfig.threadsUsername}'));
+                              'https://threads.com/@${AppConfig.threadsUsername}'));
+                        },
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(
+                            bottom: Radius.circular(16),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              gap16,
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ListTile(
+                        leading: const Icon(Icons.article),
+                        title: const Text('Terms of Service'),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(16),
+                          ),
+                        ),
+                        onTap: () {
+                          launchUrl(Uri.parse(
+                              'https://sapidlabs.com/${AppConfig.appName.toLowerCase()}/terms-of-service'));
+                        },
+                      ),
+                      Divider(height: 2),
+                      ListTile(
+                        leading: const Icon(Icons.shield),
+                        title: const Text('Privacy Policy'),
+                        onTap: () {
+                          launchUrl(Uri.parse(
+                              'https://sapidlabs.com/${AppConfig.appName.toLowerCase()}/privacy-policy'));
+                        },
+                      ),
+                      Divider(height: 2),
+                      ListTile(
+                        leading: const Icon(Icons.person_remove),
+                        title: const Text('Delete Account?'),
+                        onTap: () {
+                          launchUrl(Uri.parse(
+                              'https://sapidlabs.com/${AppConfig.appName.toLowerCase()}/delete-data'));
                         },
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.vertical(
@@ -227,7 +259,6 @@ class _AccountViewState extends State<AccountView> {
                   child: ListTile(
                     leading: const Icon(Icons.android),
                     title: const Text('Demo'),
-                    trailing: const Icon(Icons.arrow_forward_ios),
                     onTap: () {
                       router.push(DemoRoute());
                     },

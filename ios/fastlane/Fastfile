@@ -4,6 +4,12 @@ default_platform(:ios)
 
 platform :ios do
 
+  lane :reset_version_code do
+    f = File.new("fastlane/metadata/versionCode", "w")
+    f.write("0")
+    f.close
+  end
+
   lane :bump_version_code do
     versionCode = File.read("metadata/versionCode").to_i
     versionCode = versionCode + 1
@@ -14,21 +20,11 @@ platform :ios do
     versionCode
   end
   
-  lane :bump_version_name do
-    version_name = File.read("metadata/versionName").to_i
-    version_name = version_name + 1
-    
-    f = File.new("metadata/versionName", "w")
-    f.write(version_name)
-    f.close
-    version_name
-  end
-  
   desc "Push a new release build to the App Store"
   lane :prod do
     versionCode = bump_version_code
-    version_name = bump_version_name 
-    sh("flutter","build","ipa","--build-name", "100.0.#{version_name}","--dart-define-from-file=assets/config.json")
+
+    sh("flutter","build","ipa","--build-name", "1.0.#{versionCode}","--build-number", "#{versionCode}","--dart-define-from-file=assets/config.json")
     upload_to_app_store(ipa: "../build/ios/ipa/sapidlabs.ipa",
     submit_for_review: true,
     automatic_release: true,
@@ -38,17 +34,17 @@ platform :ios do
     "add_id_info_uses_idfa": false}
     )
     
-    send_slack_notification(message: "New production version #{versionCode} has been pushed to App Store!")  
+    send_slack_notification(message: "New production version 1.0.#{versionCode} (#{versionCode}) has been pushed to App Store!")  
   end
   
   desc "Push a new beta build to TestFlight"
   lane :beta do
     versionCode = bump_version_code
-    version_name = bump_version_name
-    sh("flutter","build","ipa","--build-name", "100.0.#{version_name}","--dart-define-from-file=assets/config.json")
+
+    sh("flutter","build","ipa","--build-name", "1.0.#{versionCode}","--build-number", "#{versionCode}","--dart-define-from-file=assets/config.json")
     upload_to_testflight(ipa: "../build/ios/ipa/sapidlabs.ipa")
     
-    send_slack_notification(message: "New internal version #{versionCode} has been pushed to TestFlight!")
+    send_slack_notification(message: "New internal version 1.0.#{versionCode} (#{versionCode}) has been pushed to TestFlight!")
     
   end
   
