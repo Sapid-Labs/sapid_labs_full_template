@@ -4,7 +4,7 @@ import 'package:slapp/app/router.dart';
 import 'package:slapp/features/analytics/services/analytics_service.dart';
 import 'package:slapp/features/auth/services/auth_service.dart';
 import 'package:slapp/features/feedback/services/feedback_service.dart';
-import 'package:slapp/features/onboarding%20copy/ui/services/onboarding_service.dart';
+import 'package:slapp/features/onboarding/services/onboarding_service.dart';
 import 'package:slapp/features/settings/services/settings_service.dart';
 import 'package:slapp/features/shared/services/ai_service.dart';
 import 'package:slapp/features/shared/services/permission_service.dart';

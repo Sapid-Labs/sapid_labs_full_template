@@ -9,6 +9,10 @@
         "kind": "build",
         "isDefault": false
       },
+      "icon": {
+        "id": "tools",
+        "color": "terminal.ansiBlue"
+      },
       "problemMatcher": []
     },
     {
@@ -18,6 +22,10 @@
       "group": {
         "kind": "build",
         "isDefault": false
+      },
+      "icon": {
+        "id": "cloud-download",
+        "color": "terminal.ansiMagenta"
       },
       "problemMatcher": []
     },
@@ -29,6 +37,10 @@
         "kind": "build",
         "isDefault": false
       },
+      "icon": {
+        "id": "refresh",
+        "color": "terminal.ansiYellow"
+      },
       "problemMatcher": []
     },
     {
@@ -37,6 +49,10 @@
       "command": "fastlane internal",
       "options": {
         "cwd": "${workspaceFolder}/android"
+      },
+      "icon": {
+        "id": "rocket",
+        "color": "terminal.ansiGreen"
       },
       "group": {
         "kind": "build",
@@ -49,6 +65,10 @@
       "command": "fastlane beta",
       "options": {
         "cwd": "${workspaceFolder}/ios"
+      },
+      "icon": {
+        "id": "rocket",
+        "color": "terminal.ansiGreen"
       },
       "group": {
         "kind": "build",
