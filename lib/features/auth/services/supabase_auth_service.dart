@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:slapp/app/get_it.dart';
 import 'package:slapp/features/auth/services/auth_service.dart';
 import 'package:injectable/injectable.dart';
@@ -11,6 +12,10 @@ class SupabaseAuthService implements AuthService {
 
   @override
   Future<void> setup() async {
+    await GoogleSignIn.instance.initialize(
+      serverClientId: const String.fromEnvironment("SERVER_CLIENT_ID"),
+    );
+
     await Supabase.initialize(
       url: const String.fromEnvironment('SUPABASE_URL'),
       anonKey: const String.fromEnvironment('SUPABASE_ANON_KEY'),
@@ -69,13 +74,15 @@ class SupabaseAuthService implements AuthService {
   }
 
   @override
-  Future<void> signInWithApple() async {
+  Future<bool> signInWithApple() async {
     try {
       await supabase.auth.signInWithOAuth(
         OAuthProvider.apple,
         redirectTo:
             kIsWeb ? null : 'io.supabase.flutterquickstart://login-callback/',
       );
+
+      return true;
     } catch (e) {
       rethrow;
     }

@@ -88,7 +88,7 @@ class FirebaseAuthService implements AuthService {
   }
 
   @override
-  Future<void> signInWithApple() async {
+  Future<bool> signInWithApple() async {
     try {
       final appleProvider = AppleAuthProvider();
       if (kIsWeb) {
@@ -96,6 +96,8 @@ class FirebaseAuthService implements AuthService {
       } else {
         await FirebaseAuth.instance.signInWithProvider(appleProvider);
       }
+
+      return true;
     } on SignInWithAppleAuthorizationException catch (e) {
       debugPrint('Error signing in with Apple: $e');
       throw e.message;

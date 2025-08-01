@@ -7,6 +7,7 @@ import 'package:slapp/features/auth/ui/reset_password_view.dart';
 import 'package:slapp/features/auth/ui/sign_in_view.dart';
 import 'package:slapp/features/auth/ui/sign_up_view.dart';
 import 'package:slapp/features/auth/utils/auth_guard.dart';
+import 'package:slapp/features/demo/ui/demo_view.dart';
 import 'package:slapp/features/feedback/ui/feedback_view.dart';
 import 'package:slapp/features/feedback/ui/new_feedback/new_feedback_view.dart';
 import 'package:slapp/features/home/ui/home_view.dart';

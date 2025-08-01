@@ -25,9 +25,10 @@ abstract class AuthService {
     return true;
   }
 
-  Future<void> signInWithApple() async {
+  Future<bool> signInWithApple() async {
     FirebaseAuthService().signInWithApple();
     SupabaseAuthService().signInWithApple();
+    return true;
   }
 
   Future<void> loginWithEmailAndPassword({

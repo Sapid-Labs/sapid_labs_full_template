@@ -1,15 +1,15 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:slapp/app/constants.dart';
 import 'package:slapp/app/router.dart';
 import 'package:slapp/app/services.dart';
 import 'package:slapp/features/shared/ui/app_logo.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_signin_button/button_list.dart';
-import 'package:flutter_signin_button/button_view.dart';
 import 'package:slapp/features/shared/ui/loading_stack.dart';
 import 'package:signals/signals_flutter.dart';
+import 'package:universal_io/io.dart' show Platform;
 
 @RoutePage()
 class SignInView extends StatefulWidget {
@@ -111,6 +111,35 @@ class _SignInViewState extends State<SignInView> with SignalsMixin {
     }
   }
 
+  Future<void> _handleAppleSignIn() async {
+    try {
+      isLoading.value = true;
+      error.value = null;
+
+      debugPrint('Signing in with Apple');
+      bool newUser = await authService.signInWithApple();
+
+      if (mounted) {
+        if (newUser) {
+          router.replaceAll([OnboardingRoute()]);
+        } else {
+          // Navigate to home or intended screen after successful login
+          router.replaceAll([const HomeRoute()]);
+        }
+      } else {
+        debugPrint('Not mounted');
+      }
+    } catch (e) {
+      debugPrint('e: $e');
+      error.value = e.toString();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.toString())),
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Watch((context) {
@@ -184,11 +213,44 @@ class _SignInViewState extends State<SignInView> with SignalsMixin {
                               )
                             : const Text('Sign In'),
                       ),
-                      gap16,
-                      SignInButton(Buttons.Google, onPressed: () {
-                        if (!isLoading.value) _handleGoogleSignIn();
-                      }),
-                      gap16,
+                      if (Platform.isAndroid) ...[
+                        gap8,
+                        FilledButton.icon(
+                          style: FilledButton.styleFrom(
+                            backgroundColor:
+                                Theme.brightnessOf(context) == Brightness.light
+                                    ? Colors.white
+                                    : Colors.black,
+                            foregroundColor:
+                                Theme.brightnessOf(context) == Brightness.light
+                                    ? Colors.black
+                                    : Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(24),
+                              side: BorderSide(
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                            ),
+                          ),
+                          icon: Image.asset('assets/images/google_logo.webp',
+                              height: 24, width: 24),
+                          label: const Text('Sign In with Google'),
+                          onPressed: () {
+                            if (!isLoading.value) _handleGoogleSignIn();
+                          },
+                        ),
+                      ],
+                      if (Platform.isIOS) ...[
+                        gap8,
+                        SignInWithAppleButton(
+                          style: SignInWithAppleButtonStyle.whiteOutlined,
+                          height: 38,
+                          borderRadius: BorderRadius.circular(24),
+                          onPressed: () async {
+                            if (!isLoading.value) _handleAppleSignIn();
+                          },
+                        ),
+                      ],
                       gap24,
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,

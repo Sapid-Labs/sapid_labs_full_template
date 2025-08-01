@@ -11,7 +11,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:signals/signals_flutter.dart';
-import 'package:slapp/app/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 @RoutePage()
@@ -69,147 +68,192 @@ class _AccountViewState extends State<AccountView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Watch((context) {
-        return ListView(
-          padding: paddingH16.add(EdgeInsets.symmetric(vertical: 8)),
-          children: [
-            sectionTitle('Account'),
-            gap8,
-
-            Card(
-              child: ListTile(
-                leading: const Icon(Icons.email),
-                title: const Text('Email'),
-                subtitle: Text(authEmail.value ?? 'No email'),
-              ),
-            ),
-            gap8,
-            Card(
-              child: ListTile(
-                leading: const Icon(Icons.person),
-                title: const Text('Profile Information'),
-                subtitle: const Text('Edit your name, username, and bio'),
-                trailing: const Icon(Icons.arrow_forward_ios),
-                onTap: () {
-                  router.push(ProfileRoute());
-                },
-              ),
-            ),
-            gap8,
-            Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-                side: BorderSide(
-                  color: context.primary,
-                ),
-              ),
-              child: ListTile(
-                leading: Icon(
-                  Icons.auto_awesome,
-                  color: context.primary,
-                ),
-                title: Text(
-                  '${AppConfig.appName} Premium',
-                  style: context.titleMedium.bold.primary,
-                ),
-                subtitle: Text(
-                  'Unlimited access, features, and more',
-                  style: context.bodyMedium.bold,
-                ),
-                trailing: const Icon(Icons.arrow_forward_ios),
-                onTap: () {
-                  router.push(const SubscriptionRoute());
-                },
-              ),
-            ),
-            gap32,
-            sectionTitle('Feedback'),
-            gap8,
-            Card(
-              child: ListTile(
-                leading: const Icon(Icons.thumbs_up_down),
-                title: const Text('Suggest a Feature'),
-                trailing: const Icon(Icons.arrow_forward_ios),
-                onTap: () {
-                  router.push(FeedbackRoute());
-                },
-              ),
-            ),
-            gap8,
-            Card(
-              child: ListTile(
-                leading: const Icon(Icons.star_rate),
-                title: const Text('Rate ${AppConfig.appName}'),
-                trailing: const Icon(Icons.arrow_forward_ios),
-                onTap: () {
-                  final InAppReview inAppReview = InAppReview.instance;
-
-                  inAppReview.openStoreListing(
-                    appStoreId: const String.fromEnvironment("APP_STORE_ID"),
-                  );
-                },
-              ),
-            ),
-            gap32,
-            sectionTitle('Follow Us'),
-            gap8,
-            Card(
-              child: ListTile(
-                leading: const Icon(Icons.camera_alt_outlined),
-                title: const Text('Instagram'),
-                subtitle: const Text('@' + AppConfig.instagramUsername),
-                trailing: const Icon(Icons.arrow_forward_ios),
-                onTap: () {
-                  launchUrl(Uri.parse(
-                      'https://instagram.com/${AppConfig.instagramUsername}'));
-                },
-              ),
-            ),
-            gap8,
-            Card(
-              child: ListTile(
-                leading: const Icon(Icons.chat_bubble_outline),
-                title: const Text('Threads'),
-                subtitle: const Text('@' + AppConfig.threadsUsername),
-                trailing: const Icon(Icons.arrow_forward_ios),
-                onTap: () {
-                  launchUrl(Uri.parse(
-                      'https://www.threads.com/@${AppConfig.threadsUsername}'));
-                },
-              ),
-            ),
-            if(kDebugMode)...[
-              gap8,
+      body: SafeArea(
+        child: Watch((context) {
+          return ListView(
+            padding: paddingH16.add(EdgeInsets.symmetric(vertical: 8)),
+            children: [
+              gap24,
               Card(
-              child: ListTile(
-                leading: const Icon(Icons.android),
-                title: const Text('Demo'),
-                trailing: const Icon(Icons.arrow_forward_ios),
-                onTap: () {
-                  router.push(DemoRoute());
-                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      gap4,
+                      sectionTitle('Account'),
+                      gap4,
+                      ListTile(
+                        leading: const Icon(Icons.email),
+                        title: const Text('Email'),
+                        subtitle: Text(authEmail.value ?? 'No email'),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: circular8,
+                        ),
+                      ),
+                      Divider(height: 2),
+                      ListTile(
+                        leading: const Icon(Icons.person),
+                        title: const Text('Profile Information'),
+                        trailing: const Icon(Icons.arrow_forward_ios),
+                        onTap: () {
+                          router.push(ProfileRoute());
+                        },
+                      ),
+                      Divider(height: 2),
+                      ListTile(
+                        leading: Icon(
+                          Icons.auto_awesome,
+                          color: context.primary,
+                        ),
+                        title: Text(
+                          '${AppConfig.appName} Premium',
+                          style: context.titleMedium.bold.primary,
+                        ),
+                        trailing: const Icon(Icons.arrow_forward_ios),
+                        onTap: () {
+                          router.push(const SubscriptionRoute());
+                        },
+                      ),
+                      Divider(height: 2),
+                      ListTile(
+                        leading: Icon(
+                          Icons.settings,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(
+                            bottom: Radius.circular(16),
+                          ),
+                        ),
+                        title: Text(
+                          'Settings',
+                          style: context.titleMedium.bold,
+                        ),
+                        trailing: const Icon(Icons.arrow_forward_ios),
+                        onTap: () {
+                          router.push(const SettingsRoute());
+                        },
+                      ),
+                    ],
+                  ),
+                ),
               ),
-            ),
-            ],
-            gap16,
 
-            OutlinedButton.icon(
-              onPressed: handleUpdatePassword,
-              icon: const Icon(Icons.lock),
-              label: const Text('Update Password'),
-            ),
-            // Sign Out Button
-            FilledButton.icon(
-              onPressed: handleSignOut,
-              icon: const Icon(Icons.logout),
-              label: const Text('Sign Out'),
-            ),
-            gap24,
-            Center(child: AppVersion()),
-            gap16,
-          ],
-        );
-      }),
+              gap16,
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      gap4,
+                      sectionTitle('Feedback'),
+                      gap4,
+                      ListTile(
+                        leading: const Icon(Icons.thumbs_up_down),
+                        title: const Text('Suggest a Feature'),
+                        trailing: const Icon(Icons.arrow_forward_ios),
+                        onTap: () {
+                          router.push(FeedbackRoute());
+                        },
+                      ),
+                      Divider(height: 2),
+                      ListTile(
+                        leading: const Icon(Icons.star_rate),
+                        title: const Text('Rate ${AppConfig.appName}'),
+                        trailing: const Icon(Icons.arrow_forward_ios),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(
+                            bottom: Radius.circular(16),
+                          ),
+                        ),
+                        onTap: () {
+                          final InAppReview inAppReview = InAppReview.instance;
+
+                          inAppReview.openStoreListing(
+                            appStoreId:
+                                const String.fromEnvironment("APP_STORE_ID"),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              gap16,
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      gap4,
+                      sectionTitle('Follow Us'),
+                      gap4,
+                      ListTile(
+                        leading: const Icon(Icons.camera_alt_outlined),
+                        title: const Text('Instagram'),
+                        subtitle: const Text('@' + AppConfig.instagramUsername),
+                        trailing: const Icon(Icons.arrow_forward_ios),
+                        onTap: () {
+                          launchUrl(Uri.parse(
+                              'https://instagram.com/${AppConfig.instagramUsername}'));
+                        },
+                      ),
+                      Divider(height: 2),
+                      ListTile(
+                        leading: const Icon(Icons.chat_bubble_outline),
+                        title: const Text('Threads'),
+                        subtitle: const Text('@' + AppConfig.threadsUsername),
+                        trailing: const Icon(Icons.arrow_forward_ios),
+                        onTap: () {
+                          launchUrl(Uri.parse(
+                              'https://www.threads.com/@${AppConfig.threadsUsername}'));
+                        },
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(
+                            bottom: Radius.circular(16),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              if (kDebugMode) ...[
+                gap8,
+                Card(
+                  child: ListTile(
+                    leading: const Icon(Icons.android),
+                    title: const Text('Demo'),
+                    trailing: const Icon(Icons.arrow_forward_ios),
+                    onTap: () {
+                      router.push(DemoRoute());
+                    },
+                  ),
+                ),
+              ],
+              gap32,
+
+              OutlinedButton.icon(
+                onPressed: handleUpdatePassword,
+                icon: const Icon(Icons.lock),
+                label: const Text('Update Password'),
+              ),
+              // Sign Out Button
+              FilledButton.icon(
+                onPressed: handleSignOut,
+                icon: const Icon(Icons.logout),
+                label: const Text('Sign Out'),
+              ),
+              gap24,
+              Center(child: AppVersion()),
+              gap16,
+            ],
+          );
+        }),
+      ),
     );
   }
 }
