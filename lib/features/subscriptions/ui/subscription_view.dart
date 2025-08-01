@@ -108,7 +108,7 @@ class _SubscriptionViewState extends State<SubscriptionView> {
   }
 
   Widget _buildBenefitCard(
-    BuildContext context, 
+    BuildContext context,
     PremiumFeature feature,
   ) {
     return Container(
@@ -284,9 +284,8 @@ class _SubscriptionViewState extends State<SubscriptionView> {
           );
         }
         return Scaffold(
-          backgroundColor: Colors.white,
           appBar: AppBar(
-            title: const Text('Bakedown Premium'),
+            title: const Text('${AppConfig.appName} Premium'),
             backgroundColor: Colors.transparent,
             elevation: 0,
           ),
@@ -373,7 +372,12 @@ class _SubscriptionViewState extends State<SubscriptionView> {
                     Container(
                       padding: const EdgeInsets.all(16),
                       child: Column(
-                        children: premiumFeatures.take(4).toList().asMap().entries.map((entry) {
+                        children: premiumFeatures
+                            .take(4)
+                            .toList()
+                            .asMap()
+                            .entries
+                            .map((entry) {
                           final index = entry.key;
                           final feature = entry.value;
                           return Column(

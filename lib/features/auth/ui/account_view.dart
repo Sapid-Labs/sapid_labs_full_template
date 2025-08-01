@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:slapp/app/config.dart';
 import 'package:slapp/app/constants.dart';
 import 'package:slapp/app/router.dart';
@@ -177,6 +178,19 @@ class _AccountViewState extends State<AccountView> {
                 },
               ),
             ),
+            if(kDebugMode)...[
+              gap8,
+              Card(
+              child: ListTile(
+                leading: const Icon(Icons.android),
+                title: const Text('Demo'),
+                trailing: const Icon(Icons.arrow_forward_ios),
+                onTap: () {
+                  router.push(DemoRoute());
+                },
+              ),
+            ),
+            ],
             gap16,
 
             OutlinedButton.icon(
