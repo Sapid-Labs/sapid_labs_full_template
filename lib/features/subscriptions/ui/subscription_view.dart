@@ -405,8 +405,8 @@ class _SubscriptionViewState extends State<SubscriptionView> {
                           margin: const EdgeInsets.only(bottom: 16),
                           decoration: BoxDecoration(
                             color: selectedWeekly
-                                ? Colors.grey.shade100
-                                : Colors.white,
+                                ? context.surface
+                                : context.secondaryContainer,
                             borderRadius: BorderRadius.circular(16),
                             border: Border.all(
                               color: selectedWeekly
@@ -513,8 +513,8 @@ class _SubscriptionViewState extends State<SubscriptionView> {
                           margin: const EdgeInsets.only(bottom: 16),
                           decoration: BoxDecoration(
                             color: selectedWeekly
-                                ? Colors.white
-                                : Colors.grey.shade100,
+                                ? context.secondaryContainer
+                                : context.surface,
                             borderRadius: BorderRadius.circular(16),
                             border: Border.all(
                               color: selectedWeekly

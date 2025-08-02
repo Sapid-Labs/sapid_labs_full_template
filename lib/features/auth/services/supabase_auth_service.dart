@@ -1,5 +1,9 @@
+import 'dart:convert';
+
+import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:slapp/app/get_it.dart';
 import 'package:slapp/features/auth/services/auth_service.dart';
 import 'package:injectable/injectable.dart';
@@ -60,29 +64,93 @@ class SupabaseAuthService implements AuthService {
 
   @override
   Future<bool> signInWithGoogle() async {
-    try {
-      await supabase.auth.signInWithOAuth(
-        OAuthProvider.google,
-        redirectTo:
-            kIsWeb ? null : 'io.supabase.flutterquickstart://login-callback/',
-      );
+    if (kIsWeb) {
+      try {
+        /* debugPrint('Signing in with Google on web');
+        final bool signedIn = await supabase.auth.signInWithOAuth(
 
-      return true;
-    } catch (e) {
-      rethrow;
+          provider: OAuthProvider.google,
+          redirectTo: 'io.supabase.flutterquickstart://login-callback/',
+        );
+        authUserId.value = authResponse.user?.id;
+        authEmail.value = authResponse.user?.email; */
+        return true;
+      } catch (e) {
+        rethrow;
+      }
+    } else {
+      try {
+        debugPrint('Signing in with Google');
+        if (GoogleSignIn.instance.supportsAuthenticate()) {
+          // Trigger the authentication flow
+          final GoogleSignInAccount? googleUser =
+              await GoogleSignIn.instance.authenticate();
+
+          // Obtain the auth details from the request
+          final GoogleSignInAuthentication? googleAuth =
+              googleUser?.authentication;
+
+          // Create a new credential
+          /* final credential = GoogleAuthProvider.credential(
+            idToken: googleAuth?.idToken,
+          ); */
+
+          final AuthResponse authResponse =
+              await supabase.auth.signInWithIdToken(
+            provider: OAuthProvider.google,
+            idToken: googleAuth!.idToken!,
+          );
+
+          await createUser(
+            id: authResponse.user?.id ?? '',
+            email: authResponse.user?.email,
+          );
+
+          debugPrint('User signed in with Google');
+
+          // bool isNewUser = await authResponse.user.userMetadata;
+
+          return true;
+        } else {
+          debugPrint('Google Sign-In is not supported on this platform.');
+          throw Exception('Google Sign-In is not supported on this platform.');
+        }
+      } catch (e) {
+        rethrow;
+      }
     }
   }
 
   @override
   Future<bool> signInWithApple() async {
     try {
-      await supabase.auth.signInWithOAuth(
-        OAuthProvider.apple,
-        redirectTo:
-            kIsWeb ? null : 'io.supabase.flutterquickstart://login-callback/',
+      final rawNonce = supabase.auth.generateRawNonce();
+      final hashedNonce = sha256.convert(utf8.encode(rawNonce)).toString();
+      final credential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+        nonce: hashedNonce,
+      );
+      final idToken = credential.identityToken;
+      if (idToken == null) {
+        throw const AuthException(
+            'Could not find ID Token from generated credential.');
+      }
+      final response = await supabase.auth.signInWithIdToken(
+        provider: OAuthProvider.apple,
+        idToken: idToken,
+        nonce: rawNonce,
       );
 
-      return true;
+      DateTime? createdAt = DateTime.tryParse(response.user?.createdAt ?? '');
+      debugPrint('User signed in with Apple: ${response.user?.id}');
+      debugPrint('Created At: ${response.user?.createdAt}');
+      debugPrint('Metadata: ${response.user?.userMetadata}');
+
+      return createdAt != null &&
+          createdAt.isAfter(DateTime.now().subtract(Duration(minutes: 5)));
     } catch (e) {
       rethrow;
     }
@@ -155,7 +223,20 @@ class SupabaseAuthService implements AuthService {
   }
 
   @override
-  Future<void> createUser() async {
-    // TODO - Implement createUser logic
+  Future<void> createUser({
+    required String id,
+    String? email,
+  }) async {
+    try {
+      final response = await supabase.from('users').upsert({
+        'id': id,
+        'email': email,
+        // Add other user fields as necessary
+      });
+
+      debugPrint('User created: $response');
+    } catch (e) {
+      rethrow;
+    }
   }
 }

@@ -22,6 +22,8 @@ class SignInView extends StatefulWidget {
 class _SignInViewState extends State<SignInView> with SignalsMixin {
   final _formKey = GlobalKey<FormState>();
 
+  bool showPassword = false;
+
   // https://dartsignals.dev/core/signal/#flutter
   late final email = createSignal('');
   late final password = createSignal('');
@@ -178,8 +180,25 @@ class _SignInViewState extends State<SignInView> with SignalsMixin {
                       ),
                       gap16,
                       TextFormField(
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           labelText: 'Password',
+                          suffixIcon: showPassword
+                              ? IconButton(
+                                  icon: const Icon(Icons.visibility_off),
+                                  onPressed: () {
+                                    setState(() {
+                                      showPassword = false;
+                                    });
+                                  },
+                                )
+                              : IconButton(
+                                  icon: const Icon(Icons.visibility),
+                                  onPressed: () {
+                                    setState(() {
+                                      showPassword = true;
+                                    });
+                                  },
+                                ),
                         ),
                         obscureText: true,
                         enabled: !isLoading.value,

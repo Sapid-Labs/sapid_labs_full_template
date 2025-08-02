@@ -132,6 +132,7 @@ class _SignUpViewState extends State<SignUpView> with SignalsMixin {
         extendBodyBehindAppBar: true,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
+          scrolledUnderElevation: 0,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () => router.maybePop(),
@@ -147,7 +148,7 @@ class _SignUpViewState extends State<SignUpView> with SignalsMixin {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      gap24,
+                      gap48,
                       AppLogo(sideLength: 200),
                       gap24,
                       Text(
@@ -331,6 +332,7 @@ class _SignUpViewState extends State<SignUpView> with SignalsMixin {
                           ),
                         ],
                       ),
+                      gap48,
                     ],
                   ),
                 ),

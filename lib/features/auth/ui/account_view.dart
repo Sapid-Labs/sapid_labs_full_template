@@ -272,6 +272,16 @@ class _AccountViewState extends State<AccountView> {
                     },
                   ),
                 ),
+                gap8,
+                Card(
+                  child: ListTile(
+                    leading: const Icon(Icons.android),
+                    title: const Text('Onboarding'),
+                    onTap: () {
+                      router.push(OnboardingRoute());
+                    },
+                  ),
+                ),
               ],
               gap32,
 

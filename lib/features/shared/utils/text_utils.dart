@@ -151,20 +151,68 @@ extension FastTextColor on TextStyle {
   TextStyle get primary =>
       copyWith(color: Theme.of(context).colorScheme.primary);
 
+  TextStyle get primaryContainer =>
+      copyWith(color: Theme.of(context).colorScheme.primaryContainer);
+
+  TextStyle get primaryFixed =>
+      copyWith(color: Theme.of(context).colorScheme.primaryFixed);
+
+  TextStyle get primaryFixedDim =>
+      copyWith(color: Theme.of(context).colorScheme.primaryFixedDim);
+
   TextStyle get secondary =>
       copyWith(color: Theme.of(context).colorScheme.secondary);
+
+  TextStyle get secondaryFixed =>
+      copyWith(color: Theme.of(context).colorScheme.secondaryFixed);
+
+  TextStyle get secondaryFixedDim =>
+      copyWith(color: Theme.of(context).colorScheme.secondaryFixedDim);
 
   TextStyle get tertiary =>
       copyWith(color: Theme.of(context).colorScheme.tertiary);
 
+  TextStyle get tertiaryFixed =>
+      copyWith(color: Theme.of(context).colorScheme.tertiaryFixed);
+
+  TextStyle get tertiaryFixedDim =>
+      copyWith(color: Theme.of(context).colorScheme.tertiaryFixedDim);
+
   TextStyle get onPrimary =>
       copyWith(color: Theme.of(context).colorScheme.onPrimary);
+
+  TextStyle get onPrimaryContainer =>
+      copyWith(color: Theme.of(context).colorScheme.onPrimaryContainer);
+
+  TextStyle get onPrimaryFixed =>
+      copyWith(color: Theme.of(context).colorScheme.onPrimaryFixed);
+
+  TextStyle get onPrimaryFixedVariant =>
+      copyWith(color: Theme.of(context).colorScheme.onPrimaryFixedVariant);
 
   TextStyle get onSecondary =>
       copyWith(color: Theme.of(context).colorScheme.onSecondary);
 
+  TextStyle get onSecondaryContainer =>
+      copyWith(color: Theme.of(context).colorScheme.onSecondaryContainer);
+
+  TextStyle get onSecondaryFixed =>
+      copyWith(color: Theme.of(context).colorScheme.onSecondaryFixed);
+
+  TextStyle get onSecondaryFixedVariant =>
+      copyWith(color: Theme.of(context).colorScheme.onSecondaryFixedVariant);
+
   TextStyle get onTertiary =>
       copyWith(color: Theme.of(context).colorScheme.onTertiary);
+
+  TextStyle get onTertiaryContainer =>
+      copyWith(color: Theme.of(context).colorScheme.onTertiaryContainer);
+
+  TextStyle get onTertiaryFixed =>
+      copyWith(color: Theme.of(context).colorScheme.onTertiaryFixed);
+
+  TextStyle get onTertiaryFixedVariant =>
+      copyWith(color: Theme.of(context).colorScheme.onTertiaryFixedVariant);
 
   TextStyle get background =>
       copyWith(color: Theme.of(context).colorScheme.background);
@@ -175,8 +223,32 @@ extension FastTextColor on TextStyle {
   TextStyle get surface =>
       copyWith(color: Theme.of(context).colorScheme.surface);
 
+  TextStyle get surfaceDim =>
+      copyWith(color: Theme.of(context).colorScheme.surfaceDim);
+
+  TextStyle get surfaceBright =>
+      copyWith(color: Theme.of(context).colorScheme.surfaceBright);
+
+  TextStyle get surfaceContainer =>
+      copyWith(color: Theme.of(context).colorScheme.surfaceContainer);
+
+  TextStyle get surfaceContainerHigh =>
+      copyWith(color: Theme.of(context).colorScheme.surfaceContainerHigh);
+
+  TextStyle get surfaceContainerHighest =>
+      copyWith(color: Theme.of(context).colorScheme.surfaceContainerHighest);
+
+  TextStyle get surfaceContainerLow =>
+      copyWith(color: Theme.of(context).colorScheme.surfaceContainerLow);
+
+  TextStyle get surfaceContainerLowest =>
+      copyWith(color: Theme.of(context).colorScheme.surfaceContainerLowest);
+
   TextStyle get onSurface =>
       copyWith(color: Theme.of(context).colorScheme.onSurface);
+
+  TextStyle get onSurfaceVariant =>
+      copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant);
 
   TextStyle get surfaceTint =>
       copyWith(color: Theme.of(context).colorScheme.surfaceTint);
@@ -186,8 +258,14 @@ extension FastTextColor on TextStyle {
   TextStyle get onError =>
       copyWith(color: Theme.of(context).colorScheme.onError);
 
+  TextStyle get onErrorContainer =>
+      copyWith(color: Theme.of(context).colorScheme.onErrorContainer);
+
   TextStyle get outline =>
       copyWith(color: Theme.of(context).colorScheme.outline);
+
+  TextStyle get outlineVariant =>
+      copyWith(color: Theme.of(context).colorScheme.outlineVariant);
 
   TextStyle get inversePrimary =>
       copyWith(color: Theme.of(context).colorScheme.inversePrimary);
@@ -203,4 +281,10 @@ extension FastTextColor on TextStyle {
   TextStyle get italic => copyWith(fontStyle: FontStyle.italic);
 
   TextStyle get underline => copyWith(decoration: TextDecoration.underline);
+}
+
+extension TextColorOpacity on TextStyle {
+  TextStyle withOpacity(double opacity) {
+    return copyWith(color: color?.withValues(alpha: opacity));
+  }
 }

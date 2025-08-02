@@ -70,8 +70,11 @@ abstract class AuthService {
     SupabaseAuthService().logout();
   }
 
-  Future<void> createUser() async {
-    FirebaseAuthService().createUser();
-    SupabaseAuthService().createUser();
+  Future<void> createUser({
+    required String id,
+    String? email,
+  }) async {
+    FirebaseAuthService().createUser(id: id, email: email);
+    SupabaseAuthService().createUser(id: id, email: email);
   }
 }

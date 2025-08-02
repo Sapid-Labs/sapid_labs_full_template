@@ -186,7 +186,10 @@ class FirebaseAuthService implements AuthService {
   }
 
   @override
-  Future<void> createUser() async {
+  Future<void> createUser({
+    required String id,
+    String? email,
+  }) async {
     // TODO - Implement createUser logic
   }
 }
