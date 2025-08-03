@@ -1,20 +1,25 @@
 import 'dart:convert';
 
-import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
-import 'package:slapp/app/get_it.dart';
-import 'package:slapp/features/auth/services/auth_service.dart';
+import 'package:signals/signals_flutter.dart';
 import 'package:injectable/injectable.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:slapp/app/config.dart';
+import 'package:slapp/app/router.dart';
+import 'package:slapp/app/services.dart';
+import 'package:crypto/crypto.dart';
 
-@supabaseEnv
-@Singleton(as: AuthService)
-class SupabaseAuthService implements AuthService {
+final authUserId = signal<String?>(null);
+final authEmail = signal<String?>(null);
+final authIsInitialized = signal<bool>(false);
+final authIsAuthenticated = computed(() => authUserId.value != null);
+
+@Singleton()
+class AuthService {
   late final SupabaseClient supabase;
 
-  @override
   Future<void> setup() async {
     await GoogleSignIn.instance.initialize(
       serverClientId: const String.fromEnvironment("SERVER_CLIENT_ID"),
@@ -32,6 +37,8 @@ class SupabaseAuthService implements AuthService {
       final AuthChangeEvent event = data.event;
       final Session? session = data.session;
 
+      debugPrint('Auth state changed: $event, session: $session');
+
       switch (event) {
         case AuthChangeEvent.signedIn:
           authUserId.value = session?.user.id;
@@ -41,28 +48,64 @@ class SupabaseAuthService implements AuthService {
           authUserId.value = null;
           authEmail.value = null;
           break;
+        case AuthChangeEvent.passwordRecovery:
+          router.push(ChangePasswordRoute());
         default:
           break;
       }
+    }).onError((error) {
+      if (error is AuthException) {
+        if (error.message.contains("Email link is invalid or has expired")) {
+          // Handle expired email link
+          debugPrint("Email link is invalid or has expired");
+          router.push(ResetPasswordRoute());
+        } else {
+          // Handle other auth errors
+          debugPrint("Auth error: ${error.message}");
+        }
+      }
     });
 
-    // Set initial values
+    // Set initial values from current session (this handles app restarts)
     final session = supabase.auth.currentSession;
     authUserId.value = session?.user.id;
     authEmail.value = session?.user.email;
+
+    // Mark as initialized
+    authIsInitialized.value = true;
   }
 
-  @override
-  Future<void> signUpAnonymously() async {
+  Future<void> createUser({
+    required String id,
+    String? email,
+  }) async {
     try {
-      final response = await supabase.auth.signInAnonymously();
-      authUserId.value = response.user?.id;
+      final response = await supabase.from('users').upsert({
+        'id': id,
+        'email': email,
+        // Add other user fields as necessary
+      });
+
+      debugPrint('User created: $response');
     } catch (e) {
       rethrow;
     }
   }
 
-  @override
+  Future<void> signUpAnonymously() async {
+    try {
+      final response = await supabase.auth.signInAnonymously();
+      authUserId.value = response.user?.id;
+
+      await createUser(
+        id: response.user?.id ?? '',
+        email: response.user?.email,
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<bool> signInWithGoogle() async {
     if (kIsWeb) {
       try {
@@ -90,27 +133,26 @@ class SupabaseAuthService implements AuthService {
           final GoogleSignInAuthentication? googleAuth =
               googleUser?.authentication;
 
-          // Create a new credential
-          /* final credential = GoogleAuthProvider.credential(
-            idToken: googleAuth?.idToken,
-          ); */
-
-          final AuthResponse authResponse =
-              await supabase.auth.signInWithIdToken(
+          final response = await supabase.auth.signInWithIdToken(
             provider: OAuthProvider.google,
             idToken: googleAuth!.idToken!,
           );
 
           await createUser(
-            id: authResponse.user?.id ?? '',
-            email: authResponse.user?.email,
+            id: response.user?.id ?? '',
+            email: response.user?.email,
           );
 
           debugPrint('User signed in with Google');
 
-          // bool isNewUser = await authResponse.user.userMetadata;
+          DateTime? createdAt =
+              DateTime.tryParse(response.user?.createdAt ?? '');
+          debugPrint('User signed in with Apple: ${response.user?.id}');
+          debugPrint('Created At: ${response.user?.createdAt}');
+          debugPrint('Metadata: ${response.user?.userMetadata}');
 
-          return true;
+          return createdAt != null &&
+              createdAt.isAfter(DateTime.now().subtract(Duration(minutes: 5)));
         } else {
           debugPrint('Google Sign-In is not supported on this platform.');
           throw Exception('Google Sign-In is not supported on this platform.');
@@ -121,7 +163,6 @@ class SupabaseAuthService implements AuthService {
     }
   }
 
-  @override
   Future<bool> signInWithApple() async {
     try {
       final rawNonce = supabase.auth.generateRawNonce();
@@ -156,7 +197,6 @@ class SupabaseAuthService implements AuthService {
     }
   }
 
-  @override
   Future<void> loginWithEmailAndPassword({
     required String email,
     required String password,
@@ -173,7 +213,6 @@ class SupabaseAuthService implements AuthService {
     }
   }
 
-  @override
   Future<void> signUpWithEmailAndPassword({
     required String email,
     required String password,
@@ -185,56 +224,56 @@ class SupabaseAuthService implements AuthService {
       );
       authUserId.value = response.user?.id;
       authEmail.value = response.user?.email;
-    } catch (e) {
-      rethrow;
-    }
-  }
 
-  @override
-  Future<void> updatePassword({
-    required String password,
-  }) async {
-    // Update password logic
-  }
-
-  @override
-  Future<void> resetPassword({
-    required String email,
-  }) async {
-    try {
-      await supabase.auth.resetPasswordForEmail(
-        email,
-        redirectTo: 'io.supabase.flutterquickstart://login-callback/',
+      await createUser(
+        id: response.user?.id ?? '',
+        email: response.user?.email,
       );
     } catch (e) {
       rethrow;
     }
   }
 
-  @override
-  Future<void> logout() async {
+  Future<void> updatePassword({
+    required String password,
+  }) async {
     try {
-      await supabase.auth.signOut();
-      authUserId.value = null;
-      authEmail.value = null;
+      final response = await supabase.auth.updateUser(
+        UserAttributes(password: password),
+      );
+
+      if (response.user?.id != null) {
+        authUserId.value = response.user!.id;
+        authEmail.value = response.user?.email;
+      } else {
+        throw Exception('Failed to update password: User ID is null');
+      }
+
+      debugPrint('Password updated successfully');
     } catch (e) {
       rethrow;
     }
   }
 
-  @override
-  Future<void> createUser({
-    required String id,
-    String? email,
+  Future<void> resetPassword({
+    required String email,
   }) async {
     try {
-      final response = await supabase.from('users').upsert({
-        'id': id,
-        'email': email,
-        // Add other user fields as necessary
-      });
+      await supabase.auth.resetPasswordForEmail(
+        email,
+        redirectTo:
+            '${AppConfig.appName.toLowerCase()}://${AppConfig.appName.toLowerCase()}.com/change-password',
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
 
-      debugPrint('User created: $response');
+  Future<void> logout() async {
+    try {
+      await supabase.auth.signOut();
+      authUserId.value = null;
+      authEmail.value = null;
     } catch (e) {
       rethrow;
     }

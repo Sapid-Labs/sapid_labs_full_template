@@ -29,6 +29,7 @@
 				<string>Editor</string>
 				<key>CFBundleURLSchemes</key>
 				<array>
+					<string>slapp</string>
 					<string>com.googleusercontent.apps.359662441201-5ai1r3qbcim5055j2l6jcnupjnetkeo1</string>
 				</array>
 			</dict>
