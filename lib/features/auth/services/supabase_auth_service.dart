@@ -5,6 +5,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:signals/signals_flutter.dart';
 import 'package:injectable/injectable.dart';
+import 'package:slapp/features/auth/services/auth_service.dart';
+import 'package:slapp/features/auth/utils/fast_auth_exception.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:slapp/app/config.dart';
 import 'package:slapp/app/router.dart';
@@ -17,7 +19,7 @@ final authIsInitialized = signal<bool>(false);
 final authIsAuthenticated = computed(() => authUserId.value != null);
 
 @Singleton()
-class AuthService {
+class SupabaseAuthService implements AuthService {
   late final SupabaseClient supabase;
 
   Future<void> setup() async {
@@ -157,8 +159,23 @@ class AuthService {
           debugPrint('Google Sign-In is not supported on this platform.');
           throw Exception('Google Sign-In is not supported on this platform.');
         }
+      } on GoogleSignInException catch (e) {
+        debugPrint('e: $e');
+
+        if (e.code == GoogleSignInExceptionCode.canceled) {
+          throw FastAuthException('');
+        }
+
+        throw FastAuthException(
+          'There was an error signing you in with Google. Please try again.',
+          error: e.toString(),
+        );
       } catch (e) {
-        rethrow;
+        debugPrint('Error signing in with Google: $e');
+        throw FastAuthException(
+          'There was an error signing you in with Google. Please try again.',
+          error: e.toString(),
+        );
       }
     }
   }
@@ -192,8 +209,25 @@ class AuthService {
 
       return createdAt != null &&
           createdAt.isAfter(DateTime.now().subtract(Duration(minutes: 5)));
+    } on AuthApiException catch (e) {
+      debugPrint('AuthApiException: $e');
+      if (e.code == 'invalid_credentials') {
+        throw FastAuthException(
+          'Invalid Apple credentials. Please try again.',
+          error: e.toString(),
+        );
+      } else {
+        throw FastAuthException(
+          'An error occurred while signing in with Apple. Please try again.',
+          error: e.toString(),
+        );
+      }
     } catch (e) {
-      rethrow;
+      debugPrint('Error signing in with Apple: $e');
+      throw FastAuthException(
+        'There was an error signing you in with Apple. Please try again.',
+        error: e.toString(),
+      );
     }
   }
 
@@ -208,8 +242,26 @@ class AuthService {
       );
       authUserId.value = response.user?.id;
       authEmail.value = response.user?.email;
+    } on AuthApiException catch (e) {
+      debugPrint('AuthApiException: $e');
+
+      if (e.code == 'invalid_credentials') {
+        throw FastAuthException(
+          'Invalid email or password.',
+          error: e.toString(),
+        );
+      } else {
+        throw FastAuthException(
+          'An error occurred while logging in. Please try again.',
+          error: e.toString(),
+        );
+      }
     } catch (e) {
-      rethrow;
+      debugPrint('Error logging in: $e');
+      throw FastAuthException(
+        'There was an error logging you in. Please try again.',
+        error: e.toString(),
+      );
     }
   }
 

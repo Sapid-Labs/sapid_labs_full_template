@@ -1,15 +1,14 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:slapp/app/constants.dart';
 import 'package:slapp/app/router.dart';
 import 'package:slapp/app/services.dart';
+import 'package:slapp/features/auth/utils/fast_auth_exception.dart';
 import 'package:slapp/features/shared/ui/app_logo.dart';
 import 'package:flutter/material.dart';
 import 'package:slapp/features/shared/ui/loading_stack.dart';
 import 'package:signals/signals_flutter.dart';
-import 'package:universal_io/io.dart' show Platform;
+import 'package:universal_io/io.dart';
 
 @RoutePage()
 class SignInView extends StatefulWidget {
@@ -28,16 +27,13 @@ class _SignInViewState extends State<SignInView> with SignalsMixin {
   late final email = createSignal('');
   late final password = createSignal('');
   late final isLoading = createSignal(false);
-  late final error = createSignal<String?>(null);
 
   Future<void> _handleEmailSignIn() async {
-    debugPrint('Sign In');
     if (!_formKey.currentState!.validate()) return;
 
     debugPrint('email: ${email.value}');
     try {
       isLoading.value = true;
-      error.value = null;
 
       await authService.loginWithEmailAndPassword(
         email: email.value,
@@ -50,11 +46,13 @@ class _SignInViewState extends State<SignInView> with SignalsMixin {
       } else {
         debugPrint('Not mounted');
       }
+    } on FastAuthException catch (e) {
+      handleAuthError(e);
     } catch (e) {
-      debugPrint('e: $e');
-      error.value = e.toString();
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString())),
+        SnackBar(
+          content: Text('There was an error signing you in. Please try again.'),
+        ),
       );
     } finally {
       isLoading.value = false;
@@ -64,49 +62,23 @@ class _SignInViewState extends State<SignInView> with SignalsMixin {
   Future<void> _handleGoogleSignIn() async {
     try {
       isLoading.value = true;
-      error.value = null;
 
       debugPrint('Signing in with Google');
-      bool newUser = await authService.signInWithGoogle();
+      await authService.signInWithGoogle();
 
       if (mounted) {
-        if (newUser) {
-          router.replaceAll([OnboardingRoute()]);
-        } else {
-          // Navigate to home or intended screen after successful login
-          router.replaceAll([const HomeRoute()]);
-        }
+        // Navigate to home or intended screen after successful login
+        router.replaceAll([const HomeRoute()]);
       } else {
         debugPrint('Not mounted');
       }
-    } on GoogleSignInException catch (e) {
-      debugPrint('GoogleSignInException here: $e');
-      error.value = e.description;
-
-      if (e.code == GoogleSignInExceptionCode.canceled) {
-        return;
-      }
-
+    } on FastAuthException catch (e) {
+      handleAuthError(e);
+    } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-            content: Text('Failed to sign in with Google: ${e.description}')),
-      );
-    } on FirebaseAuthException catch (e) {
-      debugPrint('FirebaseAuthException: $e');
-      error.value = e.message;
-
-      if (e.code == 'auth/user-cancelled') {
-        return;
-      }
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to sign in with Google: ${e.message}')),
-      );
-    } catch (e) {
-      debugPrint('e: $e');
-      error.value = e.toString();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString())),
+          content: Text('There was an error signing you in. Please try again.'),
+        ),
       );
     } finally {
       isLoading.value = false;
@@ -116,7 +88,6 @@ class _SignInViewState extends State<SignInView> with SignalsMixin {
   Future<void> _handleAppleSignIn() async {
     try {
       isLoading.value = true;
-      error.value = null;
 
       debugPrint('Signing in with Apple');
       bool newUser = await authService.signInWithApple();
@@ -131,14 +102,26 @@ class _SignInViewState extends State<SignInView> with SignalsMixin {
       } else {
         debugPrint('Not mounted');
       }
+    } on FastAuthException catch (e) {
+      handleAuthError(e);
     } catch (e) {
-      debugPrint('e: $e');
-      error.value = e.toString();
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString())),
+        SnackBar(
+            content: Text(
+                'There was an error signing you in with Apple. Please try again.')),
       );
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  void handleAuthError(FastAuthException e) {
+    if (e.message.isNotEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.message),
+        ),
+      );
     }
   }
 
@@ -200,7 +183,7 @@ class _SignInViewState extends State<SignInView> with SignalsMixin {
                                   },
                                 ),
                         ),
-                        obscureText: true,
+                        obscureText: !showPassword,
                         enabled: !isLoading.value,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -221,7 +204,7 @@ class _SignInViewState extends State<SignInView> with SignalsMixin {
                               },
                               child: Text("Forgot Password?"))),
                       gap24,
-                      ElevatedButton(
+                      FilledButton(
                         onPressed: isLoading.value ? null : _handleEmailSignIn,
                         child: isLoading.value
                             ? const SizedBox(
