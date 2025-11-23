@@ -94,7 +94,7 @@ class SubscriptionService extends ChangeNotifier {
   Future<void> checkSubscription() async {
     try {
       CustomerInfo customerInfo = await Purchases.getCustomerInfo();
-      if (customerInfo.entitlements.all[_premiumId]?.isActive ?? false) {
+      if (customerInfo.entitlements.active.containsKey(_premiumId)) {
         debugPrint('User has an active subscription for $_premiumId');
         setPremium(true);
       } else {
@@ -135,9 +135,10 @@ class SubscriptionService extends ChangeNotifier {
       },
     ));
     try {
-      CustomerInfo customerInfo = await Purchases.purchasePackage(package);
-      var isPremium =
-          customerInfo.entitlements.all[_premiumId]?.isActive ?? false;
+      PurchaseParams params = PurchaseParams.package(package);
+      PurchaseResult purchaseResult = await Purchases.purchase(params);
+      var isPremium = purchaseResult.customerInfo.entitlements.active
+          .containsKey(_premiumId);
       amplitude.track(BaseEvent(
         'purchase subscription success',
         eventProperties: {

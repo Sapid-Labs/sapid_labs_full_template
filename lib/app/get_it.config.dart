@@ -26,8 +26,7 @@ import '../features/feedback/services/firebase_feedback_service.dart' as _i565;
 import '../features/feedback/services/pocketbase_feedback_service.dart'
     as _i145;
 import '../features/feedback/services/supabase_feedback_service.dart' as _i891;
-import '../features/onboarding%20copy/ui/services/onboarding_service.dart'
-    as _i89;
+import '../features/onboarding/services/onboarding_service.dart' as _i548;
 import '../features/settings/services/settings_service.dart' as _i542;
 import '../features/shared/services/ai_service.dart' as _i567;
 import '../features/shared/services/modules.dart' as _i176;
@@ -58,8 +57,9 @@ Future<_i174.GetIt> $initGetIt(
     preResolve: true,
   );
   gh.singleton<_i542.SettingsService>(() => _i542.SettingsService());
+  gh.singleton<_i57.SupabaseAuthService>(() => _i57.SupabaseAuthService());
   gh.singleton<_i506.SubscriptionService>(() => _i506.SubscriptionService());
-  gh.singleton<_i89.OnboardingService>(() => _i89.OnboardingService());
+  gh.singleton<_i548.OnboardingService>(() => _i548.OnboardingService());
   gh.lazySingleton<_i567.AIService>(() => _i567.AIService());
   gh.lazySingleton<_i136.FeedbackService>(
     () => _i145.PocketbaseFeedbackService(),
@@ -76,10 +76,6 @@ Future<_i174.GetIt> $initGetIt(
   gh.lazySingleton<_i546.AnalyticsService>(
     () => _i1072.FirebaseAnalyticsService(),
     registerFor: {_firebaseAnalytics},
-  );
-  gh.singleton<_i413.AuthService>(
-    () => _i57.SupabaseAuthService(),
-    registerFor: {_supabase},
   );
   gh.lazySingleton<_i136.FeedbackService>(
     () => _i565.FirebaseFeedbackService(),

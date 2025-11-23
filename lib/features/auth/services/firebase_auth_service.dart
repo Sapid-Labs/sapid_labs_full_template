@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
@@ -189,7 +190,78 @@ class FirebaseAuthService implements AuthService {
   Future<void> createUser({
     required String id,
     String? email,
+    String? phoneNumber,
   }) async {
-    // TODO - Implement createUser logic
+    // Create a user in the "users" collection
+    try {
+      FirebaseFirestore.instance.collection('users').doc(id).set({
+        'phoneNumber': phoneNumber,
+        'createdAt': FieldValue.serverTimestamp(),
+        'email': authEmail.value,
+      });
+    } catch (e) {
+      debugPrint('Error creating user document: $e');
+    }
+  }
+
+  @override
+  Future<void> verifyPhoneNumber({
+    required String phoneNumber,
+    required Function(String verificationId) onCodeSent,
+    required Function(String error) onVerificationFailed,
+  }) async {
+    try {
+      await FirebaseAuth.instance.verifyPhoneNumber(
+        phoneNumber: phoneNumber,
+        verificationCompleted: (PhoneAuthCredential credential) async {
+          // Auto-resolve the verification code on Android
+          try {
+            await FirebaseAuth.instance.signInWithCredential(credential);
+          } catch (e) {
+            debugPrint('Auto verification failed: $e');
+          }
+        },
+        verificationFailed: (FirebaseAuthException e) {
+          debugPrint('Phone verification failed: ${e.code} - ${e.message}');
+          onVerificationFailed(e.message ?? 'Phone verification failed');
+        },
+        codeSent: (String verificationId, int? resendToken) {
+          debugPrint('SMS code sent to $phoneNumber');
+          onCodeSent(verificationId);
+        },
+        codeAutoRetrievalTimeout: (String verificationId) {
+          debugPrint('Auto retrieval timeout for $phoneNumber');
+        },
+        timeout: const Duration(seconds: 60),
+      );
+    } catch (e) {
+      debugPrint('Error verifying phone number: $e');
+      onVerificationFailed('Failed to verify phone number: ${e.toString()}');
+    }
+  }
+
+  @override
+  Future<bool> signInWithPhoneNumber({
+    required String verificationId,
+    required String smsCode,
+  }) async {
+    try {
+      PhoneAuthCredential credential = PhoneAuthProvider.credential(
+        verificationId: verificationId,
+        smsCode: smsCode,
+      );
+
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+
+      debugPrint('User signed in with phone number');
+      return userCredential.additionalUserInfo?.isNewUser ?? false;
+    } on FirebaseAuthException catch (e) {
+      debugPrint('Firebase auth exception: ${e.code} - ${e.message}');
+      throw Exception(e.message ?? 'Failed to sign in with phone number');
+    } catch (e) {
+      debugPrint('Error signing in with phone number: $e');
+      throw Exception('Failed to sign in with phone number: ${e.toString()}');
+    }
   }
 }

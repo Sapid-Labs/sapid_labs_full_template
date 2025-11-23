@@ -77,7 +77,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView> with SignalsMix
                   ),
                   gap32,
                   FilledButton(
-                    onPressed: () => router.replace(const SignInRoute()),
+                    onPressed: () => router.replace(const SignInEmailRoute()),
                     child: const Text('Continue to Sign In'),
                   ),
                 ],

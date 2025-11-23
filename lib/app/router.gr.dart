@@ -243,46 +243,62 @@ class SettingsRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [SignInView]
-class SignInRoute extends PageRouteInfo<void> {
-  const SignInRoute({List<PageRouteInfo>? children})
-      : super(SignInRoute.name, initialChildren: children);
+/// [SignInEmailView]
+class SignInEmailRoute extends PageRouteInfo<void> {
+  const SignInEmailRoute({List<PageRouteInfo>? children})
+      : super(SignInEmailRoute.name, initialChildren: children);
 
-  static const String name = 'SignInRoute';
+  static const String name = 'SignInEmailRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const SignInView();
+      return const SignInEmailView();
     },
   );
 }
 
 /// generated route for
-/// [SignUpView]
-class SignUpRoute extends PageRouteInfo<SignUpRouteArgs> {
-  SignUpRoute({Key? key, String? email, List<PageRouteInfo>? children})
-      : super(
-          SignUpRoute.name,
-          args: SignUpRouteArgs(key: key, email: email),
-          initialChildren: children,
-        );
+/// [SignInPhoneView]
+class SignInPhoneRoute extends PageRouteInfo<void> {
+  const SignInPhoneRoute({List<PageRouteInfo>? children})
+      : super(SignInPhoneRoute.name, initialChildren: children);
 
-  static const String name = 'SignUpRoute';
+  static const String name = 'SignInPhoneRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      final args = data.argsAs<SignUpRouteArgs>(
-        orElse: () => const SignUpRouteArgs(),
-      );
-      return SignUpView(key: args.key, email: args.email);
+      return const SignInPhoneView();
     },
   );
 }
 
-class SignUpRouteArgs {
-  const SignUpRouteArgs({this.key, this.email});
+/// generated route for
+/// [SignUpEmailView]
+class SignUpEmailRoute extends PageRouteInfo<SignUpEmailRouteArgs> {
+  SignUpEmailRoute({Key? key, String? email, List<PageRouteInfo>? children})
+      : super(
+          SignUpEmailRoute.name,
+          args: SignUpEmailRouteArgs(key: key, email: email),
+          initialChildren: children,
+        );
+
+  static const String name = 'SignUpEmailRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<SignUpEmailRouteArgs>(
+        orElse: () => const SignUpEmailRouteArgs(),
+      );
+      return SignUpEmailView(key: args.key, email: args.email);
+    },
+  );
+}
+
+class SignUpEmailRouteArgs {
+  const SignUpEmailRouteArgs({this.key, this.email});
 
   final Key? key;
 
@@ -290,18 +306,99 @@ class SignUpRouteArgs {
 
   @override
   String toString() {
-    return 'SignUpRouteArgs{key: $key, email: $email}';
+    return 'SignUpEmailRouteArgs{key: $key, email: $email}';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    if (other is! SignUpRouteArgs) return false;
+    if (other is! SignUpEmailRouteArgs) return false;
     return key == other.key && email == other.email;
   }
 
   @override
   int get hashCode => key.hashCode ^ email.hashCode;
+}
+
+/// generated route for
+/// [SignUpPhoneView]
+class SignUpPhoneRoute extends PageRouteInfo<void> {
+  const SignUpPhoneRoute({List<PageRouteInfo>? children})
+      : super(SignUpPhoneRoute.name, initialChildren: children);
+
+  static const String name = 'SignUpPhoneRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const SignUpPhoneView();
+    },
+  );
+}
+
+/// generated route for
+/// [SmsVerificationView]
+class SmsVerificationRoute extends PageRouteInfo<SmsVerificationRouteArgs> {
+  SmsVerificationRoute({
+    Key? key,
+    required String verificationId,
+    required String phoneNumber,
+    List<PageRouteInfo>? children,
+  }) : super(
+          SmsVerificationRoute.name,
+          args: SmsVerificationRouteArgs(
+            key: key,
+            verificationId: verificationId,
+            phoneNumber: phoneNumber,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'SmsVerificationRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<SmsVerificationRouteArgs>();
+      return SmsVerificationView(
+        key: args.key,
+        verificationId: args.verificationId,
+        phoneNumber: args.phoneNumber,
+      );
+    },
+  );
+}
+
+class SmsVerificationRouteArgs {
+  const SmsVerificationRouteArgs({
+    this.key,
+    required this.verificationId,
+    required this.phoneNumber,
+  });
+
+  final Key? key;
+
+  final String verificationId;
+
+  final String phoneNumber;
+
+  @override
+  String toString() {
+    return 'SmsVerificationRouteArgs{key: $key, verificationId: $verificationId, phoneNumber: $phoneNumber}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! SmsVerificationRouteArgs) return false;
+    return key == other.key &&
+        verificationId == other.verificationId &&
+        phoneNumber == other.phoneNumber;
+  }
+
+  @override
+  int get hashCode =>
+      key.hashCode ^ verificationId.hashCode ^ phoneNumber.hashCode;
 }
 
 /// generated route for

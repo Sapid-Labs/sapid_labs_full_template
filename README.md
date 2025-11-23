@@ -43,6 +43,14 @@ Reauthenticate with GitHub using this command:
 gh auth login
 ````
 
+## Release Steps
+
+Generate your upload key if you don't already have one:
+
+```bash
+keytool -genkey -v -keystore ./keys/vault-keystore.jks -keyalg RSA -keysize 2048 -validity 10000 -alias upload
+```
+
 ## Environments
 
 | Environment       | Description                                                     | Type                |

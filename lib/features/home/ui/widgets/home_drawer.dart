@@ -29,7 +29,7 @@ class HomeDrawer extends StatelessWidget {
                       title: Text('Sign In'),
                       onTap: () {
                         Navigator.of(context).pop();
-                        router.push(const SignInRoute());
+                        router.push(const SignInEmailRoute());
                       },
                     ),
                   ListTile(

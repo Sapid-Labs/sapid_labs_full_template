@@ -80,11 +80,13 @@ class SupabaseAuthService implements AuthService {
   Future<void> createUser({
     required String id,
     String? email,
+    String? phoneNumber,
   }) async {
     try {
       final response = await supabase.from('users').upsert({
         'id': id,
         'email': email,
+        'phone_number': phoneNumber,
         // Add other user fields as necessary
       });
 
@@ -329,5 +331,21 @@ class SupabaseAuthService implements AuthService {
     } catch (e) {
       rethrow;
     }
+  }
+
+  @override
+  Future<bool> signInWithPhoneNumber(
+      {required String verificationId, required String smsCode}) {
+    // TODO: implement signInWithPhoneNumber
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> verifyPhoneNumber(
+      {required String phoneNumber,
+      required Function(String verificationId) onCodeSent,
+      required Function(String error) onVerificationFailed}) {
+    // TODO: implement verifyPhoneNumber
+    throw UnimplementedError();
   }
 }

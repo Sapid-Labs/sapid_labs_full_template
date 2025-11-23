@@ -79,7 +79,7 @@ class _ResetPasswordViewState extends State<ResetPasswordView>
                   ),
                   gap32,
                   FilledButton(
-                    onPressed: () => router.replace(const SignInRoute()),
+                    onPressed: () => router.replace(const SignInEmailRoute()),
                     child: const Text('Return to Sign In'),
                   ),
                 ],
@@ -146,7 +146,7 @@ class _ResetPasswordViewState extends State<ResetPasswordView>
                   children: [
                     const Text('Remember your password?'),
                     TextButton(
-                      onPressed: () => router.replace(const SignInRoute()),
+                      onPressed: () => router.replace(const SignInEmailRoute()),
                       child: const Text('Sign In'),
                     ),
                   ],

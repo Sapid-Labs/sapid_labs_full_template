@@ -73,8 +73,33 @@ abstract class AuthService {
   Future<void> createUser({
     required String id,
     String? email,
+    String? phoneNumber,
   }) async {
-    FirebaseAuthService().createUser(id: id, email: email);
-    SupabaseAuthService().createUser(id: id, email: email);
+    FirebaseAuthService().createUser(id: id, email: email, phoneNumber: phoneNumber);
+    SupabaseAuthService().createUser(id: id, email: email, phoneNumber: phoneNumber);
   }
+
+   Future<void> verifyPhoneNumber({
+    required String phoneNumber,
+    required Function(String verificationId) onCodeSent,
+    required Function(String error) onVerificationFailed,
+  }) async {
+    FirebaseAuthService().verifyPhoneNumber(
+      phoneNumber: phoneNumber,
+      onCodeSent: onCodeSent,
+      onVerificationFailed: onVerificationFailed,
+    );
+  }
+
+  Future<bool> signInWithPhoneNumber({
+    required String verificationId,
+    required String smsCode,
+  }) async {
+    FirebaseAuthService().signInWithPhoneNumber(
+      verificationId: verificationId,
+      smsCode: smsCode,
+    );
+    return true;
+  }
+
 }

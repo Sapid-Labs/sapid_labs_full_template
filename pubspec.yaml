@@ -40,7 +40,7 @@ dependencies:
   package_info_plus: ^8.3.0
   permission_handler: ^12.0.1
   pocketbase: ^0.23.0
-  purchases_flutter: ^8.2.1
+  purchases_flutter: ^9.9.8
   recase: 4.1.0
   shared_preferences: ^2.3.5
   simple_mvvm: ^1.0.1

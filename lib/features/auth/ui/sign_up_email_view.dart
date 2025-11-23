@@ -1,8 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:slapp/app/config.dart';
 import 'package:slapp/app/constants.dart';
 import 'package:slapp/app/router.dart';
 import 'package:slapp/app/services.dart';
+import 'package:slapp/features/auth/utils/fast_auth_exception.dart';
 import 'package:slapp/features/shared/ui/app_logo.dart';
 import 'package:flutter/material.dart';
 import 'package:slapp/features/shared/ui/loading_stack.dart';
@@ -10,22 +12,21 @@ import 'package:signals/signals_flutter.dart';
 import 'package:universal_io/io.dart';
 
 @RoutePage()
-class SignUpView extends StatefulWidget {
-  const SignUpView({super.key, this.email});
+class SignUpEmailView extends StatefulWidget {
+  const SignUpEmailView({super.key, this.email});
 
   final String? email;
 
   @override
-  State<SignUpView> createState() => _SignUpViewState();
+  State<SignUpEmailView> createState() => _SignUpEmailViewState();
 }
 
-class _SignUpViewState extends State<SignUpView> with SignalsMixin {
+class _SignUpEmailViewState extends State<SignUpEmailView> with SignalsMixin {
   final _formKey = GlobalKey<FormState>();
   late final email = createSignal(widget.email ?? '');
   late final password = createSignal('');
   late final confirmPassword = createSignal('');
   late final isLoading = createSignal(false);
-  late final error = createSignal<String?>(null);
   late final showPassword = createSignal(false);
 
   Future<void> signUpWithEmail() async {
@@ -33,7 +34,6 @@ class _SignUpViewState extends State<SignUpView> with SignalsMixin {
 
     try {
       isLoading.value = true;
-      error.value = null;
 
       await authService.signUpWithEmailAndPassword(
         email: email.value,
@@ -45,7 +45,6 @@ class _SignUpViewState extends State<SignUpView> with SignalsMixin {
         router.replaceAll([const OnboardingRoute()]);
       }
     } catch (e) {
-      error.value = 'Failed to sign up: ${e.toString()}';
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(e.toString())),
       );
@@ -57,18 +56,24 @@ class _SignUpViewState extends State<SignUpView> with SignalsMixin {
   Future<void> signUpWithGoogle() async {
     try {
       isLoading.value = true;
-      error.value = null;
 
-      await authService.signInWithGoogle();
+      bool newUser = await authService.signInWithGoogle();
 
       if (mounted) {
-        // Navigate to home or intended screen after successful signup
-        router.replaceAll([const HomeRoute()]);
+        if (newUser) {
+          router.replaceAll([OnboardingRoute()]);
+        } else {
+          // Navigate to home or intended screen after successful signup
+          router.replaceAll([const HomeRoute()]);
+        }
       }
+    } on FastAuthException catch (e) {
+      handleAuthError(e);
     } catch (e) {
-      error.value = 'Failed to sign up with Google: ${e.toString()}';
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString())),
+        SnackBar(
+            content: Text(
+                'There was an error signing you up with Google. Please try again.')),
       );
     } finally {
       isLoading.value = false;
@@ -78,7 +83,6 @@ class _SignUpViewState extends State<SignUpView> with SignalsMixin {
   Future<void> _handleAppleSignIn() async {
     try {
       isLoading.value = true;
-      error.value = null;
 
       bool newUser = await authService.signInWithApple();
 
@@ -92,10 +96,13 @@ class _SignUpViewState extends State<SignUpView> with SignalsMixin {
       } else {
         debugPrint('Not mounted');
       }
+    } on FastAuthException catch (e) {
+      handleAuthError(e);
     } catch (e) {
-      error.value = 'Failed to sign up with Apple: ${e.toString()}';
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString())),
+        SnackBar(
+            content: Text(
+                'There was an error signing you in with Apple. Please try again.')),
       );
     } finally {
       isLoading.value = false;
@@ -106,7 +113,6 @@ class _SignUpViewState extends State<SignUpView> with SignalsMixin {
     debugPrint('Sign Up Anonymously');
     try {
       isLoading.value = true;
-      error.value = null;
 
       await authService.signUpAnonymously();
 
@@ -114,13 +120,26 @@ class _SignUpViewState extends State<SignUpView> with SignalsMixin {
         // Navigate to home or intended screen after successful signup
         router.replaceAll([const HomeRoute()]);
       }
+    } on FastAuthException catch (e) {
+      handleAuthError(e);
     } catch (e) {
-      error.value = 'Failed to sign up anonymously: ${e.toString()}';
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString())),
+        SnackBar(
+            content: Text(
+                'There was an error signing you up anonymously. Please try again.')),
       );
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  void handleAuthError(FastAuthException e) {
+    if (e.message.isNotEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.message),
+        ),
+      );
     }
   }
 
@@ -137,11 +156,12 @@ class _SignUpViewState extends State<SignUpView> with SignalsMixin {
             icon: const Icon(Icons.arrow_back),
             onPressed: () => router.maybePop(),
           ),
+          elevation: 0,
         ),
         body: Watch((context) {
           return SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Form(
                 key: _formKey,
                 child: SingleChildScrollView(
@@ -151,12 +171,6 @@ class _SignUpViewState extends State<SignUpView> with SignalsMixin {
                       gap48,
                       AppLogo(sideLength: 200),
                       gap24,
-                      Text(
-                        'Join Us',
-                        style: Theme.of(context).textTheme.headlineMedium,
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 8),
                       Text(
                         'Create an account to get started',
                         style: Theme.of(context).textTheme.bodyLarge,
@@ -168,7 +182,6 @@ class _SignUpViewState extends State<SignUpView> with SignalsMixin {
                           labelText: 'Email',
                           prefixIcon: Icon(Icons.email_outlined),
                         ),
-                        initialValue: email.value,
                         keyboardType: TextInputType.emailAddress,
                         enabled: !isLoading.value,
                         validator: (value) {
@@ -239,7 +252,7 @@ class _SignUpViewState extends State<SignUpView> with SignalsMixin {
                         onChanged: (value) => confirmPassword.value = value,
                       ),
                       gap24,
-                      ElevatedButton(
+                      FilledButton(
                         onPressed: isLoading.value ? null : signUpWithEmail,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 12),
@@ -264,24 +277,16 @@ class _SignUpViewState extends State<SignUpView> with SignalsMixin {
                           Expanded(child: Divider()),
                         ],
                       ),
-                      gap16,
-                      OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(24),
-                            side: BorderSide(
-                              color: Colors.grey,
-                              width: 1,
-                            ),
-                          ),
-                        ),
-                        onPressed: () async {
-                          if (isLoading.value) return;
-                          await signUpAnonymously();
-                        },
-                        child: Text('Sign Up Anonymously'),
-                      ),
+                      if (AppConfig.allowAnonymousUsers) ...[
+                        gap16,
+                        FilledButton(
+                          onPressed: () async {
+                            if (isLoading.value) return;
+                            await signUpAnonymously();
+                          },
+                          child: Text('Sign Up Anonymously'),
+                        )
+                      ],
                       if (Platform.isAndroid) ...[
                         gap8,
                         FilledButton.icon(
@@ -327,7 +332,7 @@ class _SignUpViewState extends State<SignUpView> with SignalsMixin {
                           const Text('Already have an account?'),
                           TextButton(
                             onPressed: () =>
-                                router.replace(const SignInRoute()),
+                                router.replace(const SignInEmailRoute()),
                             child: const Text('Sign In'),
                           ),
                         ],

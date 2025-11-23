@@ -34,6 +34,7 @@ Future<void> main() async {
   await setup();
 
   // MobileAds.instance.initialize();
+  await subscriptionService.initPlatformState();
 
   runApp(const MainApp());
 }

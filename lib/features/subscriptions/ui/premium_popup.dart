@@ -189,6 +189,8 @@ class PremiumPopupContentState extends State<PremiumPopupContent> {
                               }
                               await subscriptionService
                                   .purchaseSubscription(selectedPackage);
+
+                              Navigator.of(context).pop();
                             },
                           ),
                           gap48,

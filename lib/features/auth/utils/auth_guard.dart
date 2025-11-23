@@ -15,11 +15,11 @@ class AuthGuard extends AutoRouteGuard {
         resolver.next(true); // Allow navigation
       } else {
         debugPrint("Not authenticated, navigating to sign in");
-        router.push(SignInRoute());
+        router.push(SignInEmailRoute());
       }
     } catch (e) {
       debugPrint('Basic observer - AuthGuard - error: $e');
-      router.push(SignInRoute());
+      router.push(SignInEmailRoute());
     }
   }
 }

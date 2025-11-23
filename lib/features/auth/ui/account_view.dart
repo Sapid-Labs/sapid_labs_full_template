@@ -40,7 +40,7 @@ class _AccountViewState extends State<AccountView> {
       subscriptionService.signOut();
       await authService.logout();
       if (mounted) {
-        router.replaceAll([const SignInRoute()]);
+        router.replaceAll([const SignInEmailRoute()]);
       }
     } catch (e) {
       if (mounted) {

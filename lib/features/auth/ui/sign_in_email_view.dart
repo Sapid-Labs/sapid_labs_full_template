@@ -11,14 +11,14 @@ import 'package:signals/signals_flutter.dart';
 import 'package:universal_io/io.dart';
 
 @RoutePage()
-class SignInView extends StatefulWidget {
-  const SignInView({super.key});
+class SignInEmailView extends StatefulWidget {
+  const SignInEmailView({super.key});
 
   @override
-  State<SignInView> createState() => _SignInViewState();
+  State<SignInEmailView> createState() => _SignInEmailViewState();
 }
 
-class _SignInViewState extends State<SignInView> with SignalsMixin {
+class _SignInEmailViewState extends State<SignInEmailView> with SignalsMixin {
   final _formKey = GlobalKey<FormState>();
 
   bool showPassword = false;
@@ -64,11 +64,15 @@ class _SignInViewState extends State<SignInView> with SignalsMixin {
       isLoading.value = true;
 
       debugPrint('Signing in with Google');
-      await authService.signInWithGoogle();
+      bool newUser = await authService.signInWithGoogle();
 
       if (mounted) {
         // Navigate to home or intended screen after successful login
-        router.replaceAll([const HomeRoute()]);
+        if (newUser) {
+          router.replaceAll([OnboardingRoute()]);
+        } else {
+          router.replaceAll([const HomeRoute()]);
+        }
       } else {
         debugPrint('Not mounted');
       }
@@ -260,7 +264,7 @@ class _SignInViewState extends State<SignInView> with SignalsMixin {
                           const Text('Don\'t have an account?'),
                           TextButton(
                             onPressed: () =>
-                                router.push(SignUpRoute(email: email.value)),
+                                router.push(SignUpEmailRoute(email: email.value)),
                             child: const Text('Sign Up'),
                           ),
                         ],

@@ -2,5 +2,7 @@
   "STACK_PAAS": "firebase",
   "STACK_ANALYTICS": "firebaseAnalytics",
   "SUPABASE_ANON_KEY": "your_supabase_anon_key",
-  "SERVER_CLIENT_ID": ""
+  "SERVER_CLIENT_ID": "",
+  "REVENUECAT_GOOGLE_API_KEY": "test_xxYvkcaVuJJapRFWygXshKTpouE",
+  "REVENUECAT_IOS_API_KEY": "test_xxYvkcaVuJJapRFWygXshKTpouE"
 }

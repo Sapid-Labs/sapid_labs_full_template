@@ -4,8 +4,11 @@ import 'package:slapp/features/auth/ui/account_view.dart';
 import 'package:slapp/features/auth/ui/change_password_view.dart';
 import 'package:slapp/features/auth/ui/profile/profile_view.dart';
 import 'package:slapp/features/auth/ui/reset_password_view.dart';
-import 'package:slapp/features/auth/ui/sign_in_view.dart';
-import 'package:slapp/features/auth/ui/sign_up_view.dart';
+import 'package:slapp/features/auth/ui/sign_in_email_view.dart';
+import 'package:slapp/features/auth/ui/sign_in_phone_view.dart';
+import 'package:slapp/features/auth/ui/sign_up_email_view.dart';
+import 'package:slapp/features/auth/ui/sign_up_phone_view.dart';
+import 'package:slapp/features/auth/ui/sms_verification_view.dart';
 import 'package:slapp/features/auth/utils/auth_guard.dart';
 import 'package:slapp/features/demo/ui/demo_view.dart';
 import 'package:slapp/features/feedback/ui/feedback_view.dart';
@@ -38,12 +41,20 @@ class AppRouter extends RootStackRouter {
       guards: [AuthGuard()],
     ),
     AutoRoute(
-      page: SignInRoute.page,
-      path: '/sign-in',
+      page: SignInEmailRoute.page,
+      path: '/sign-in-email',
     ),
     AutoRoute(
-      page: SignUpRoute.page,
-      path: '/sign-up',
+      page: SignUpEmailRoute.page,
+      path: '/sign-up-email',
+    ),
+     AutoRoute(
+      page: SignInPhoneRoute.page,
+      path: '/sign-in-phone',
+    ),
+    AutoRoute(
+      page: SignUpPhoneRoute.page,
+      path: '/sign-up-phone',
     ),
     AutoRoute(
       page: AccountRoute.page,
