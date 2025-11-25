@@ -348,4 +348,18 @@ class SupabaseAuthService implements AuthService {
     // TODO: implement verifyPhoneNumber
     throw UnimplementedError();
   }
+
+  @override
+  Future<void> loadUserData(String userId) async {
+    try {
+      final response =
+          await supabase.from('users').select().eq('id', userId).single();
+
+      // Update any necessary user state here
+      debugPrint('User data loaded: $response');
+    } catch (e) {
+      debugPrint('Error loading user data: $e');
+      rethrow;
+    }
+  }
 }

@@ -1,7 +1,9 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:slapp/app/constants.dart';
 import 'package:slapp/app/router.dart';
 import 'package:slapp/app/services.dart';
+import 'package:slapp/features/auth/services/auth_service.dart';
 import 'package:slapp/features/auth/utils/fast_auth_exception.dart';
 import 'package:slapp/features/shared/ui/app_logo.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +13,14 @@ import 'package:signals/signals_flutter.dart';
 
 @RoutePage()
 class SignInPhoneView extends StatefulWidget {
-  const SignInPhoneView({super.key});
+  const SignInPhoneView({
+    super.key,
+    required this.verificationId,
+    required this.phoneNumber,
+  });
+
+  final String verificationId;
+  final String phoneNumber;
 
   @override
   State<SignInPhoneView> createState() => _SignInPhoneViewState();
@@ -24,6 +33,30 @@ class _SignInPhoneViewState extends State<SignInPhoneView> with SignalsMixin {
   // https://dartsignals.dev/core/signal/#flutter
   late final phoneNumber = createSignal('');
   late final isLoading = createSignal(false);
+
+  @override
+  void initState() {
+    FirebaseAuth.instance.authStateChanges().listen((User? user) async {
+      if (user != null) {
+        if (user.metadata.creationTime == user.metadata.lastSignInTime) {
+          // New user
+          await authService.createUser(
+            id: authUserId.value!,
+            phoneNumber: widget.phoneNumber,
+          );
+          await authService.loadUserData(authUserId.value!);
+
+          router.replaceAll([OnboardingRoute()]);
+        } else {
+          // Existing user
+          await authService.loadUserData(authUserId.value!);
+
+          router.replaceAll([const HomeRoute()]);
+        }
+      }
+    });
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -58,7 +91,8 @@ class _SignInPhoneViewState extends State<SignInPhoneView> with SignalsMixin {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('There was an error verifying your phone number. Please try again.'),
+          content: Text(
+              'There was an error verifying your phone number. Please try again.'),
         ),
       );
     } finally {
@@ -121,7 +155,8 @@ class _SignInPhoneViewState extends State<SignInPhoneView> with SignalsMixin {
                                 return 'Please enter your phone number';
                               }
                               // Basic phone number validation - check if we have 10 digits
-                              String digitsOnly = PhoneNumberTextField.extractDigits(value);
+                              String digitsOnly =
+                                  PhoneNumberTextField.extractDigits(value);
                               if (digitsOnly.length < 10) {
                                 return 'Please enter a valid phone number';
                               }
@@ -129,18 +164,21 @@ class _SignInPhoneViewState extends State<SignInPhoneView> with SignalsMixin {
                             },
                             onChanged: (value) {
                               // Extract digits and store with country code
-                              String digitsOnly = PhoneNumberTextField.extractDigits(value);
+                              String digitsOnly =
+                                  PhoneNumberTextField.extractDigits(value);
                               phoneNumber.value = '+1$digitsOnly';
                             },
                           ),
                           gap24,
                           FilledButton(
-                            onPressed: isLoading.value ? null : _handlePhoneSignIn,
+                            onPressed:
+                                isLoading.value ? null : _handlePhoneSignIn,
                             child: isLoading.value
                                 ? const SizedBox(
                                     height: 20,
                                     width: 20,
-                                    child: CircularProgressIndicator(strokeWidth: 2),
+                                    child: CircularProgressIndicator(
+                                        strokeWidth: 2),
                                   )
                                 : const Text('Send Verification Code'),
                           ),
@@ -153,8 +191,7 @@ class _SignInPhoneViewState extends State<SignInPhoneView> with SignalsMixin {
                       children: [
                         const Text('Don\'t have a slapp?'),
                         TextButton(
-                          onPressed: () =>
-                              router.push(SignUpPhoneRoute()),
+                          onPressed: () => router.push(SignUpPhoneRoute()),
                           child: const Text('Create One'),
                         ),
                       ],

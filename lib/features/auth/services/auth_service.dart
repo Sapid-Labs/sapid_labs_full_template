@@ -75,11 +75,18 @@ abstract class AuthService {
     String? email,
     String? phoneNumber,
   }) async {
-    FirebaseAuthService().createUser(id: id, email: email, phoneNumber: phoneNumber);
-    SupabaseAuthService().createUser(id: id, email: email, phoneNumber: phoneNumber);
+    FirebaseAuthService()
+        .createUser(id: id, email: email, phoneNumber: phoneNumber);
+    SupabaseAuthService()
+        .createUser(id: id, email: email, phoneNumber: phoneNumber);
   }
 
-   Future<void> verifyPhoneNumber({
+  Future<void> loadUserData(String userId) async {
+    FirebaseAuthService().loadUserData(userId);
+    SupabaseAuthService().loadUserData(userId);
+  }
+
+  Future<void> verifyPhoneNumber({
     required String phoneNumber,
     required Function(String verificationId) onCodeSent,
     required Function(String error) onVerificationFailed,
@@ -101,5 +108,4 @@ abstract class AuthService {
     );
     return true;
   }
-
 }

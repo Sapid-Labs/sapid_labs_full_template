@@ -264,4 +264,27 @@ class FirebaseAuthService implements AuthService {
       throw Exception('Failed to sign in with phone number: ${e.toString()}');
     }
   }
+
+  @override
+  Future<void> loadUserData(String userId) {
+    // Load user data from Firestore
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        Map<String, dynamic>? data =
+            documentSnapshot.data() as Map<String, dynamic>?;
+        if (data != null) {
+          // Update any necessary user state here
+          debugPrint('User data loaded: $data');
+        }
+      } else {
+        debugPrint('No user data found for userId: $userId');
+      }
+    }).catchError((error) {
+      debugPrint('Error loading user data: $error');
+    });
+  }
 }

@@ -260,18 +260,67 @@ class SignInEmailRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [SignInPhoneView]
-class SignInPhoneRoute extends PageRouteInfo<void> {
-  const SignInPhoneRoute({List<PageRouteInfo>? children})
-      : super(SignInPhoneRoute.name, initialChildren: children);
+class SignInPhoneRoute extends PageRouteInfo<SignInPhoneRouteArgs> {
+  SignInPhoneRoute({
+    Key? key,
+    required String verificationId,
+    required String phoneNumber,
+    List<PageRouteInfo>? children,
+  }) : super(
+          SignInPhoneRoute.name,
+          args: SignInPhoneRouteArgs(
+            key: key,
+            verificationId: verificationId,
+            phoneNumber: phoneNumber,
+          ),
+          initialChildren: children,
+        );
 
   static const String name = 'SignInPhoneRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const SignInPhoneView();
+      final args = data.argsAs<SignInPhoneRouteArgs>();
+      return SignInPhoneView(
+        key: args.key,
+        verificationId: args.verificationId,
+        phoneNumber: args.phoneNumber,
+      );
     },
   );
+}
+
+class SignInPhoneRouteArgs {
+  const SignInPhoneRouteArgs({
+    this.key,
+    required this.verificationId,
+    required this.phoneNumber,
+  });
+
+  final Key? key;
+
+  final String verificationId;
+
+  final String phoneNumber;
+
+  @override
+  String toString() {
+    return 'SignInPhoneRouteArgs{key: $key, verificationId: $verificationId, phoneNumber: $phoneNumber}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! SignInPhoneRouteArgs) return false;
+    return key == other.key &&
+        verificationId == other.verificationId &&
+        phoneNumber == other.phoneNumber;
+  }
+
+  @override
+  int get hashCode =>
+      key.hashCode ^ verificationId.hashCode ^ phoneNumber.hashCode;
 }
 
 /// generated route for
