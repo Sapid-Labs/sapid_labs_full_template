@@ -160,7 +160,7 @@ class PremiumPopupContentState extends State<PremiumPopupContent> {
                               ),
                             ),
 
-                            const SizedBox(height: 16),
+                            gap16,
 
                             // Yearly plan with discount
                             if (yearlyPackage != null)
@@ -211,8 +211,8 @@ class PremiumPopupContentState extends State<PremiumPopupContent> {
                               package: selectedPlan == 'weekly'
                                   ? weeklyPackage!
                                   : selectedPlan == 'monthly'
-                                  ? monthlyPackage!
-                                  : yearlyPackage!,
+                                      ? monthlyPackage!
+                                      : yearlyPackage!,
                             ),
                             gap48,
                           ],
