@@ -2,13 +2,12 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
-import 'package:signals/signals_flutter.dart';
 import 'package:slapp/app/get_it.dart';
 import 'package:slapp/app/router.dart';
 import 'package:slapp/app/services.dart';
+import 'package:slapp/features/auth/models/app_user.dart';
 import 'package:slapp/features/auth/services/auth_service.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:injectable/injectable.dart';
@@ -201,7 +200,7 @@ class FirebaseAuthService implements AuthService {
       throw Exception(e.message ?? 'Failed to sign in');
     } catch (error, stack) {
       log('Error creating Firebase account: ' + error.toString());
-      FirebaseCrashlytics.instance.recordError(error, stack, fatal: false);
+      crashService.logError(error: error, stackTrace: stack);
     }
   }
 
@@ -215,7 +214,7 @@ class FirebaseAuthService implements AuthService {
       user?.updatePassword(password);
     } catch (error, stack) {
       log('Error updating Firebase password: ' + error.toString());
-      FirebaseCrashlytics.instance.recordError(error, stack, fatal: false);
+      crashService.logError(error: error, stackTrace: stack);
     }
   }
 
@@ -226,7 +225,7 @@ class FirebaseAuthService implements AuthService {
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
     } catch (error, stack) {
-      FirebaseCrashlytics.instance.recordError(error, stack);
+      crashService.logError(error: error, stackTrace: stack);
     }
   }
 
@@ -237,7 +236,7 @@ class FirebaseAuthService implements AuthService {
       authUserId.value = null;
       authEmail.value = null;
     } catch (error, stack) {
-      FirebaseCrashlytics.instance.recordError(error, stack);
+      crashService.logError(error: error, stackTrace: stack);
     }
   }
 
@@ -332,8 +331,9 @@ class FirebaseAuthService implements AuthService {
         Map<String, dynamic>? data =
             documentSnapshot.data() as Map<String, dynamic>?;
         if (data != null) {
-          // Update any necessary user state here
-          debugPrint('User data loaded: $data');
+          AppUser appUser = AppUser.fromJson(data);
+
+          debugPrint('User data loaded: ${appUser.toJson()}');
         }
       } else {
         debugPrint('No user data found for userId: $userId');
@@ -350,10 +350,10 @@ class FirebaseAuthService implements AuthService {
   Future<void> forgetMe() async {
     await FirebaseAuth.instance.setPersistence(Persistence.NONE);
   }
-  
+
   @override
   void listenForPhoneSignUp(String phoneNumber) {
-     FirebaseAuth.instance.authStateChanges().listen((User? user) async {
+    FirebaseAuth.instance.authStateChanges().listen((User? user) async {
       if (user != null) {
         if (user.metadata.creationTime == user.metadata.lastSignInTime) {
           // New user
@@ -369,6 +369,5 @@ class FirebaseAuthService implements AuthService {
         }
       }
     });
-   
   }
 }

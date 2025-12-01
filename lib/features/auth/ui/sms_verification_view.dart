@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:slapp/app/constants.dart';
 import 'package:slapp/app/router.dart';
@@ -86,7 +85,7 @@ class _SmsVerificationViewState extends State<SmsVerificationView>
           ),
         ),
       );
-      FirebaseCrashlytics.instance.recordError(e, s, fatal: false);
+      crashService.logError(error: e, stackTrace: s);
     } finally {
       isLoading.value = false;
     }

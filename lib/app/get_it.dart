@@ -9,6 +9,8 @@ const pocketbaseEnv = Environment('pocketbase');
 const amplitudeAnalyticsEnv = Environment('amplitude');
 const posthogEnv = Environment('posthog');
 const firebaseAnalyticsEnv = Environment('firebaseAnalytics');
+const firebaseCrashlyticsEnv = Environment('firebaseCrashlytics');
+const sentryEnv = Environment('sentry');
 
 final getIt = GetIt.instance;
 
@@ -26,6 +28,9 @@ Future<void> configureDependencies() async => await $initGetIt(
           // amplitude, posthog, firebaseAnalytics
           const String.fromEnvironment('STACK_ANALYTICS',
               defaultValue: 'amplitude'),
+          // firebaseCrashlytics, sentry
+          const String.fromEnvironment('STACK_CRASHLYTICS',
+              defaultValue: 'firebaseCrashlytics'),
         },
       ),
     );

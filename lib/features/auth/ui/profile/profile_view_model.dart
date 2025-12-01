@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:simple_mvvm/simple_mvvm.dart';
+import 'package:slapp/app/services.dart';
 import 'package:slapp/features/auth/models/app_user.dart';
 
 class ProfileViewModelBuilder extends ViewModelBuilder<ProfileViewModel> {
@@ -61,7 +61,7 @@ class ProfileViewModel extends ViewModel<ProfileViewModel> {
       }
     } catch (e, s) {
       print('Error fetching user data: $e');
-      FirebaseCrashlytics.instance.recordError(e, s, fatal: false);
+      crashService.logError(error: e, stackTrace: s);
       setState(() {
         _isLoading = false;
       });
