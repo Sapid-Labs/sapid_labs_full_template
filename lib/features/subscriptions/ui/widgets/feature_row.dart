@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:slapp/app/constants.dart';
 import 'package:slapp/features/shared/utils/color_utils.dart';
 import 'package:slapp/features/shared/utils/text_utils.dart';
 import 'package:slapp/features/subscriptions/models/subscription_feature.dart';
@@ -27,7 +28,7 @@ class FeatureRow extends StatelessWidget {
               size: 16,
             ),
           ),
-          const SizedBox(width: 16),
+          gap16,
           Expanded(
             child: Text(feature.title, style: context.bodyLarge.bold),
           ),
