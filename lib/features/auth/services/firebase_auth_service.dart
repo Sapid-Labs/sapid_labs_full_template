@@ -287,4 +287,12 @@ class FirebaseAuthService implements AuthService {
       debugPrint('Error loading user data: $error');
     });
   }
+
+  Future<void> rememberMe() async {
+    await FirebaseAuth.instance.setPersistence(Persistence.SESSION);
+  }
+
+  Future<void> forgetMe() async {
+    await FirebaseAuth.instance.setPersistence(Persistence.NONE);
+  }
 }
