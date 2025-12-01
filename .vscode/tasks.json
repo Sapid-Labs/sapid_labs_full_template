@@ -76,7 +76,20 @@
       }
     },
     {
-      "label": "1. Create Upload Key",
+      "label": "1. Add Template Source",
+      "type": "shell",
+      "command": "git remote add template https://github.com/Sapid-Labs/sapid_labs_flutter_template.git",
+      "icon": {
+        "id": "checklist",
+        "color": "terminal.ansiGreen"
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      }
+    },
+    {
+      "label": "2. Create Upload Key",
       "type": "shell",
       "command": "keytool -genkey -v -keystore ./keys/upload-keystore.jks -keyalg RSA -keysize 2048 -validity 10000 -alias upload",
       "icon": {
@@ -87,6 +100,19 @@
         "kind": "build",
         "isDefault": false
       }
-    }
+    },
+    {
+      "label": "Fetch Template Updates",
+      "type": "shell",
+      "command": "git fetch template",
+      "icon": {
+        "id": "download",
+        "color": "terminal.ansiGreen"
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      }
+    },
   ]
 }
