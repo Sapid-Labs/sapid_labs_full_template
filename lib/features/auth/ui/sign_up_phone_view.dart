@@ -112,7 +112,8 @@ class _SignUpPhoneViewState extends State<SignUpPhoneView> with SignalsMixin {
                             return 'Please enter your phone number';
                           }
                           // Basic phone number validation - check if we have 10 digits
-                          String digitsOnly = PhoneNumberTextField.extractDigits(value);
+                          String digitsOnly =
+                              PhoneNumberTextField.extractDigits(value);
                           if (digitsOnly.length < 10) {
                             return 'Please enter a valid phone number';
                           }
@@ -120,7 +121,8 @@ class _SignUpPhoneViewState extends State<SignUpPhoneView> with SignalsMixin {
                         },
                         onChanged: (value) {
                           // Extract digits and store with country code
-                          String digitsOnly = PhoneNumberTextField.extractDigits(value);
+                          String digitsOnly =
+                              PhoneNumberTextField.extractDigits(value);
                           phoneNumber.value = '+1$digitsOnly';
                         },
                       ),
@@ -145,8 +147,7 @@ class _SignUpPhoneViewState extends State<SignUpPhoneView> with SignalsMixin {
                         children: [
                           const Text('Already have a slapp?'),
                           TextButton(
-                            onPressed: () =>
-                                router.replace(const SignInPhoneRoute()),
+                            onPressed: () => router.replace(SignInPhoneRoute()),
                             child: const Text('Sign In'),
                           ),
                         ],

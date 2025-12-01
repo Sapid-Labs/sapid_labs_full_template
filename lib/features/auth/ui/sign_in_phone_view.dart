@@ -15,12 +15,7 @@ import 'package:signals/signals_flutter.dart';
 class SignInPhoneView extends StatefulWidget {
   const SignInPhoneView({
     super.key,
-    required this.verificationId,
-    required this.phoneNumber,
   });
-
-  final String verificationId;
-  final String phoneNumber;
 
   @override
   State<SignInPhoneView> createState() => _SignInPhoneViewState();
@@ -42,7 +37,7 @@ class _SignInPhoneViewState extends State<SignInPhoneView> with SignalsMixin {
           // New user
           await authService.createUser(
             id: authUserId.value!,
-            phoneNumber: widget.phoneNumber,
+            phoneNumber: phoneNumber.value,
           );
           await authService.loadUserData(authUserId.value!);
 

@@ -74,6 +74,19 @@
         "kind": "build",
         "isDefault": false
       }
+    },
+    {
+      "label": "1. Create Upload Key",
+      "type": "shell",
+      "command": "keytool -genkey -v -keystore ./keys/upload-keystore.jks -keyalg RSA -keysize 2048 -validity 10000 -alias upload",
+      "icon": {
+        "id": "checklist",
+        "color": "terminal.ansiGreen"
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      }
     }
   ]
 }

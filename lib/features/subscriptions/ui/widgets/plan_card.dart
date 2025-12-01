@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:slapp/features/shared/utils/text_utils.dart';
 import 'package:slapp/app/constants.dart';
 import 'package:slapp/app/theme.dart';
 import 'package:slapp/features/shared/utils/text_utils.dart';

@@ -3,9 +3,7 @@ import 'dart:io';
 import 'package:slapp/app/config.dart';
 import 'package:slapp/app/constants.dart';
 import 'package:slapp/app/services.dart';
-import 'package:slapp/features/shared/ui/app_logo.dart';
 import 'package:slapp/features/shared/utils/color_utils.dart';
-import 'package:slapp/features/shared/utils/text_utils.dart';
 import 'package:slapp/features/subscriptions/services/subscription_service.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -14,8 +12,7 @@ import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:slapp/features/subscriptions/ui/widgets/benefit_card.dart';
 import 'package:slapp/features/subscriptions/ui/widgets/feature_row.dart';
 import 'package:slapp/features/subscriptions/ui/widgets/free_trial_button.dart';
-import 'package:slapp/features/subscriptions/ui/widgets/weekly_plan_button.dart';
-import 'package:slapp/features/subscriptions/ui/widgets/yearly_plan_button.dart';
+import 'package:slapp/features/subscriptions/ui/widgets/plan_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 @RoutePage()
@@ -27,7 +24,7 @@ class SubscriptionView extends StatefulWidget {
 }
 
 class _SubscriptionViewState extends State<SubscriptionView> {
-  bool selectedWeekly = false;
+  String selectedPlan = 'yearly';
 
   @override
   Widget build(BuildContext context) {
@@ -44,11 +41,17 @@ class _SubscriptionViewState extends State<SubscriptionView> {
                   onPressed: () {
                     // Manage subscriptions
                     if (Platform.isIOS) {
-                      launchUrl(Uri.parse(
-                          "https://apps.apple.com/account/subscriptions"));
+                      launchUrl(
+                        Uri.parse(
+                          "https://apps.apple.com/account/subscriptions",
+                        ),
+                      );
                     } else {
-                      launchUrl(Uri.parse(
-                          'https://play.google.com/store/account/subscriptions'));
+                      launchUrl(
+                        Uri.parse(
+                          'https://play.google.com/store/account/subscriptions',
+                        ),
+                      );
                     }
                   },
                 ),
@@ -65,14 +68,12 @@ class _SubscriptionViewState extends State<SubscriptionView> {
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
-                          Theme.of(context)
-                              .colorScheme
-                              .primary
-                              .withOpacity(0.1),
-                          Theme.of(context)
-                              .colorScheme
-                              .secondary
-                              .withOpacity(0.1),
+                          Theme.of(
+                            context,
+                          ).colorScheme.primary.withOpacity(0.1),
+                          Theme.of(
+                            context,
+                          ).colorScheme.secondary.withOpacity(0.1),
                         ],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
@@ -81,19 +82,14 @@ class _SubscriptionViewState extends State<SubscriptionView> {
                     ),
                     child: Column(
                       children: [
-                        Icon(
-                          Icons.arrow_downward,
-                          size: 80,
-                        ),
+                        Icon(Icons.auto_awesome, size: 80),
                         gap16,
                         Text(
                           'You\'re enjoying Premium!',
                           style: Theme.of(context)
                               .textTheme
                               .headlineSmall
-                              ?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
+                              ?.copyWith(fontWeight: FontWeight.bold),
                           textAlign: TextAlign.center,
                         ),
                         gap8,
@@ -101,10 +97,9 @@ class _SubscriptionViewState extends State<SubscriptionView> {
                           'Thank you for supporting ${AppConfig.appName} ☺️',
                           style:
                               Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurface
-                                        .withOpacity(0.7),
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurface.withOpacity(0.7),
                                   ),
                           textAlign: TextAlign.center,
                         ),
@@ -126,6 +121,7 @@ class _SubscriptionViewState extends State<SubscriptionView> {
                   gap16,
 
                   Column(
+                    spacing: 8,
                     children: [
                       ...features
                           .map((feature) => BenefitCard(feature: feature))
@@ -160,6 +156,12 @@ class _SubscriptionViewState extends State<SubscriptionView> {
                   .where((element) => element.packageType == PackageType.annual)
                   .firstOrNull;
 
+              Package? monthlyPackage = offerings.availablePackages
+                  .where(
+                    (element) => element.packageType == PackageType.monthly,
+                  )
+                  .firstOrNull;
+
               Package? weeklyPackage = offerings.availablePackages
                   .where((element) => element.packageType == PackageType.weekly)
                   .firstOrNull;
@@ -171,15 +173,9 @@ class _SubscriptionViewState extends State<SubscriptionView> {
                   children: [
                     // Hero images section
                     Container(
-                      height: 100,
+                      height: 200,
                       margin: const EdgeInsets.symmetric(vertical: 16),
-                      child: AppLogo(),
-                    ),
-
-                    Center(
-                      child: Text(AppConfig.cta,
-                          textAlign: TextAlign.center,
-                          style: context.titleLarge.bold),
+                      child: Image.asset('assets/images/slapp-image.png'),
                     ),
 
                     // Features list
@@ -197,50 +193,59 @@ class _SubscriptionViewState extends State<SubscriptionView> {
                     gap16,
 
                     if (yearlyPackage != null)
-                      YearlyPlanButton(
+                      PlanButton(
                         onTap: () {
                           setState(() {
-                            selectedWeekly = false;
+                            selectedPlan = 'yearly';
                           });
                         },
-                        selectedWeekly: selectedWeekly,
-                        yearlyPackage: yearlyPackage,
+                        isSelected: selectedPlan == 'yearly',
+                        package: yearlyPackage,
+                        periodLabel: '/year',
+                        planTitle: 'Yearly Plan',
+                        badgeText: 'Save 50%',
+                      ),
+                    // Monthly plan
+                    if (monthlyPackage != null)
+                      PlanButton(
+                        onTap: () {
+                          setState(() {
+                            selectedPlan = 'monthly';
+                          });
+                        },
+                        isSelected: selectedPlan == 'monthly',
+                        package: monthlyPackage,
+                        periodLabel: '/month',
+                        planTitle: 'Monthly Plan',
                       ),
                     // Weekly plan
                     if (weeklyPackage != null)
-                      WeeklyPlanButton(
+                      PlanButton(
                         onTap: () {
                           setState(() {
-                            selectedWeekly = true;
+                            selectedPlan = 'weekly';
                           });
                         },
-                        selectedWeekly: selectedWeekly,
-                        weeklyPackage: weeklyPackage,
+                        isSelected: selectedPlan == 'weekly',
+                        package: weeklyPackage,
+                        periodLabel: '/week',
+                        planTitle: 'Weekly Plan',
                       ),
                     gap24,
 
                     // Start Free Trial button
                     FreeTrialButton(
                       offerings: offerings,
-                      selectedWeekly: selectedWeekly,
-                      weeklyPackage: weeklyPackage,
-                      yearlyPackage: yearlyPackage,
-                      onTap: () async {
-                        Package selectedPackage;
-                        if (selectedWeekly && weeklyPackage != null) {
-                          selectedPackage = weeklyPackage;
-                        } else if (!selectedWeekly && yearlyPackage != null) {
-                          selectedPackage = yearlyPackage;
-                        } else {
-                          // Fallback to any available package
-                          selectedPackage = offerings.availablePackages.first;
-                        }
-                        await subscriptionService
-                            .purchaseSubscription(selectedPackage);
-                      },
+                      freeTrialEnabled: false,
+                      package: selectedPlan == 'weekly'
+                          ? weeklyPackage!
+                          : selectedPlan == 'monthly'
+                              ? monthlyPackage!
+                              : yearlyPackage!,
                     ),
                     gap16,
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         if (Platform.isIOS) ...[
                           TextButton(
@@ -250,8 +255,9 @@ class _SubscriptionViewState extends State<SubscriptionView> {
                             },
                           ),
                           Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 4.0),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 4.0,
+                            ),
                             child: SizedBox(
                               height: 8,
                               child: VerticalDivider(
@@ -269,7 +275,8 @@ class _SubscriptionViewState extends State<SubscriptionView> {
                                   await Purchases.restorePurchases();
 
                               debugPrint(
-                                  'Customer info: ${customerInfo.toString()}');
+                                'Customer info: ${customerInfo.toString()}',
+                              );
 
                               subscriptionService.checkSubscription();
                             } on PlatformException catch (e) {
