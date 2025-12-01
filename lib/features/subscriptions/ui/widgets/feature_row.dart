@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:slapp/features/shared/utils/color_utils.dart';
+import 'package:slapp/features/shared/utils/text_utils.dart';
 import 'package:slapp/features/subscriptions/models/subscription_feature.dart';
 
 class FeatureRow extends StatelessWidget {
@@ -28,13 +29,7 @@ class FeatureRow extends StatelessWidget {
           ),
           const SizedBox(width: 16),
           Expanded(
-            child: Text(
-              feature.title,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
+            child: Text(feature.title, style: context.bodyLarge.bold),
           ),
         ],
       ),
