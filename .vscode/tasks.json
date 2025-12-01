@@ -89,7 +89,20 @@
       }
     },
     {
-      "label": "2. Create Upload Key",
+      "label": "2. Sync Template",
+      "type": "shell",
+      "command": "git fetch template && git merge template/main --allow-unrelated-histories --strategy-option=theirs",
+      "icon": {
+        "id": "checklist",
+        "color": "terminal.ansiGreen"
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      }
+    },
+    {
+      "label": "3. Create Upload Key",
       "type": "shell",
       "command": "keytool -genkey -v -keystore ./keys/upload-keystore.jks -keyalg RSA -keysize 2048 -validity 10000 -alias upload",
       "icon": {
@@ -104,7 +117,7 @@
     {
       "label": "Fetch Template Updates",
       "type": "shell",
-      "command": "git fetch template",
+      "command": "git fetch template && git merge template/main --allow-unrelated-histories --strategy-option=theirs",
       "icon": {
         "id": "download",
         "color": "terminal.ansiGreen"
@@ -113,6 +126,6 @@
         "kind": "build",
         "isDefault": false
       }
-    },
+    }
   ]
 }
