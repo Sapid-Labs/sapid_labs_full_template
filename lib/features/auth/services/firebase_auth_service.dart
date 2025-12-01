@@ -32,7 +32,15 @@ class FirebaseAuthService implements AuthService {
   @override
   Future<void> signUpAnonymously() async {
     try {
-      await FirebaseAuth.instance.signInAnonymously();
+      UserCredential credential =
+          await FirebaseAuth.instance.signInAnonymously();
+
+      if (credential.user != null) {
+        await createUser(
+          id: credential.user!.uid,
+          email: credential.user!.email,
+        );
+      }
     } on FirebaseAuthException catch (e) {
       debugPrint('Firebase auth exception: ${e.code} - ${e.message}');
       throw Exception(e.message ?? 'Failed to sign up anonymously');
@@ -77,7 +85,18 @@ class FirebaseAuthService implements AuthService {
 
           debugPrint('User signed in with Google');
 
-          return userCredential.additionalUserInfo?.isNewUser ?? false;
+          bool newUser = userCredential.additionalUserInfo?.isNewUser ?? false;
+
+          if (newUser) {
+            if (userCredential.user != null) {
+              await createUser(
+                id: userCredential.user!.uid,
+                email: userCredential.user!.email,
+              );
+            }
+          }
+
+          return newUser;
         } else {
           debugPrint('Google Sign-In is not supported on this platform.');
           throw Exception('Google Sign-In is not supported on this platform.');
@@ -93,12 +112,38 @@ class FirebaseAuthService implements AuthService {
     try {
       final appleProvider = AppleAuthProvider();
       if (kIsWeb) {
-        await FirebaseAuth.instance.signInWithPopup(appleProvider);
-      } else {
-        await FirebaseAuth.instance.signInWithProvider(appleProvider);
-      }
+        UserCredential userCredential =
+            await FirebaseAuth.instance.signInWithPopup(appleProvider);
 
-      return true;
+        bool newUser = userCredential.additionalUserInfo?.isNewUser ?? false;
+
+        if (newUser) {
+          if (userCredential.user != null) {
+            await createUser(
+              id: userCredential.user!.uid,
+              email: userCredential.user!.email,
+            );
+          }
+        }
+
+        return newUser;
+      } else {
+        UserCredential userCredential =
+            await FirebaseAuth.instance.signInWithProvider(appleProvider);
+
+        bool newUser = userCredential.additionalUserInfo?.isNewUser ?? false;
+
+        if (newUser) {
+          if (userCredential.user != null) {
+            await createUser(
+              id: userCredential.user!.uid,
+              email: userCredential.user!.email,
+            );
+          }
+        }
+
+        return newUser;
+      }
     } on SignInWithAppleAuthorizationException catch (e) {
       debugPrint('Error signing in with Apple: $e');
       throw e.message;
@@ -141,6 +186,13 @@ class FirebaseAuthService implements AuthService {
 
       authUserId.value = user.user?.uid;
       authEmail.value = user.user?.email;
+
+      if (user.user != null) {
+        await createUser(
+          id: user.user!.uid,
+          email: user.user!.email,
+        );
+      }
     } on FirebaseAuthException catch (e) {
       debugPrint('Firebase auth exception: ${e.code} - ${e.message}');
       throw Exception(e.message ?? 'Failed to sign in');

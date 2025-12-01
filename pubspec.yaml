@@ -13,8 +13,6 @@ dependencies:
   collection: ^1.17.1
   crypto: ^3.0.6
   csv: ^6.0.0
-  dartantic_ai: ^1.0.2
-  dartantic_interface: ^1.0.2
   device_info_plus: ^11.1.1
   flex_color_scheme: ^8.0.0
   flutter:

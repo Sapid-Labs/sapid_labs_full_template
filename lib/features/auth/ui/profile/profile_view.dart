@@ -1,6 +1,4 @@
 import 'package:slapp/app/constants.dart';
-import 'package:slapp/app/services.dart';
-import 'package:slapp/features/subscriptions/services/subscription_service.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'profile_view_model.dart';
@@ -46,13 +44,6 @@ class ProfileView extends StatelessWidget {
                           decoration:
                               const InputDecoration(labelText: 'Username'),
                           onChanged: model.setUsername,
-                        ),
-                        gap16,
-                        TextFormField(
-                          initialValue: model.bio,
-                          decoration: const InputDecoration(labelText: 'Bio'),
-                          onChanged: model.setBio,
-                          maxLines: 3,
                         ),
                         gap24,
                         ElevatedButton(

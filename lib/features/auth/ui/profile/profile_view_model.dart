@@ -3,6 +3,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:simple_mvvm/simple_mvvm.dart';
+import 'package:slapp/features/auth/models/app_user.dart';
 
 class ProfileViewModelBuilder extends ViewModelBuilder<ProfileViewModel> {
   const ProfileViewModelBuilder({
@@ -18,16 +19,12 @@ class ProfileViewModel extends ViewModel<ProfileViewModel> {
   static ProfileViewModel of_(BuildContext context) =>
       getModel<ProfileViewModel>(context);
 
-  String _firstName = '';
-  String _lastName = '';
-  String _username = '';
-  String _bio = '';
+  AppUser? appUser = null;
   bool _isLoading = true;
 
-  String get firstName => _firstName;
-  String get lastName => _lastName;
-  String get username => _username;
-  String get bio => _bio;
+  String get firstName => appUser?.firstName ?? '';
+  String get lastName => appUser?.lastName ?? '';
+  String get username => appUser?.username ?? '';
   bool get isLoading => _isLoading;
 
   @override
@@ -53,10 +50,7 @@ class ProfileViewModel extends ViewModel<ProfileViewModel> {
       if (docSnapshot.exists) {
         final data = docSnapshot.data() as Map<String, dynamic>;
         setState(() {
-          _firstName = data['firstName'] ?? '';
-          _lastName = data['lastName'] ?? '';
-          _username = data['username'] ?? '';
-          _bio = data['bio'] ?? '';
+          appUser = AppUser.fromJson(data);
           _isLoading = false;
         });
       } else {
@@ -76,25 +70,19 @@ class ProfileViewModel extends ViewModel<ProfileViewModel> {
 
   void setFirstName(String value) {
     setState(() {
-      _firstName = value;
+      appUser = appUser?.copyWith(firstName: value);
     });
   }
 
   void setLastName(String value) {
     setState(() {
-      _lastName = value;
+      appUser = appUser?.copyWith(lastName: value);
     });
   }
 
   void setUsername(String value) {
     setState(() {
-      _username = value;
-    });
-  }
-
-  void setBio(String value) {
-    setState(() {
-      _bio = value;
+      appUser = appUser?.copyWith(username: value);
     });
   }
 
@@ -104,10 +92,9 @@ class ProfileViewModel extends ViewModel<ProfileViewModel> {
           .collection('users')
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .set({
-        'firstName': _firstName,
-        'lastName': _lastName,
-        'username': _username,
-        'bio': _bio,
+        'firstName': appUser?.firstName,
+        'lastName': appUser?.lastName,
+        'username': appUser?.username,
         'email': FirebaseAuth.instance.currentUser!.email,
         'id': FirebaseAuth.instance.currentUser!.uid,
       }, SetOptions(merge: true));

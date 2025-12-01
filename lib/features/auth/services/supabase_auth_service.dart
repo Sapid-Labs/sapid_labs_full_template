@@ -155,8 +155,17 @@ class SupabaseAuthService implements AuthService {
           debugPrint('Created At: ${response.user?.createdAt}');
           debugPrint('Metadata: ${response.user?.userMetadata}');
 
-          return createdAt != null &&
+          bool newUser = createdAt != null &&
               createdAt.isAfter(DateTime.now().subtract(Duration(minutes: 5)));
+
+          if (newUser) {
+            await createUser(
+              id: response.user?.id ?? '',
+              email: response.user?.email,
+            );
+          }
+
+          return newUser;
         } else {
           debugPrint('Google Sign-In is not supported on this platform.');
           throw Exception('Google Sign-In is not supported on this platform.');
@@ -209,8 +218,17 @@ class SupabaseAuthService implements AuthService {
       debugPrint('Created At: ${response.user?.createdAt}');
       debugPrint('Metadata: ${response.user?.userMetadata}');
 
-      return createdAt != null &&
+      bool newUser = createdAt != null &&
           createdAt.isAfter(DateTime.now().subtract(Duration(minutes: 5)));
+
+      if (newUser) {
+        await createUser(
+          id: response.user?.id ?? '',
+          email: response.user?.email,
+        );
+      }
+
+      return newUser;
     } on AuthApiException catch (e) {
       debugPrint('AuthApiException: $e');
       if (e.code == 'invalid_credentials') {
@@ -335,18 +353,69 @@ class SupabaseAuthService implements AuthService {
 
   @override
   Future<bool> signInWithPhoneNumber(
-      {required String verificationId, required String smsCode}) {
-    // TODO: implement signInWithPhoneNumber
-    throw UnimplementedError();
+      {required String verificationId, required String smsCode}) async {
+    try {
+      final response = await supabase.auth.verifyOTP(
+        type: OtpType.sms,
+        phone:
+            verificationId, // In Supabase, we use the phone number as the identifier
+        token: smsCode,
+      );
+
+      authUserId.value = response.user?.id;
+      authEmail.value = response.user?.email;
+
+      debugPrint('User signed in with phone number: ${response.user?.id}');
+
+      // Check if this is a new user by checking createdAt timestamp
+      DateTime? createdAt = DateTime.tryParse(response.user?.createdAt ?? '');
+      bool isNewUser = createdAt != null &&
+          createdAt.isAfter(DateTime.now().subtract(Duration(minutes: 5)));
+
+      if (isNewUser) {
+        await createUser(
+          id: response.user?.id ?? '',
+          phoneNumber: response.user?.phone,
+        );
+      }
+
+      return isNewUser;
+    } on AuthApiException catch (e) {
+      debugPrint('AuthApiException: ${e.code} - ${e.message}');
+      throw FastAuthException(
+        e.message ?? 'Failed to sign in with phone number',
+        error: e.toString(),
+      );
+    } catch (e) {
+      debugPrint('Error signing in with phone number: $e');
+      throw FastAuthException(
+        'Failed to sign in with phone number',
+        error: e.toString(),
+      );
+    }
   }
 
   @override
   Future<void> verifyPhoneNumber(
       {required String phoneNumber,
       required Function(String verificationId) onCodeSent,
-      required Function(String error) onVerificationFailed}) {
-    // TODO: implement verifyPhoneNumber
-    throw UnimplementedError();
+      required Function(String error) onVerificationFailed}) async {
+    try {
+      await supabase.auth.signInWithOtp(
+        phone: phoneNumber,
+      );
+
+      debugPrint('OTP sent to $phoneNumber');
+      // For Supabase, we pass the phone number itself as the verificationId
+      // since we need it later to verify the OTP
+      onCodeSent(phoneNumber);
+    } on AuthApiException catch (e) {
+      debugPrint('AuthApiException: ${e.code} - ${e.message}');
+      onVerificationFailed(e.message ?? 'Failed to send OTP');
+    } catch (e) {
+      debugPrint('Error sending OTP: $e');
+      onVerificationFailed('Failed to send OTP: ${e.toString()}');
+    }
   }
 
   @override
