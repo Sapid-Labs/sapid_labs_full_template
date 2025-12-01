@@ -5,7 +5,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:signals/signals_flutter.dart';
 import 'package:slapp/app/get_it.dart';
+import 'package:slapp/app/router.dart';
+import 'package:slapp/app/services.dart';
 import 'package:slapp/features/auth/services/auth_service.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:injectable/injectable.dart';
@@ -346,5 +349,26 @@ class FirebaseAuthService implements AuthService {
 
   Future<void> forgetMe() async {
     await FirebaseAuth.instance.setPersistence(Persistence.NONE);
+  }
+  
+  @override
+  void listenForPhoneSignUp(String phoneNumber) {
+     FirebaseAuth.instance.authStateChanges().listen((User? user) async {
+      if (user != null) {
+        if (user.metadata.creationTime == user.metadata.lastSignInTime) {
+          // New user
+          await authService.createUser(
+            id: authUserId.value!,
+            phoneNumber: phoneNumber,
+          );
+
+          router.replaceAll([OnboardingRoute()]);
+        } else {
+          // Existing user
+          router.replaceAll([const HomeRoute()]);
+        }
+      }
+    });
+   
   }
 }

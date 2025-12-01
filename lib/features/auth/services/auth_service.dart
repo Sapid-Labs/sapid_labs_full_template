@@ -108,4 +108,9 @@ abstract class AuthService {
     );
     return true;
   }
+
+  void listenForPhoneSignUp(String phoneNumber){
+    FirebaseAuthService().listenForPhoneSignUp(phoneNumber);
+    SupabaseAuthService().listenForPhoneSignUp(phoneNumber);
+  }
 }

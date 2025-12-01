@@ -431,4 +431,29 @@ class SupabaseAuthService implements AuthService {
       rethrow;
     }
   }
+
+  @override
+  void listenForPhoneSignUp(String phoneNumber) {
+    supabase.auth.onAuthStateChange.listen((data) async {
+      final AuthChangeEvent event = data.event;
+      final Session? session = data.session;
+
+      if (event == AuthChangeEvent.signedIn && session != null) {
+        DateTime? createdAt = DateTime.tryParse(session.user.createdAt);
+        bool isNewUser = createdAt != null &&
+            createdAt.isAfter(DateTime.now().subtract(Duration(minutes: 5)));
+
+        if (isNewUser) {
+          await createUser(
+            id: session.user.id,
+            phoneNumber: phoneNumber,
+          );
+
+          router.replaceAll([OnboardingRoute()]);
+        } else {
+          router.replaceAll([const HomeRoute()]);
+        }
+      }
+    });
+  }
 }

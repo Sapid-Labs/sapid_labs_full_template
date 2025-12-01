@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:slapp/app/constants.dart';
 import 'package:slapp/app/router.dart';
@@ -34,6 +35,12 @@ class _SmsVerificationViewState extends State<SmsVerificationView>
   late final isLoading = createSignal(false);
 
   @override
+  void initState() {
+    authService.listenForPhoneSignUp(widget.phoneNumber);
+    super.initState();
+  }
+
+  @override
   void dispose() {
     _smsCodeController.dispose();
     super.dispose();
@@ -50,23 +57,36 @@ class _SmsVerificationViewState extends State<SmsVerificationView>
         smsCode: smsCode.value,
       );
 
-      if (mounted) {
-        if (isNewUser) {
-          authService.createUser(
-            id: authUserId.value!,
-            phoneNumber: widget.phoneNumber,
-          );
-          router.replaceAll([OnboardingRoute()]);
-        } else {
-          router.replaceAll([const HomeRoute()]);
+      if (authUserId.value != null) {
+        await authService.loadUserData(authUserId.value!);
+
+        if (mounted) {
+          if (isNewUser) {
+            print('New user detected, creating user profile');
+            authService.createUser(
+              id: authUserId.value!,
+              phoneNumber: widget.phoneNumber,
+            );
+            router.replaceAll([OnboardingRoute()]);
+          } else {
+            print('Existing user, navigating to home');
+            router.replaceAll([const HomeRoute()]);
+          }
         }
+      } else {
+        throw FastAuthException('Authentication failed. Please try again.');
       }
     } on FastAuthException catch (e) {
       _handleAuthError(e);
-    } catch (e) {
+    } catch (e, s) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Invalid verification code. Please try again.')),
+        SnackBar(
+          content: Text(
+            'Invalid verification code. Please try again: ' + e.toString(),
+          ),
+        ),
       );
+      FirebaseCrashlytics.instance.recordError(e, s, fatal: false);
     } finally {
       isLoading.value = false;
     }
@@ -106,8 +126,8 @@ class _SmsVerificationViewState extends State<SmsVerificationView>
                   Text(
                     formatPhoneNumber(widget.phoneNumber),
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                          fontWeight: FontWeight.bold,
+                        ),
                     textAlign: TextAlign.center,
                   ),
                   gap24,
@@ -117,10 +137,16 @@ class _SmsVerificationViewState extends State<SmsVerificationView>
                       labelText: 'Verification Code',
                       hintText: 'Enter 6-digit code',
                     ),
+                    textInputAction: TextInputAction.done,
                     keyboardType: TextInputType.number,
                     textAlign: TextAlign.center,
                     maxLength: 6,
                     enabled: !isLoading.value,
+                    onFieldSubmitted: (value) {
+                      if (!isLoading.value) {
+                        _handleSmsVerification();
+                      }
+                    },
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter the verification code';
