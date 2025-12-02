@@ -10,6 +10,7 @@ import 'package:slapp/features/shared/services/ai_service.dart';
 import 'package:slapp/features/shared/services/crash/crash_service.dart';
 import 'package:slapp/features/shared/services/permission_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:slapp/features/subscriptions/services/gate_service.dart';
 import 'package:slapp/features/subscriptions/services/subscription_service.dart';
 
 AIService get aiService => getIt.get<AIService>();
@@ -18,6 +19,7 @@ AppRouter get router => getIt.get<AppRouter>();
 AuthService get authService => getIt.get<AuthService>();
 CrashService get crashService => getIt.get<CrashService>();
 FeedbackService get feedbackService => getIt.get<FeedbackService>();
+GateService get gateService => getIt.get<GateService>();
 OnboardingService get onboardingService => getIt.get<OnboardingService>();
 SettingsService get settingsService => getIt.get<SettingsService>();
 SharedPreferences get sharedPrefs => getIt.get<SharedPreferences>();

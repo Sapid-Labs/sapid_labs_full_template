@@ -1,3 +1,4 @@
+import 'package:slapp/app/config.dart';
 import 'package:slapp/app/services.dart';
 import 'package:slapp/features/auth/services/auth_service.dart';
 import 'package:slapp/features/subscriptions/ui/premium_popup.dart';
@@ -208,9 +209,7 @@ class SubscriptionService extends ChangeNotifier {
   }
 
   bool isVip() {
-    List<String> vipEmails = [
-      //'jtmuller5@gmail.com',
-    ];
+    List<String> vipEmails = AppConfig.vipEmails;
 
     return vipEmails.contains(authEmail.value);
   }

@@ -7,6 +7,7 @@ class AppConfig {
   static const String threadsUsername = 'sapid_labs';
   static const String cta = "Build A Better App";
   static const bool allowAnonymousUsers = true;
+  static const List<String> vipEmails = [];
 }
 
 List<SubscriptionFeature> features = [
