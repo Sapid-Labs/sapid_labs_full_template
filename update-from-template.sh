@@ -17,7 +17,7 @@ git merge template/main --squash --no-commit
 # If there are conflicts, resolve them
 if [ $? -ne 0 ]; then
     echo "Resolving conflicts..."
-    git checkout --theirs .
+    git checkout .
     git add .
 fi
 
