@@ -27,6 +27,47 @@ class AIService {
     );
   }
 
+  Future<String> generateText(String prompt) async {
+    try {
+      final apiKey = Platform.isAndroid
+          ? const String.fromEnvironment('GEMINI_API_KEY_ANDROID')
+          : const String.fromEnvironment('GEMINI_API_KEY_IOS');
+
+      final url = Uri.parse(
+          'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateText');
+
+      final requestBody = {
+        'prompt': {
+          'text': prompt,
+        },
+        'temperature': 0.7,
+        'maxOutputTokens': 512,
+      };
+
+      final response = await http.post(
+        url,
+        headers: {
+          'x-goog-api-key': apiKey,
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(requestBody),
+      );
+
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+        final generatedText = responseData['candidates']?[0]?['output'] ?? '';
+
+        return generatedText;
+      } else {
+        print('API Error: ${response.statusCode} - ${response.body}');
+        return '';
+      }
+    } catch (error) {
+      print('Error generating text: $error');
+      return '';
+    }
+  }
+
   Future<dynamic> generateStructuredResponse(String prompt) async {
     try {
       final apiKey = Platform.isAndroid
