@@ -46,6 +46,20 @@ platform :android do
   
     send_slack_notification(message: "New internal version 1.0.#{versionCode} (#{versionCode}) has been pushed to Google Play!")
   end
+
+  desc "Deploy a new version to the alpha testing track of Google Play"
+  lane :alpha do
+    versionCode = bump_version_code
+
+    sh("flutter", "build", "appbundle","--build-name", "1.0.#{versionCode}", "--build-number=#{versionCode}", "--dart-define-from-file=assets/config.json")
+  
+    upload_to_play_store(
+      track: 'alpha',
+      aab: '../build/app/outputs/bundle/release/app-release.aab',
+    )
+  
+    send_slack_notification(message: "New internal version 1.0.#{versionCode} (#{versionCode}) has been pushed to Google Play!")
+  end
   
   desc "Send a message to Slack"
   lane :send_slack_notification do |options|
