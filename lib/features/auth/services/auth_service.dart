@@ -6,6 +6,7 @@ import 'package:signals/signals_flutter.dart';
 final authUserId = signal<String?>(null);
 final authEmail = signal<String?>(null);
 final authIsAuthenticated = computed(() => authUserId.value != null);
+final authPhoneNumber = signal<String?>(null);
 
 abstract class AuthService {
   // all implementations are linked here for easy dev navigation
@@ -109,7 +110,7 @@ abstract class AuthService {
     return true;
   }
 
-  void listenForPhoneSignUp(String phoneNumber){
+  void listenForPhoneSignUp(String phoneNumber) {
     FirebaseAuthService().listenForPhoneSignUp(phoneNumber);
     SupabaseAuthService().listenForPhoneSignUp(phoneNumber);
   }
