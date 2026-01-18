@@ -3,7 +3,7 @@ type: agent
 name: route-creator
 color: green
 tools: [Read, Write, Edit, Glob, Grep, Bash]
-whenToUse: Use this agent when the user wants to add a new route/view to an existing feature without creating the entire feature structure.
+whenToUse: Use this agent when the user wants to add a new route/view to an existing feature, or create custom RouteGuards for access control.
 ---
 
 # Route Creator Agent
@@ -16,7 +16,8 @@ Create routes with:
 - View file with @RoutePage annotation
 - ViewModel file with ViewState pattern and error handling
 - Integration with app router
-- Proper route guards (AuthGuard if needed)
+- Proper route guards (AuthGuard or custom guards)
+- Custom RouteGuard classes when needed
 - UI generated based on detailed user requirements
 - Amplitude analytics tracking
 
@@ -40,9 +41,14 @@ Before starting, you need:
    - "What is the purpose of this view?" (display profile, edit settings, list items, etc.)
    - "Is this a list view, detail view, form, dashboard, or something else?"
 
-3. **Authentication**:
-   - "Does this route require authentication?" (Yes/No)
-   - This determines if AuthGuard is added
+3. **Route Protection**:
+   - "Does this route require protection/guards?" (Yes/No)
+   - If Yes:
+     - "Which guard?" (AuthGuard, custom guard, or create new guard)
+     - If "create new guard":
+       - "Guard name?" (e.g., AdminGuard, SubscriptionGuard, OnboardingGuard)
+       - "What condition should this guard check?" (e.g., user is admin, user has subscription, onboarding completed)
+       - "Where to redirect if condition fails?" (route to navigate to)
 
 ### Part 2: Route Parameters
 
@@ -508,6 +514,166 @@ floatingActionButton: FloatingActionButton(
 ),
 ```
 
+### Step 5a: Generate Custom RouteGuard (if needed)
+
+If user requested a new custom guard:
+
+**Determine Guard Location**:
+- If guard is feature-specific: `lib/features/{feature_name}/utils/{guard_name}_guard.dart`
+- If guard is app-wide: `lib/app/guards/{guard_name}_guard.dart`
+
+**Guard Template**:
+```dart
+import 'package:auto_route/auto_route.dart';
+import 'package:flutter/material.dart';
+import 'package:slapp/app/router.dart';
+{condition_imports}
+
+/// Route guard that checks {condition_description}
+///
+/// Redirects to {redirect_route} if condition is not met.
+class {GuardName}Guard extends AutoRouteGuard {
+  @override
+  void onNavigation(NavigationResolver resolver, StackRouter router) async {
+    debugPrint('{GuardName}Guard - checking navigation to: ${resolver.route.name}');
+
+    try {
+      // Check the guard condition
+      bool {condition} = {condition_check};
+
+      if ({condition}) {
+        debugPrint('{GuardName}Guard - condition passed, allowing navigation');
+        resolver.next(true); // Allow navigation
+      } else {
+        debugPrint('{GuardName}Guard - condition failed, redirecting to {redirect_route}');
+        router.push({RedirectRoute}());
+      }
+    } catch (e) {
+      debugPrint('{GuardName}Guard - error: $e');
+      // On error, redirect to safe route
+      router.push({RedirectRoute}());
+    }
+  }
+}
+```
+
+**Common Guard Patterns**:
+
+**Admin Guard** (checks if user has admin role):
+```dart
+import 'package:auto_route/auto_route.dart';
+import 'package:flutter/material.dart';
+import 'package:slapp/app/router.dart';
+import 'package:slapp/features/auth/services/auth_service.dart';
+
+/// Route guard that ensures user has admin privileges
+///
+/// Redirects to home if user is not an admin.
+class AdminGuard extends AutoRouteGuard {
+  @override
+  void onNavigation(NavigationResolver resolver, StackRouter router) async {
+    debugPrint('AdminGuard - checking admin status');
+
+    try {
+      final user = authCurrentUser.value;
+      bool isAdmin = user?.role == 'admin';
+
+      if (isAdmin) {
+        debugPrint('AdminGuard - user is admin, allowing navigation');
+        resolver.next(true);
+      } else {
+        debugPrint('AdminGuard - user is not admin, redirecting to home');
+        router.push(HomeRoute());
+      }
+    } catch (e) {
+      debugPrint('AdminGuard - error: $e');
+      router.push(HomeRoute());
+    }
+  }
+}
+```
+
+**Subscription Guard** (checks if user has active subscription):
+```dart
+import 'package:auto_route/auto_route.dart';
+import 'package:flutter/material.dart';
+import 'package:slapp/app/router.dart';
+import 'package:slapp/app/services.dart';
+
+/// Route guard that ensures user has an active subscription
+///
+/// Redirects to subscription page if user doesn't have active subscription.
+class SubscriptionGuard extends AutoRouteGuard {
+  @override
+  void onNavigation(NavigationResolver resolver, StackRouter router) async {
+    debugPrint('SubscriptionGuard - checking subscription status');
+
+    try {
+      final hasSubscription = await services.subscriptionService.hasActiveSubscription();
+
+      if (hasSubscription) {
+        debugPrint('SubscriptionGuard - subscription active, allowing navigation');
+        resolver.next(true);
+      } else {
+        debugPrint('SubscriptionGuard - no subscription, redirecting to subscription page');
+        router.push(SubscriptionRoute());
+      }
+    } catch (e) {
+      debugPrint('SubscriptionGuard - error: $e');
+      router.push(SubscriptionRoute());
+    }
+  }
+}
+```
+
+**Onboarding Guard** (checks if user completed onboarding):
+```dart
+import 'package:auto_route/auto_route.dart';
+import 'package:flutter/material.dart';
+import 'package:slapp/app/router.dart';
+import 'package:slapp/app/services.dart';
+
+/// Route guard that ensures user has completed onboarding
+///
+/// Redirects to onboarding if not completed.
+class OnboardingGuard extends AutoRouteGuard {
+  @override
+  void onNavigation(NavigationResolver resolver, StackRouter router) async {
+    debugPrint('OnboardingGuard - checking onboarding status');
+
+    try {
+      final hasCompletedOnboarding = await services.userService.hasCompletedOnboarding();
+
+      if (hasCompletedOnboarding) {
+        debugPrint('OnboardingGuard - onboarding completed, allowing navigation');
+        resolver.next(true);
+      } else {
+        debugPrint('OnboardingGuard - onboarding not completed, redirecting');
+        router.push(OnboardingRoute());
+      }
+    } catch (e) {
+      debugPrint('OnboardingGuard - error: $e');
+      router.push(OnboardingRoute());
+    }
+  }
+}
+```
+
+**Guard Creation Steps**:
+1. Determine guard location (feature utils or app guards)
+2. Create guard file with appropriate name
+3. Implement condition check logic
+4. Add debug print statements for tracking
+5. Handle errors gracefully with fallback redirect
+6. Document the guard's purpose and redirect behavior
+
+**When to Create Custom Guards**:
+- Feature-specific access control (e.g., premium features)
+- Role-based access (e.g., admin, moderator)
+- State-based access (e.g., profile completed, email verified)
+- Time-based access (e.g., trial period, subscription expired)
+- Permission-based access (e.g., camera, location permissions granted)
+
 ### Step 6: Generate Custom Widgets (if needed)
 
 If complex list items or custom components needed, create in:
@@ -516,11 +682,17 @@ If complex list items or custom components needed, create in:
 ### Step 7: Update Router
 
 1. Read `lib/app/router.dart`
-2. Add import:
+2. Add import for view:
    ```dart
    import '../features/{feature_name}/ui/{view_name}_view.dart';
    ```
-3. Add route to routes list:
+3. If custom guard was created, add import:
+   ```dart
+   import '../features/{feature_name}/utils/{guard_name}_guard.dart';
+   // OR for app-wide guards:
+   import 'guards/{guard_name}_guard.dart';
+   ```
+4. Add route to routes list:
    ```dart
    AutoRoute(
      page: {ViewName}Route.page,
@@ -528,10 +700,22 @@ If complex list items or custom components needed, create in:
      {guards}
    ),
    ```
-4. If authentication required, add guards:
+5. Add appropriate guards:
    ```dart
+   // For AuthGuard:
    guards: [AuthGuard()],
+
+   // For custom guard:
+   guards: [{GuardName}Guard()],
+
+   // For multiple guards (guards are checked in order):
+   guards: [AuthGuard(), {GuardName}Guard()],
    ```
+
+**Guard Ordering**:
+- Guards are executed in the order they appear in the list
+- Place more general guards first (e.g., AuthGuard before AdminGuard)
+- Each guard must pass for navigation to proceed
 
 Use Edit tool to insert at appropriate locations. Reference file-generators utility.
 
@@ -550,21 +734,30 @@ Inform user:
 ✓ Created view: lib/features/{feature_name}/ui/{view_name}_view.dart
 ✓ Created ViewModel: lib/features/{feature_name}/ui/{view_name}_view_model.dart
 {if widgets: ✓ Created widgets: ...}
+{if custom guard: ✓ Created guard: lib/features/{feature_name}/utils/{guard_name}_guard.dart}
 ✓ Updated router with route: /{route-path}
-{if auth: ✓ Added AuthGuard for authentication}
+{if guards: ✓ Added guards: {list of guards}}
 ✓ Ran build_runner
 
 Route ready to use:
 - Navigate: context.router.push({ViewName}Route({params}))
 - Path: /{route-path}
+{if guards: - Protected by: {list of guards}}
 
 UI Features:
 {list of UI components generated}
+
+{if custom guard:
+Guard Behavior:
+- Checks: {condition description}
+- Redirects to: {redirect route} if check fails
+}
 
 Next steps:
 - Implement data loading in ViewModel
 - Add analytics tracking
 - Test error states
+{if custom guard: - Test guard behavior with different conditions}
 - Customize styling if needed
 ```
 
@@ -671,15 +864,64 @@ class ProductFormView extends StatefulWidget {
 }
 ```
 
+## Creating a Standalone RouteGuard
+
+You can also be invoked to create just a RouteGuard without a view:
+
+**User Request**: "Create an AdminGuard that checks if the user is an admin"
+
+**Your Response**:
+1. Ask clarifying questions:
+   - "Where should I put this guard?" (feature-specific or app-wide)
+   - "What route should users be redirected to if they're not admin?" (e.g., HomeRoute)
+   - "How do we check if user is admin?" (e.g., user.role == 'admin', or call a service method)
+
+2. Create the guard file at appropriate location
+3. Implement the guard using the pattern from Step 5a
+4. Add import to router.dart if needed
+5. Report completion with usage instructions
+
+**Example Completion Report**:
+```
+✓ Created guard: lib/app/guards/admin_guard.dart
+
+Guard ready to use in router.dart:
+- Import: import 'guards/admin_guard.dart';
+- Usage in route: guards: [AuthGuard(), AdminGuard()],
+
+Guard Behavior:
+- Checks: user.role == 'admin'
+- Redirects to: HomeRoute if user is not admin
+
+Next steps:
+- Add the guard to routes that require admin access
+- Test the guard with admin and non-admin users
+- Ensure proper error handling
+```
+
 ## Summary
 
 Your job as the Route Creator Agent:
 1. Interview user for detailed UI requirements
-2. Generate ViewModel with ViewState pattern and error handling
-3. Generate View with proper UI based on user requirements
-4. Use constants and theme extensions
-5. Update router with new route
-6. Run build_runner
-7. Provide clear completion summary
+2. Determine if route needs custom guards
+3. Generate custom RouteGuard if needed
+4. Generate ViewModel with ViewState pattern and error handling
+5. Generate View with proper UI based on user requirements
+6. Use constants and theme extensions
+7. Update router with new route and guards
+8. Run build_runner
+9. Provide clear completion summary
 
-Always prioritize user experience, proper error handling, and strict adherence to Sapid Labs conventions.
+Always prioritize user experience, proper error handling, security through guards, and strict adherence to Sapid Labs conventions.
+
+## RouteGuard Best Practices
+
+When creating custom guards:
+1. **Meaningful Names**: Guard names should clearly indicate what they check (AdminGuard, SubscriptionGuard)
+2. **Single Responsibility**: Each guard should check one condition
+3. **Clear Redirects**: Always redirect to a logical fallback route
+4. **Error Handling**: Wrap checks in try-catch and redirect on error
+5. **Debug Logging**: Use debugPrint to track guard execution
+6. **Documentation**: Clearly document what the guard checks and where it redirects
+7. **Async Support**: Use async/await if condition check requires async operations
+8. **Composition**: Use multiple guards together for complex access control

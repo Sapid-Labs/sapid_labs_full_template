@@ -105,6 +105,56 @@ Plus automatic integration with:
 #### `/create`
 Main entry point for code generation. Provides interactive menu and routes to appropriate agent based on user selection.
 
+### Commands
+
+#### `/add-todo`
+Add a new todo to all other Sapid Labs Flutter projects in the work directory. This command:
+- Prompts for todo description, reason, and affected files
+- Scans the work directory for other Flutter projects
+- Creates or updates `sapid-todos.md` in each project
+- Skips duplicates automatically
+- Leaves changes unstaged for manual review
+
+**Usage:**
+```bash
+/add-todo
+```
+
+The command will interactively ask for:
+1. **Description**: What change should be shared (required)
+2. **Reason**: Why this change was made (optional)
+3. **Files**: Which files are affected (optional, comma-separated)
+
+**Example workflow:**
+```
+Template Project → /add-todo → Updates all child apps' sapid-todos.md
+Child App → /add-todo → Updates template's sapid-todos.md
+```
+
+#### `/sync-todos`
+View and implement pending todos from the current project's `sapid-todos.md` file. This command:
+- Displays all pending todos with details
+- Lets you select which ones to implement via checkboxes
+- AI implements each selected todo
+- Removes implemented todos from the file
+
+**Usage:**
+```bash
+/sync-todos
+```
+
+The command will:
+1. Show a preview of all pending todos
+2. Let you select which to implement (multi-select)
+3. Implement each selected todo
+4. Remove completed todos from sapid-todos.md
+
+**Todo format in sapid-todos.md:**
+```markdown
+- Add PhoneNumberValidator (Reason: improve data quality) [Files: lib/validators/phone.dart]
+<!-- Added: 2026-01-18, From: sapid_labs_flutter_template -->
+```
+
 ### Agents
 
 #### `feature-creator`

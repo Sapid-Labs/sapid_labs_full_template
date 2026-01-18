@@ -3,5 +3,6 @@
   "version": "1.0.0",
   "description": "Sapid Labs Flutter template code generator with enforced conventions",
   "skills": ["create"],
-  "agents": ["feature-creator", "route-creator", "service-creator", "model-creator"]
+  "agents": ["feature-creator", "route-creator", "service-creator", "model-creator"],
+  "commands": ["add-todo", "sync-todos"]
 }
