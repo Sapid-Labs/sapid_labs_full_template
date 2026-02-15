@@ -12,50 +12,7 @@ Changes are communicated to and from the template in a `sapid-todos.md` file. Ea
 
 When a change is implemented, the `sapid-todos.md` file for the implementing app should be updated so the change is deleted.
 
-## Implementation Status
+## Usage
 
-✅ **Complete** - The sapid-todos sync system has been implemented with the following components:
-
-### Components Created
-
-1. **Bash Script Library** - `.claude/plugins/sapid-labs/scripts/sync-todos.sh`
-   - Core functions for project detection, file management, and todo operations
-   - Validates Flutter projects via pubspec.yaml
-   - Auto-detects work directory and finds all Flutter projects
-   - Handles duplicate detection and error cases gracefully
-
-2. **`/add-todo` Command** - `.claude/plugins/sapid-labs/commands/add-todo.md`
-   - Interactive prompts for description, reason, and files
-   - Creates todos in all other Flutter projects (excludes current project)
-   - Auto-creates sapid-todos.md with proper header if missing
-   - Skips duplicate todos automatically
-   - Leaves changes unstaged for manual review
-
-3. **`/sync-todos` Command** - `.claude/plugins/sapid-labs/commands/sync-todos.md`
-   - Displays all pending todos with formatted preview
-   - Multi-select checkbox interface for choosing which to implement
-   - AI implements selected todos
-   - Removes completed todos from sapid-todos.md
-
-### Usage
-
-**From Template (to propagate changes to child apps):**
-```bash
-/add-todo
-# Follow prompts to add todo
-# All child apps receive the update
-```
-
-**From Child App (to implement template updates):**
-```bash
-/sync-todos
-# Select which updates to implement
-# Todos are implemented and removed from file
-```
-
-**From Child App (to propagate improvements back to template):**
-```bash
-/add-todo
-# Follow prompts to add todo
-# Template receives the update
-```
+- **`/add-todo`** — Propagate a change to sibling projects. Prompts for description, reason, and files, then appends to `sapid-todos.md` in all other Flutter projects under `~/projects/work/`.
+- **`/sync-todos`** — Implement pending changes. Reads the current project's `sapid-todos.md`, lets you pick which to implement, then removes completed entries.
