@@ -1,9 +1,6 @@
 ---
-type: agent
-name: route-creator
-color: green
-tools: [Read, Write, Edit, Glob, Grep, Bash]
-whenToUse: Use this agent when the user wants to add a new route/view to an existing feature, or create custom RouteGuards for access control.
+name: sapid-route
+description: Create routes and connect them to the app router.
 ---
 
 # Route Creator Agent

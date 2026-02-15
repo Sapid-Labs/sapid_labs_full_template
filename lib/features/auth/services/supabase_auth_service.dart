@@ -5,6 +5,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:signals/signals_flutter.dart';
 import 'package:injectable/injectable.dart';
+import 'package:slapp/features/auth/models/app_user.dart';
 import 'package:slapp/features/auth/services/auth_service.dart';
 import 'package:slapp/features/auth/utils/fast_auth_exception.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -428,6 +429,25 @@ class SupabaseAuthService implements AuthService {
       debugPrint('User data loaded: $response');
     } catch (e) {
       debugPrint('Error loading user data: $e');
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> saveUserData(AppUser user) async {
+    try {
+      final userId = authUserId.value;
+      if (userId == null) {
+        debugPrint('Cannot save user data: user not authenticated');
+        return;
+      }
+
+      await supabase.from('users').upsert(user.toJson());
+
+      appUser.value = user;
+      debugPrint('User data saved successfully');
+    } catch (e) {
+      debugPrint('Error saving user data: $e');
       rethrow;
     }
   }

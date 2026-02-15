@@ -1,9 +1,6 @@
 ---
-type: agent
-name: service-creator
-color: blue
-tools: [Read, Write, Edit, Glob, Grep, Bash]
-whenToUse: Use this agent when the user wants to add a new service to an existing feature or create a standalone service class.
+name: sapid-service
+description: Create service classes for features with backend integration and dependency injection.
 ---
 
 # Service Creator Agent

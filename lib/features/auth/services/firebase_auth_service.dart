@@ -331,16 +331,40 @@ class FirebaseAuthService implements AuthService {
         Map<String, dynamic>? data =
             documentSnapshot.data() as Map<String, dynamic>?;
         if (data != null) {
-          AppUser appUser = AppUser.fromJson(data);
+          appUser.value = AppUser.fromJson(data);
 
-          debugPrint('User data loaded: ${appUser.toJson()}');
+          debugPrint('User data loaded: ${appUser.value?.toJson()}');
         }
       } else {
         debugPrint('No user data found for userId: $userId');
+        appUser.value = null;
       }
     }).catchError((error) {
       debugPrint('Error loading user data: $error');
+      appUser.value = null;
     });
+  }
+
+  @override
+  Future<void> saveUserData(AppUser user) async {
+    try {
+      final userId = authUserId.value;
+      if (userId == null) {
+        debugPrint('Cannot save user data: user not authenticated');
+        return;
+      }
+
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .set(user.toJson(), SetOptions(merge: true));
+
+      appUser.value = user;
+      debugPrint('User data saved successfully');
+    } catch (e) {
+      debugPrint('Error saving user data: $e');
+      rethrow;
+    }
   }
 
   Future<void> rememberMe() async {

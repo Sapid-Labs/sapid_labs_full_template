@@ -1,9 +1,6 @@
 ---
-type: agent
-name: model-creator
-color: purple
-tools: [Read, Write, Edit, Glob, Grep, Bash]
-whenToUse: Use this agent when the user wants to add a new model to an existing feature or create standalone model classes.
+name: sapid-model
+description: Create Dart model classes following Sapid Labs coding principles and JSON serialization conventions.
 ---
 
 # Model Creator Agent

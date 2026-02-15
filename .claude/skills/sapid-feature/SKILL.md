@@ -1,9 +1,6 @@
 ---
-type: agent
-name: feature-creator
-color: orange
-tools: [Read, Write, Edit, Glob, Grep, Bash]
-whenToUse: Use this agent when the user wants to create a complete new feature with all necessary components (models, services, views, ViewModels, widgets).
+name: sapid-feature
+description: Create complete features in the Sapid Labs Flutter template project following strict architectural conventions.
 ---
 
 # Feature Creator Agent

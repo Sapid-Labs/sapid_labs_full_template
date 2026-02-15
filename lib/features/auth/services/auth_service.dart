@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:slapp/features/auth/models/app_user.dart';
 import 'package:slapp/features/auth/services/firebase_auth_service.dart';
 import 'package:slapp/features/auth/services/supabase_auth_service.dart';
 import 'package:signals/signals_flutter.dart';
@@ -7,6 +8,7 @@ final authUserId = signal<String?>(null);
 final authEmail = signal<String?>(null);
 final authIsAuthenticated = computed(() => authUserId.value != null);
 final authPhoneNumber = signal<String?>(null);
+final appUser = signal<AppUser?>(null);
 
 abstract class AuthService {
   // all implementations are linked here for easy dev navigation
@@ -85,6 +87,11 @@ abstract class AuthService {
   Future<void> loadUserData(String userId) async {
     FirebaseAuthService().loadUserData(userId);
     SupabaseAuthService().loadUserData(userId);
+  }
+
+  Future<void> saveUserData(AppUser user) async {
+    FirebaseAuthService().saveUserData(user);
+    SupabaseAuthService().saveUserData(user);
   }
 
   Future<void> verifyPhoneNumber({
