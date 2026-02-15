@@ -353,6 +353,33 @@ class SupabaseAuthService implements AuthService {
   }
 
   @override
+  Future<void> deleteAccount() async {
+    final userId = authUserId.value;
+    if (userId == null) return;
+
+    // Delete user data from the users table
+    try {
+      await supabase.from('users').delete().eq('id', userId);
+    } catch (e) {
+      debugPrint('Error deleting user data: $e');
+    }
+
+    // Delete the auth user via RPC (requires setup — see todos.md)
+    try {
+      await supabase.rpc('deleteUser');
+    } catch (e) {
+      debugPrint('Error deleting auth user via RPC: $e');
+    }
+
+    await supabase.auth.signOut();
+
+    authUserId.value = null;
+    authEmail.value = null;
+    authPhoneNumber.value = null;
+    appUser.value = null;
+  }
+
+  @override
   Future<bool> signInWithPhoneNumber(
       {required String verificationId, required String smsCode}) async {
     try {

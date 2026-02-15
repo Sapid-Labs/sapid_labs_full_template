@@ -23,10 +23,62 @@ class AccountView extends StatefulWidget {
 
 class _AccountViewState extends State<AccountView> {
   bool isSigningOut = false;
+  bool isDeletingAccount = false;
 
   Future<void> handleUpdatePassword() async {
     if (mounted) {
       await router.push(ChangePasswordRoute());
+    }
+  }
+
+  Future<void> handleDeleteAccount() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Delete Account'),
+        content: const Text(
+          'Are you sure you want to permanently delete your account? This action cannot be undone and all your data will be lost.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            style: FilledButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.error,
+            ),
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true || !mounted) return;
+
+    setState(() {
+      isDeletingAccount = true;
+    });
+
+    try {
+      subscriptionService.signOut();
+      await authService.deleteAccount();
+      if (mounted) {
+        router.replaceAll([const SignInEmailRoute()]);
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to delete account: ${e.toString()}')),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          isDeletingAccount = false;
+        });
+      }
     }
   }
 
@@ -241,15 +293,28 @@ class _AccountViewState extends State<AccountView> {
                       ),
                       Divider(height: 2),
                       ListTile(
-                        leading: const Icon(Icons.person_remove),
-                        title: const Text('Delete Account?'),
-                        onTap: () {
-                          launchUrl(
-                            Uri.parse(
-                              'https://sapidlabs.com/${AppConfig.appName.toLowerCase()}/delete-data',
-                            ),
-                          );
-                        },
+                        leading: Icon(
+                          Icons.person_remove,
+                          color: isDeletingAccount
+                              ? Theme.of(context).disabledColor
+                              : null,
+                        ),
+                        title: isDeletingAccount
+                            ? Row(
+                                children: [
+                                  SizedBox(
+                                    width: 16,
+                                    height: 16,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                    ),
+                                  ),
+                                  gap8,
+                                  const Text('Deleting Account...'),
+                                ],
+                              )
+                            : const Text('Delete Account'),
+                        onTap: isDeletingAccount ? null : handleDeleteAccount,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.vertical(
                             bottom: Radius.circular(16),

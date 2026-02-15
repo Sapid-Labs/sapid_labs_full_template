@@ -241,6 +241,29 @@ class FirebaseAuthService implements AuthService {
   }
 
   @override
+  Future<void> deleteAccount() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+
+    final userId = user.uid;
+
+    // Delete user data from Firestore
+    try {
+      await FirebaseFirestore.instance.collection('users').doc(userId).delete();
+    } catch (e) {
+      debugPrint('Error deleting user data: $e');
+    }
+
+    // Delete the Firebase Auth account
+    await user.delete();
+
+    authUserId.value = null;
+    authEmail.value = null;
+    authPhoneNumber.value = null;
+    appUser.value = null;
+  }
+
+  @override
   Future<void> createUser({
     required String id,
     String? email,

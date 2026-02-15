@@ -73,6 +73,11 @@ abstract class AuthService {
     SupabaseAuthService().logout();
   }
 
+  Future<void> deleteAccount() async {
+    FirebaseAuthService().deleteAccount();
+    SupabaseAuthService().deleteAccount();
+  }
+
   Future<void> createUser({
     required String id,
     String? email,
