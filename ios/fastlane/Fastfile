@@ -31,7 +31,8 @@ platform :ios do
     force: true,
     submission_information: {
     "export_compliance_uses_encryption": false,
-    "add_id_info_uses_idfa": false}
+    "add_id_info_uses_idfa": false},
+    ipa: "../build/ios/ipa/sapidlabs.ipa"
     )
     
     send_slack_notification(message: "New production version 1.0.#{versionCode} (#{versionCode}) has been pushed to App Store!")  
