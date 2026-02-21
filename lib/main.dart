@@ -17,10 +17,11 @@ import 'package:get_it/get_it.dart';
 import 'package:signals/signals_flutter.dart';
 import 'package:slapp/features/shared/utils/navigation_observers.dart';
 
-final Amplitude amplitude = Amplitude(Configuration(
+// STACK_AMPLITUDE
+/* final Amplitude amplitude = Amplitude(Configuration(
   apiKey: "ff2f485bec7b3432c7a6ed352cc6420c",
   flushQueueSize: 1,
-));
+)); */
 
 Future<void> main() async {
   // Comment to activate Signals logging
@@ -41,12 +42,18 @@ Future<void> main() async {
 }
 
 Future<void> setup() async {
-  if (const String.fromEnvironment('STACK_PAAS') == 'firebase') {
-    await Firebase.initializeApp(
+  // STACK_FIREBASE
+  /* await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform);
 
-    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
-  } else if (const String.fromEnvironment('STACK_PAAS') == 'supabase') {}
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError; */
+
+  // STACK_SUPABASE
+  /*    await Supabase.initialize(
+      url: 'https://your-project.supabase.co',
+      anonymousKey: 'your-anonymous-key',
+  ); */
+
   await configureDependencies();
   await authService.setup();
   await analyticsService.setup();
