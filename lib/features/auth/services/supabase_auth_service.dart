@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
-import 'package:signals/signals_flutter.dart';
 import 'package:injectable/injectable.dart';
 import 'package:slapp/features/auth/models/app_user.dart';
 import 'package:slapp/features/auth/services/auth_service.dart';
@@ -14,11 +13,8 @@ import 'package:slapp/app/router.dart';
 import 'package:slapp/app/services.dart';
 import 'package:crypto/crypto.dart';
 
-final authUserId = signal<String?>(null);
-final authEmail = signal<String?>(null);
-final authIsInitialized = signal<bool>(false);
-final authIsAuthenticated = computed(() => authUserId.value != null);
-
+// STACK_SUPABASE
+// @Singleton(as: AuthService)
 @Singleton()
 class SupabaseAuthService implements AuthService {
   late final SupabaseClient supabase;

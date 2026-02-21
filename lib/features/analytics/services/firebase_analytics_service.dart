@@ -1,9 +1,8 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:slapp/app/get_it.dart';
 import 'package:slapp/features/analytics/services/analytics_service.dart';
 import 'package:injectable/injectable.dart';
 
-@firebaseAnalyticsEnv
+// STACK_FIREBASE_ANALYTICS
 @LazySingleton(as: AnalyticsService)
 class FirebaseAnalyticsService implements AnalyticsService {
   FirebaseAnalytics analytics = FirebaseAnalytics.instance;

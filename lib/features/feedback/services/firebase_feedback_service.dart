@@ -1,12 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:injectable/injectable.dart';
-import 'package:slapp/app/get_it.dart';
 import 'package:slapp/features/auth/services/auth_service.dart';
 import 'package:slapp/features/feedback/models/feedback.dart';
 import 'package:slapp/features/feedback/services/feedback_service.dart';
 
-@firebaseEnv
+// STACK_FIREBASE
 @LazySingleton(as: FeedbackService)
 class FirebaseFeedbackService extends FeedbackService {
   @override

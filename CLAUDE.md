@@ -9,7 +9,7 @@ This is the **Sapid Labs Flutter Template** (package name: `slapp`) — a produc
 **Company**: Sapid Labs — "tasteful software"
 
 Key capabilities:
-- **Multi-backend support**: Firebase, Supabase, and Pocketbase via a configurable stack system
+- **Multi-backend support**: Firebase, Supabase, and Pocketbase via `// STACK_*` comment labels
 - **Comprehensive auth**: Email/password, phone/SMS, Google Sign-In, Apple Sign-In, anonymous
 - **Analytics**: Amplitude, PostHog, or Firebase Analytics
 - **Crash reporting**: Firebase Crashlytics or Sentry
@@ -17,28 +17,28 @@ Key capabilities:
 - **Ads**: Google Mobile Ads
 - **Deployment**: Fastlane for iOS (TestFlight, App Store) and Android (internal, alpha, beta, production)
 
-## Stack Configuration System
+## Stack System
 
-The template uses an environment-based stack selection system defined in `lib/app/get_it.dart`. Three axes control which service implementations are registered:
+The template uses `// STACK_[TECH]` comment labels to mark stack-specific code. Each service implementation has a label above its injectable annotation. The **active** implementation has its annotation uncommented; **inactive** ones have the `(as: ServiceInterface)` annotation commented out.
 
-| Variable | Options | Default |
-|---|---|---|
-| `STACK_PAAS` | `firebase`, `supabase`, `pocketbase` | `firebase` |
-| `STACK_ANALYTICS` | `amplitude`, `posthog`, `firebaseAnalytics` | `amplitude` |
-| `STACK_CRASHLYTICS` | `firebaseCrashlytics`, `sentry` | `firebaseCrashlytics` |
+| Label | Technology | Category | Default |
+|---|---|---|---|
+| `STACK_FIREBASE` | Firebase Auth, Firestore | Backend | Active |
+| `STACK_SUPABASE` | Supabase Auth, Database | Backend | Inactive |
+| `STACK_POCKETBASE` | Pocketbase Auth, Database | Backend | Inactive |
+| `STACK_FIREBASE_ANALYTICS` | Firebase Analytics | Analytics | Active |
+| `STACK_AMPLITUDE` | Amplitude | Analytics | Inactive |
+| `STACK_FIREBASE_CRASHLYTICS` | Firebase Crashlytics | Crash Reporting | Active |
+| `STACK_SENTRY` | Sentry | Crash Reporting | Inactive |
 
-**How it works**: `configureDependencies()` uses a `NoEnvOrContainsAny` filter. Services without an env annotation always register. Services annotated with an env (e.g., `@firebaseEnv`, `@supabaseEnv`) only register when their env is in the active set.
+**How to switch stacks**:
+1. Search for the `// STACK_*` label (e.g., `// STACK_SUPABASE`)
+2. Uncomment the `@Singleton(as: ...)` / `@LazySingleton(as: ...)` annotation for the stack you want
+3. Comment out the corresponding annotation for the stack you're deactivating
+4. Update the initialization blocks in `lib/main.dart`
+5. Run `flutter pub run build_runner build --delete-conflicting-outputs`
 
-**Example**: `FirebaseAuthService` is annotated with `@firebaseEnv` and `SupabaseAuthService` with `@supabaseEnv`. When `STACK_PAAS=firebase`, only `FirebaseAuthService` registers as the `AuthService` implementation.
-
-**Configuration**: Set via `assets/config.json` and passed with `--dart-define-from-file`:
-```json
-{
-  "STACK_PAAS": "firebase",
-  "STACK_ANALYTICS": "firebaseAnalytics",
-  "SERVER_CLIENT_ID": "your_client_id"
-}
-```
+**Example**: `FirebaseAuthService` has `// STACK_FIREBASE` with `@Singleton(as: AuthService)` uncommented. `SupabaseAuthService` has `// STACK_SUPABASE` with `// @Singleton(as: AuthService)` commented out. To switch to Supabase, uncomment the Supabase annotation and comment out the Firebase one.
 
 ## Build & Development Commands
 
@@ -58,9 +58,6 @@ flutter run --dart-define-from-file=assets/config.json
 
 # Run with individual environment variables
 flutter run \
-  --dart-define=STACK_PAAS=firebase \
-  --dart-define=STACK_ANALYTICS=amplitude \
-  --dart-define=STACK_CRASHLYTICS=firebaseCrashlytics \
   --dart-define=SUPABASE_URL=your_url \
   --dart-define=SUPABASE_ANON_KEY=your_key \
   --dart-define=AMPLITUDE_API_KEY=your_key \
@@ -109,7 +106,7 @@ git merge template/main --allow-unrelated-histories
 
 ### Dependency Injection
 - Uses `get_it` with `injectable` for dependency registration
-- **Multi-backend pattern**: Abstract service classes (e.g., `AuthService`, `AnalyticsService`, `CrashService`) have multiple concrete implementations annotated with environment constants (e.g., `@firebaseEnv`, `@supabaseEnv`, `@amplitudeAnalyticsEnv`). Only the implementation matching the active stack registers at runtime.
+- **Multi-backend pattern**: Abstract service classes (e.g., `AuthService`, `AnalyticsService`, `CrashService`) have multiple concrete implementations marked with `// STACK_*` comment labels. Only the implementation with an uncommented `(as: ServiceInterface)` annotation registers at runtime.
 - Services are decorated with:
   - `@Singleton(as: AuthService)` for single instance services with an interface
   - `@LazySingleton(as: AnalyticsService)` for lazily initialized services with an interface
@@ -146,7 +143,7 @@ Current features: `analytics`, `auth`, `dashboard`, `demo`, `feed`, `feedback`, 
 - **Services**: `lib/features/shared/services/` contains cross-cutting concerns (AI, crash reporting, permissions, HTTP client)
 
 ### Backend Services
-The template supports three backend providers, selectable via `STACK_PAAS`:
+The template supports three backend providers, selectable via `// STACK_*` labels:
 
 | Backend | Auth Service | Data Access | Files |
 |---|---|---|---|
@@ -174,12 +171,9 @@ Auth state is managed through global signals (`authUserId`, `authEmail`, `authIs
 
 | Variable | Required When | Purpose |
 |---|---|---|
-| `STACK_PAAS` | Always (defaults to `firebase`) | Backend provider selection |
-| `STACK_ANALYTICS` | Always (defaults to `amplitude`) | Analytics provider selection |
-| `STACK_CRASHLYTICS` | Always (defaults to `firebaseCrashlytics`) | Crash reporting provider selection |
-| `SUPABASE_URL` | `STACK_PAAS=supabase` | Supabase project URL |
-| `SUPABASE_ANON_KEY` | `STACK_PAAS=supabase` | Supabase anonymous key |
-| `AMPLITUDE_API_KEY` | `STACK_ANALYTICS=amplitude` | Amplitude analytics API key |
+| `SUPABASE_URL` | Supabase stack active | Supabase project URL |
+| `SUPABASE_ANON_KEY` | Supabase stack active | Supabase anonymous key |
+| `AMPLITUDE_API_KEY` | Amplitude stack active | Amplitude analytics API key |
 | `SERVER_CLIENT_ID` | Google Sign-In is used | Google Sign-In server client ID |
 
 These are configured in `assets/config.json` and passed via `--dart-define-from-file`, or individually via `--dart-define` flags. VS Code launch configurations can also be used (`.vscode/launch.json`).
@@ -243,8 +237,8 @@ Purpose: propagate improvements between the template and child apps. All Sapid L
 - `lib/main.dart`: App entry point — initializes Firebase/Supabase based on stack, configures dependencies
 - `lib/app/router.dart`: Route definitions and navigation guards
 - `lib/app/services.dart`: Global service accessors (e.g., `authService`, `analyticsService`)
-- `lib/app/get_it.dart`: Dependency injection configuration with stack-based environment filtering
+- `lib/app/get_it.dart`: Dependency injection configuration
 - `lib/app/constants.dart`: UI constants (gaps, paddings, borders, breakpoints)
 - `lib/app/config.dart`: App configuration and branding (first file to customize per child app)
 - `lib/app/theme.dart`: Theme configuration (uses FlexColorScheme)
-- `assets/config.json`: Stack and environment variable configuration
+- `assets/config.json`: Environment variable configuration

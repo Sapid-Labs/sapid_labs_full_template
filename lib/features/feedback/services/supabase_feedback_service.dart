@@ -1,12 +1,12 @@
 import 'package:injectable/injectable.dart';
-import 'package:slapp/app/get_it.dart';
 import 'package:slapp/features/auth/services/auth_service.dart';
 import 'package:slapp/features/feedback/models/feedback.dart';
 import 'package:slapp/features/feedback/services/feedback_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-@supabaseEnv
-@LazySingleton(as: FeedbackService)
+// STACK_SUPABASE
+// @LazySingleton(as: FeedbackService)
+@LazySingleton()
 class SupabaseFeedbackService extends FeedbackService {
   SupabaseClient get _supabase => Supabase.instance.client;
 

@@ -15,5 +15,3 @@ flutterfire configure --ios-bundle-id=com.sapidlabs.slapp -a com.sapidlabs.slapp
 ```
 
 Follow naming conventions here: https://dart.dev/tools/pub/pubspec#name. Avoid using underscores in the package name as this causes issues when registering the iOS app in Firebase.
-
-Update the `config.json` file to set `STACK_PAAS` equal to "firebase".

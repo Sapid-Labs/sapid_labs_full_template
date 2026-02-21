@@ -6,6 +6,7 @@ import 'package:signals/signals_flutter.dart';
 
 final authUserId = signal<String?>(null);
 final authEmail = signal<String?>(null);
+final authIsInitialized = signal<bool>(false);
 final authIsAuthenticated = computed(() => authUserId.value != null);
 final authPhoneNumber = signal<String?>(null);
 final appUser = signal<AppUser?>(null);

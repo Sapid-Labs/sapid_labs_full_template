@@ -1,14 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:pocketbase/pocketbase.dart';
-import 'package:slapp/app/get_it.dart';
 import 'package:slapp/features/auth/services/auth_service.dart';
 import 'package:slapp/features/feedback/models/feedback.dart';
 
 import 'feedback_service.dart';
 
-@pocketbaseEnv
-@LazySingleton(as: FeedbackService)
+// STACK_POCKETBASE
+// @LazySingleton(as: FeedbackService)
+@LazySingleton()
 class PocketbaseFeedbackService extends FeedbackService {
   PocketBase pb = PocketBase(const String.fromEnvironment('POCKETBASE_URL'));
 

@@ -4,12 +4,12 @@ import 'package:amplitude_flutter/events/base_event.dart';
 import 'package:amplitude_flutter/events/identify.dart';
 import 'package:flutter/foundation.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:slapp/app/get_it.dart';
 import 'package:slapp/features/analytics/services/analytics_service.dart';
 import 'package:injectable/injectable.dart';
 
-@amplitudeAnalyticsEnv
-@LazySingleton(as: AnalyticsService)
+// STACK_AMPLITUDE
+// @LazySingleton(as: AnalyticsService)
+@LazySingleton()
 class AmplitudeAnalyticsService implements AnalyticsService {
   final Amplitude amplitude = Amplitude(
       Configuration(apiKey: const String.fromEnvironment("AMPLITUDE_API_KEY")));

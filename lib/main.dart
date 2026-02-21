@@ -1,5 +1,3 @@
-import 'package:amplitude_flutter/amplitude.dart';
-import 'package:amplitude_flutter/configuration.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -15,7 +13,11 @@ import 'package:slapp/app/theme.dart';
 import 'package:slapp/features/settings/services/settings_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:signals/signals_flutter.dart';
-import 'package:slapp/features/shared/utils/navigation_observers.dart';
+
+// STACK_AMPLITUDE
+// import 'package:amplitude_flutter/amplitude.dart';
+// import 'package:amplitude_flutter/configuration.dart';
+// import 'package:slapp/features/shared/utils/navigation_observers.dart';
 
 // STACK_AMPLITUDE
 /* final Amplitude amplitude = Amplitude(Configuration(
@@ -43,10 +45,10 @@ Future<void> main() async {
 
 Future<void> setup() async {
   // STACK_FIREBASE
-  /* await Firebase.initializeApp(
-        options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform);
 
-    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError; */
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
 
   // STACK_SUPABASE
   /*    await Supabase.initialize(
@@ -83,11 +85,12 @@ class MainApp extends StatelessWidget {
         ),
         themeMode: settingsThemeMode.value,
         routerConfig: router.config(
-          navigatorObservers: () {
-            return [
-              AmplitudeNavigationObserver(),
-            ];
-          },
+          // STACK_AMPLITUDE
+          // navigatorObservers: () {
+          //   return [
+          //     AmplitudeNavigationObserver(),
+          //   ];
+          // },
         ),
       );
     });

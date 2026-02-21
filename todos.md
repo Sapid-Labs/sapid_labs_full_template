@@ -2,7 +2,7 @@
 
 ## Supabase: Account Deletion RPC Function
 
-When using `STACK_PAAS=supabase`, you need to create a PostgreSQL function so users can delete their own auth accounts from the client. Run this SQL in the Supabase SQL Editor:
+When using Supabase as your backend, you need to create a PostgreSQL function so users can delete their own auth accounts from the client. Run this SQL in the Supabase SQL Editor:
 
 ```sql
 CREATE OR REPLACE FUNCTION public."deleteUser"()

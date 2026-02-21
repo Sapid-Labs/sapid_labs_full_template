@@ -7,25 +7,31 @@ environment:
   sdk: ^3.5.2
 
 dependencies:
+  # STACK_AMPLITUDE
   amplitude_flutter: ^4.3.2
   auto_route: ^10.1.0
+  # STACK_FIREBASE
   cloud_firestore: ^5.6.2
   collection: ^1.17.1
+  # STACK_SUPABASE
   crypto: ^3.0.6
   csv: ^6.0.0
   device_info_plus: ^11.1.1
   flex_color_scheme: ^8.0.0
   flutter:
     sdk: flutter
-  flutter_animate: ^4.5.0  
+  flutter_animate: ^4.5.0
   flutter_web_plugins:
-    sdk: flutter 
-  flutter_svg: ^2.0.14  
+    sdk: flutter
+  flutter_svg: ^2.0.14
+  # STACK_FIREBASE_ANALYTICS
   firebase_analytics: ^11.5.2
+  # STACK_FIREBASE
   firebase_auth: ^5.4.1
   firebase_core: ^3.10.1
+  # STACK_FIREBASE_CRASHLYTICS
   firebase_crashlytics: ^4.3.9
-  get_it: ^8.0.3 
+  get_it: ^8.0.3
   google_fonts: ^8.0.1
   google_mobile_ads: ^6.0.0
   google_sign_in: ^7.1.0
@@ -37,6 +43,7 @@ dependencies:
   json_schema: ^5.2.1
   package_info_plus: ^8.3.0
   permission_handler: ^12.0.1
+  # STACK_POCKETBASE
   pocketbase: ^0.23.0
   purchases_flutter: ^9.9.8
   recase: 4.1.0
@@ -44,10 +51,11 @@ dependencies:
   simple_mvvm: ^1.0.1
   signals: ^6.0.2
   sign_in_with_apple: ^6.1.0
+  # STACK_SUPABASE
   supabase_flutter: ^2.8.3
   transparent_image: ^2.0.1
   universal_html: ^2.2.4
-  universal_io: 2.2.2 
+  universal_io: 2.2.2
   url_launcher: ^6.3.1
 
 dependency_overrides:

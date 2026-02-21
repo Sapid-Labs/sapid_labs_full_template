@@ -6,7 +6,7 @@ A production-grade Flutter app template with multi-backend support, comprehensiv
 
 Starting a Flutter app from scratch means wiring up authentication, analytics, crash reporting, routing, state management, dependency injection, and deployment — often taking weeks before you write any feature code. This template gives you all of that out of the box:
 
-- **Multi-backend support** — Switch between Firebase, Supabase, and Pocketbase by changing a single config value
+- **Multi-backend support** — Switch between Firebase, Supabase, and Pocketbase by toggling comment labels
 - **Full auth flows** — Email/password, phone/SMS, Google Sign-In, Apple Sign-In, and anonymous auth, with pre-built sign-in, sign-up, password reset, and account management screens
 - **Analytics ready** — Amplitude, PostHog, or Firebase Analytics, swappable without touching your feature code
 - **Crash reporting** — Firebase Crashlytics or Sentry, same swap-friendly pattern
@@ -30,13 +30,12 @@ Search the project for `slapp` and replace it with your app's package name. Then
 
 ### 2. Configure Your Stack
 
-Create `assets/config.json` to select which services to use:
+The template defaults to Firebase + Firebase Analytics + Firebase Crashlytics. To switch stacks, search for the `// STACK_*` labels (e.g., `// STACK_SUPABASE`) and uncomment/comment the relevant annotations. See the **Stack System** section below for details.
+
+Create `assets/config.json` for any environment variables your stack needs:
 
 ```json
 {
-  "STACK_PAAS": "firebase",
-  "STACK_ANALYTICS": "amplitude",
-  "STACK_CRASHLYTICS": "firebaseCrashlytics",
   "SERVER_CLIENT_ID": "your_google_client_id"
 }
 ```
@@ -54,28 +53,35 @@ flutter pub run build_runner build --delete-conflicting-outputs
 flutter run --dart-define-from-file=assets/config.json
 ```
 
-## Stack Configuration
+## Stack System
 
-The template uses an environment-based stack system. Three axes control which service implementations are registered at runtime:
+The template supports multiple backend, analytics, and crash reporting providers. Stack-specific code is marked with `// STACK_[TECH]` comment labels. To switch stacks:
 
-| Variable | Options | Default |
-|---|---|---|
-| `STACK_PAAS` | `firebase`, `supabase`, `pocketbase` | `firebase` |
-| `STACK_ANALYTICS` | `amplitude`, `posthog`, `firebaseAnalytics` | `amplitude` |
-| `STACK_CRASHLYTICS` | `firebaseCrashlytics`, `sentry` | `firebaseCrashlytics` |
+1. Search the codebase for the label (e.g., `// STACK_SUPABASE`)
+2. Uncomment the `@Singleton(as: ...)` or `@LazySingleton(as: ...)` annotation for the stack you want to activate
+3. Comment out the annotation for the stack you want to deactivate
+4. Update `lib/main.dart` initialization blocks accordingly
+5. Run `flutter pub run build_runner build --delete-conflicting-outputs`
 
-Behind the scenes, abstract service classes (e.g., `AuthService`, `AnalyticsService`) have multiple concrete implementations annotated with environment constants. Only the implementation matching your active stack registers at runtime via get_it's `NoEnvOrContainsAny` filter. Your feature code always depends on the abstract interface, so swapping backends requires zero code changes — just update `config.json`.
+| Label | Technology | Category | Default |
+|---|---|---|---|
+| `STACK_FIREBASE` | Firebase Auth, Firestore, Crashlytics | Backend + Crash | Active |
+| `STACK_SUPABASE` | Supabase Auth, Database | Backend | Inactive |
+| `STACK_POCKETBASE` | Pocketbase Auth, Database | Backend | Inactive |
+| `STACK_FIREBASE_ANALYTICS` | Firebase Analytics | Analytics | Active |
+| `STACK_AMPLITUDE` | Amplitude | Analytics | Inactive |
+| `STACK_FIREBASE_CRASHLYTICS` | Firebase Crashlytics | Crash Reporting | Active |
+| `STACK_SENTRY` | Sentry | Crash Reporting | Inactive |
+
+Abstract service classes (`AuthService`, `AnalyticsService`, `CrashService`, `FeedbackService`) have multiple concrete implementations. Only the implementation with an active (uncommented) annotation registers via get_it. Your feature code always depends on the abstract interface, so swapping backends requires no changes to feature code.
 
 ### Environment Variables
 
 | Variable | Required When | Purpose |
 |---|---|---|
-| `STACK_PAAS` | Always (defaults to `firebase`) | Backend provider selection |
-| `STACK_ANALYTICS` | Always (defaults to `amplitude`) | Analytics provider selection |
-| `STACK_CRASHLYTICS` | Always (defaults to `firebaseCrashlytics`) | Crash reporting provider |
-| `SUPABASE_URL` | `STACK_PAAS=supabase` | Supabase project URL |
-| `SUPABASE_ANON_KEY` | `STACK_PAAS=supabase` | Supabase anonymous key |
-| `AMPLITUDE_API_KEY` | `STACK_ANALYTICS=amplitude` | Amplitude API key |
+| `SUPABASE_URL` | Supabase stack active | Supabase project URL |
+| `SUPABASE_ANON_KEY` | Supabase stack active | Supabase anonymous key |
+| `AMPLITUDE_API_KEY` | Amplitude stack active | Amplitude API key |
 | `SERVER_CLIENT_ID` | Google Sign-In is used | Google OAuth server client ID |
 
 ## Architecture
@@ -183,7 +189,7 @@ You can [safely commit firebase_options.dart to git](https://github.com/firebase
 
 ### Supabase
 
-Set the `SUPABASE_URL` and `SUPABASE_ANON_KEY` variables in `assets/config.json` and set `STACK_PAAS` to `supabase`.
+Set the `SUPABASE_URL` and `SUPABASE_ANON_KEY` variables in `assets/config.json` and activate the `STACK_SUPABASE` labels (see Stack System above).
 
 ## Release
 
@@ -241,10 +247,10 @@ This updates:
 | `lib/app/config.dart` | App name, branding, feature flags — first file to customize |
 | `lib/app/router.dart` | Route definitions and navigation guards |
 | `lib/app/services.dart` | Global service accessors |
-| `lib/app/get_it.dart` | DI configuration with stack-based environment filtering |
+| `lib/app/get_it.dart` | DI configuration |
 | `lib/app/constants.dart` | UI constants (gaps, paddings, borders, breakpoints) |
 | `lib/app/theme.dart` | Theme configuration |
-| `assets/config.json` | Stack and environment variable configuration |
+| `assets/config.json` | Environment variable configuration |
 
 ## Assets
 

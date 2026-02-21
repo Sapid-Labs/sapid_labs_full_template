@@ -2,8 +2,6 @@ import 'package:slapp/app/config.dart';
 import 'package:slapp/app/services.dart';
 import 'package:slapp/features/auth/services/auth_service.dart';
 import 'package:slapp/features/subscriptions/ui/premium_popup.dart';
-import 'package:slapp/main.dart';
-import 'package:amplitude_flutter/events/base_event.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -129,45 +127,33 @@ class SubscriptionService extends ChangeNotifier {
   }
 
   Future<void> purchaseSubscription(Package package) async {
-    amplitude.track(BaseEvent(
-      'purchase subscription',
-      eventProperties: {
-        'package': package.identifier,
-      },
-    ));
+    analyticsService.logEvent('purchase subscription', parameters: {
+      'package': package.identifier,
+    });
     try {
       PurchaseParams params = PurchaseParams.package(package);
       PurchaseResult purchaseResult = await Purchases.purchase(params);
       var isPremium = purchaseResult.customerInfo.entitlements.active
           .containsKey(_premiumId);
-      amplitude.track(BaseEvent(
-        'purchase subscription success',
-        eventProperties: {
-          'package': package.identifier,
-        },
-      ));
+      analyticsService.logEvent('purchase subscription success', parameters: {
+        'package': package.identifier,
+      });
       if (isPremium) {
         setPremium(true);
       }
     } on PlatformException catch (e) {
-      amplitude.track(BaseEvent(
-        'purchase subscription error',
-        eventProperties: {
-          'package': package.identifier,
-        },
-      ));
+      analyticsService.logEvent('purchase subscription error', parameters: {
+        'package': package.identifier,
+      });
       debugPrint('Error purchasing subscription: $e');
       var errorCode = PurchasesErrorHelper.getErrorCode(e);
       if (errorCode != PurchasesErrorCode.purchaseCancelledError) {
         // showError(e);
       }
     } catch (e) {
-      amplitude.track(BaseEvent(
-        'purchase subscription error',
-        eventProperties: {
-          'package': package.identifier,
-        },
-      ));
+      analyticsService.logEvent('purchase subscription error', parameters: {
+        'package': package.identifier,
+      });
       debugPrint('Error purchasing subscription: $e');
       // Handle other errors
     }
@@ -176,15 +162,10 @@ class SubscriptionService extends ChangeNotifier {
   Future<void> showPremiumPopup({
     String? message,
   }) async {
-    amplitude.track(
-      BaseEvent(
-        'show premium popup',
-        eventProperties: {
-          'message': message ??
-              'You need to be a premium member to access this feature.',
-        },
-      ),
-    );
+    analyticsService.logEvent('show premium popup', parameters: {
+      'message': message ??
+          'You need to be a premium member to access this feature.',
+    });
 
     await showModalBottomSheet(
       context: router.navigatorKey.currentContext!,

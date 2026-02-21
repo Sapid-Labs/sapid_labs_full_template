@@ -1,8 +1,15 @@
-import 'package:slapp/main.dart';
+// STACK_AMPLITUDE — this entire file is Amplitude-specific
+import 'package:amplitude_flutter/amplitude.dart';
+import 'package:amplitude_flutter/configuration.dart';
 import 'package:amplitude_flutter/events/base_event.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
+// Replace with your Amplitude API key when using this file
+final Amplitude amplitude = Amplitude(Configuration(
+  apiKey: const String.fromEnvironment("AMPLITUDE_API_KEY"),
+));
 
 /// Navigation observer that automatically tracks page navigation events using Amplitude.
 /// This observer will track route changes, providing analytics on user navigation patterns.

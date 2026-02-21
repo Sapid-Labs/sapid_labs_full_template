@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
-import 'package:slapp/app/get_it.dart';
 import 'package:slapp/app/router.dart';
 import 'package:slapp/app/services.dart';
 import 'package:slapp/features/auth/models/app_user.dart';
@@ -12,7 +11,7 @@ import 'package:slapp/features/auth/services/auth_service.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:injectable/injectable.dart';
 
-@firebaseEnv
+// STACK_FIREBASE
 @Singleton(as: AuthService)
 class FirebaseAuthService implements AuthService {
   @override
