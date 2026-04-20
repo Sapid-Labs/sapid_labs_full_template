@@ -2,6 +2,10 @@
 
 This file provides guidance to Claude Code when working with code in this repository.
 
+## Getting Started with a New Project
+
+When starting a new project from this template, begin with the brand bootstrap process before writing any code. Read `brand/bootstrap.md` and use it to interview the user about what they want to build. Walk them through each step of the bootstrap guide, filling out the brand documents (`brand/mission.md`, `brand/marketing.md`, `brand/app-store.md`) collaboratively through conversation. Ask questions one section at a time, help refine their answers, and write the results into the files. Only move on to technical setup and code once the brand foundation is in place.
+
 ## Project Overview
 
 This is the **Sapid Labs Flutter Template** (package name: `slapp`) — a production-grade base template used to create all Sapid Labs apps. It aggregates learnings across child apps (app store fixes, auth flows, notifications, deployment, etc.) so improvements propagate to every project.
@@ -9,7 +13,7 @@ This is the **Sapid Labs Flutter Template** (package name: `slapp`) — a produc
 **Company**: Sapid Labs — "tasteful software"
 
 Key capabilities:
-- **Multi-backend support**: Firebase, Supabase, and Pocketbase via `// STACK_*` comment labels
+- **Multi-backend support**: Firebase and Supabase, swappable via `stack/` activation guides
 - **Comprehensive auth**: Email/password, phone/SMS, Google Sign-In, Apple Sign-In, anonymous
 - **Analytics**: Amplitude, PostHog, or Firebase Analytics
 - **Crash reporting**: Firebase Crashlytics or Sentry
@@ -19,26 +23,25 @@ Key capabilities:
 
 ## Stack System
 
-The template uses `// STACK_[TECH]` comment labels to mark stack-specific code. Each service implementation has a label above its injectable annotation. The **active** implementation has its annotation uncommented; **inactive** ones have the `(as: ServiceInterface)` annotation commented out.
+The template supports multiple backend, analytics, and crash reporting providers. When the user tells you which technology they want, read the corresponding activation guide from the `stack/` folder and follow its steps.
 
-| Label | Technology | Category | Default |
-|---|---|---|---|
-| `STACK_FIREBASE` | Firebase Auth, Firestore | Backend | Active |
-| `STACK_SUPABASE` | Supabase Auth, Database | Backend | Inactive |
-| `STACK_POCKETBASE` | Pocketbase Auth, Database | Backend | Inactive |
-| `STACK_FIREBASE_ANALYTICS` | Firebase Analytics | Analytics | Active |
-| `STACK_AMPLITUDE` | Amplitude | Analytics | Inactive |
-| `STACK_FIREBASE_CRASHLYTICS` | Firebase Crashlytics | Crash Reporting | Active |
-| `STACK_SENTRY` | Sentry | Crash Reporting | Inactive |
+| Guide | Technology | Category |
+|---|---|---|
+| `stack/FIREBASE.md` | Firebase Auth, Firestore | Backend |
+| `stack/SUPABASE.md` | Supabase Auth, Database | Backend |
+| `stack/FIREBASE_ANALYTICS.md` | Firebase Analytics | Analytics |
+| `stack/AMPLITUDE.md` | Amplitude | Analytics |
+| `stack/FIREBASE_CRASHLYTICS.md` | Firebase Crashlytics | Crash Reporting |
+| `stack/SENTRY.md` | Sentry | Crash Reporting |
+| `stack/MOBILE_ADS.md` | Google Mobile Ads | Ads |
 
-**How to switch stacks**:
-1. Search for the `// STACK_*` label (e.g., `// STACK_SUPABASE`)
-2. Uncomment the `@Singleton(as: ...)` / `@LazySingleton(as: ...)` annotation for the stack you want
-3. Comment out the corresponding annotation for the stack you're deactivating
-4. Update the initialization blocks in `lib/main.dart`
-5. Run `flutter pub run build_runner build --delete-conflicting-outputs`
+**How to activate a stack**:
+1. Read the guide from `stack/` for the requested technology
+2. Follow its activation steps (config.json values, `lib/main.dart` changes, etc.)
+3. Delete the competing service files listed in the guide
+4. Run `flutter pub run build_runner build --delete-conflicting-outputs`
 
-**Example**: `FirebaseAuthService` has `// STACK_FIREBASE` with `@Singleton(as: AuthService)` uncommented. `SupabaseAuthService` has `// STACK_SUPABASE` with `// @Singleton(as: AuthService)` commented out. To switch to Supabase, uncomment the Supabase annotation and comment out the Firebase one.
+Each guide specifies the active services to keep and the competing code to delete. Stack selection is configured in `assets/config.json` using `STACK_PAAS` (backend), `STACK_ANALYTICS` (analytics), and `STACK_CRASHLYTICS` (crash reporting) keys.
 
 ## Build & Development Commands
 
@@ -53,15 +56,8 @@ flutter pub run build_runner build --delete-conflicting-outputs
 # Clean build artifacts
 flutter clean
 
-# Run the app (primary approach — uses assets/config.json)
+# Run the app (uses assets/config.json for stack and environment config)
 flutter run --dart-define-from-file=assets/config.json
-
-# Run with individual environment variables
-flutter run \
-  --dart-define=SUPABASE_URL=your_url \
-  --dart-define=SUPABASE_ANON_KEY=your_key \
-  --dart-define=AMPLITUDE_API_KEY=your_key \
-  --dart-define=SERVER_CLIENT_ID=your_client_id
 ```
 
 ### Testing & Deployment
@@ -106,7 +102,7 @@ git merge template/main --allow-unrelated-histories
 
 ### Dependency Injection
 - Uses `get_it` with `injectable` for dependency registration
-- **Multi-backend pattern**: Abstract service classes (e.g., `AuthService`, `AnalyticsService`, `CrashService`) have multiple concrete implementations marked with `// STACK_*` comment labels. Only the implementation with an uncommented `(as: ServiceInterface)` annotation registers at runtime.
+- **Multi-backend pattern**: Abstract service classes (e.g., `AuthService`, `AnalyticsService`, `CrashService`) have multiple concrete implementations. When activating a stack, you keep the chosen implementation and delete the competing ones (see `stack/` guides).
 - Services are decorated with:
   - `@Singleton(as: AuthService)` for single instance services with an interface
   - `@LazySingleton(as: AnalyticsService)` for lazily initialized services with an interface
@@ -143,13 +139,12 @@ Current features: `analytics`, `auth`, `dashboard`, `demo`, `feed`, `feedback`, 
 - **Services**: `lib/features/shared/services/` contains cross-cutting concerns (AI, crash reporting, permissions, HTTP client)
 
 ### Backend Services
-The template supports three backend providers, selectable via `// STACK_*` labels:
+The template supports multiple backend providers. See `stack/FIREBASE.md` and `stack/SUPABASE.md` for activation instructions.
 
 | Backend | Auth Service | Data Access | Files |
 |---|---|---|---|
 | **Firebase** | `FirebaseAuthService` | Cloud Firestore | `lib/features/auth/services/firebase_auth_service.dart` |
 | **Supabase** | `SupabaseAuthService` | `supabase.from('table')` | `lib/features/auth/services/supabase_auth_service.dart` |
-| **Pocketbase** | (planned) | — | — |
 
 Auth methods available: email/password, Google Sign-In, Apple Sign-In, phone/SMS, anonymous
 
@@ -169,14 +164,7 @@ Auth state is managed through global signals (`authUserId`, `authEmail`, `authIs
 
 ### Environment Variables
 
-| Variable | Required When | Purpose |
-|---|---|---|
-| `SUPABASE_URL` | Supabase stack active | Supabase project URL |
-| `SUPABASE_ANON_KEY` | Supabase stack active | Supabase anonymous key |
-| `AMPLITUDE_API_KEY` | Amplitude stack active | Amplitude analytics API key |
-| `SERVER_CLIENT_ID` | Google Sign-In is used | Google Sign-In server client ID |
-
-These are configured in `assets/config.json` and passed via `--dart-define-from-file`, or individually via `--dart-define` flags. VS Code launch configurations can also be used (`.vscode/launch.json`).
+All configuration lives in `assets/config.json` and is passed via `--dart-define-from-file`. Each stack activation guide in `stack/` specifies what keys are needed.
 
 ## Code Style & Conventions
 
@@ -234,11 +222,12 @@ Purpose: propagate improvements between the template and child apps. All Sapid L
 
 ## Key Files
 
-- `lib/main.dart`: App entry point — initializes Firebase/Supabase based on stack, configures dependencies
+- `lib/main.dart`: App entry point — initializes backend based on stack, configures dependencies
 - `lib/app/router.dart`: Route definitions and navigation guards
 - `lib/app/services.dart`: Global service accessors (e.g., `authService`, `analyticsService`)
 - `lib/app/get_it.dart`: Dependency injection configuration
 - `lib/app/constants.dart`: UI constants (gaps, paddings, borders, breakpoints)
 - `lib/app/config.dart`: App configuration and branding (first file to customize per child app)
 - `lib/app/theme.dart`: Theme configuration (uses FlexColorScheme)
-- `assets/config.json`: Environment variable configuration
+- `assets/config.json`: Stack selection and environment variable configuration
+- `stack/`: Activation guides for each supported technology

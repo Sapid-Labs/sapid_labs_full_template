@@ -25,15 +25,8 @@ flutterfire configure
 
 This generates `lib/app/firebase_options.dart`, which is imported by `main.dart`.
 
-### 3. Set stack in `assets/config.json`
 
-```json
-{
-  "STACK_PAAS": "firebase"
-}
-```
-
-### 4. (Optional) Set `SERVER_CLIENT_ID` for Google Sign-In
+### 3. (Optional) Set `SERVER_CLIENT_ID` for Google Sign-In
 
 ```json
 {
