@@ -3,6 +3,7 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:slapp/app/constants.dart';
 import 'package:slapp/app/router.dart';
 import 'package:slapp/app/services.dart';
+import 'package:slapp/features/auth/services/auth_service.dart';
 import 'package:slapp/features/auth/utils/fast_auth_exception.dart';
 import 'package:slapp/features/shared/ui/app_logo.dart';
 import 'package:flutter/material.dart';
@@ -219,7 +220,7 @@ class _SignInEmailViewState extends State<SignInEmailView> with SignalsMixin {
                               )
                             : const Text('Sign In'),
                       ),
-                      if (Platform.isAndroid) ...[
+                      if (Platform.isAndroid && googleSignInAvailable.value) ...[
                         gap8,
                         FilledButton.icon(
                           style: FilledButton.styleFrom(

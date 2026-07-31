@@ -11,6 +11,13 @@ final authIsAuthenticated = computed(() => authUserId.value != null);
 final authPhoneNumber = signal<String?>(null);
 final appUser = signal<AppUser?>(null);
 
+/// Whether Google sign-in can actually run on this device.
+///
+/// Set by the live [AuthService] implementation once its Google SDK has
+/// started. It stays false when the SDK is missing a client id or refuses to
+/// start, so the UI hides the button rather than offering one that throws.
+final googleSignInAvailable = signal<bool>(false);
+
 abstract class AuthService {
   // all implementations are linked here for easy dev navigation
   Future<void> setup() async {

@@ -4,6 +4,7 @@ import 'package:slapp/app/config.dart';
 import 'package:slapp/app/constants.dart';
 import 'package:slapp/app/router.dart';
 import 'package:slapp/app/services.dart';
+import 'package:slapp/features/auth/services/auth_service.dart';
 import 'package:slapp/features/auth/utils/fast_auth_exception.dart';
 import 'package:slapp/features/shared/ui/app_logo.dart';
 import 'package:flutter/material.dart';
@@ -287,7 +288,7 @@ class _SignUpEmailViewState extends State<SignUpEmailView> with SignalsMixin {
                           child: Text('Sign Up Anonymously'),
                         )
                       ],
-                      if (Platform.isAndroid) ...[
+                      if (Platform.isAndroid && googleSignInAvailable.value) ...[
                         gap8,
                         FilledButton.icon(
                           style: FilledButton.styleFrom(

@@ -14,11 +14,24 @@ import 'package:injectable/injectable.dart';
 // STACK_FIREBASE
 @Singleton(as: AuthService)
 class FirebaseAuthService implements AuthService {
+  static const webGoogleClientId =
+      String.fromEnvironment('GOOGLE_WEB_CLIENT_ID');
+
+  /// Resolves when the Google SDK has finished starting, successfully or not.
+  ///
+  /// It is deliberately NOT awaited by [setup]. This service used to await
+  /// `GoogleSignIn.instance.initialize()` before it attached the auth-state
+  /// listener, and on web that call throws when no web client id is
+  /// configured — so `setup()` aborted and the app painted no first frame at
+  /// all. One unavailable sign-in provider must cost the user that button,
+  /// never the whole app.
+  late final Future<void> googleSignInReady;
+
   @override
   Future<void> setup() async {
-    await GoogleSignIn.instance.initialize(
-      serverClientId: const String.fromEnvironment("SERVER_CLIENT_ID"),
-    );
+    // Started here, awaited only by signInWithGoogle.
+    googleSignInReady = _initGoogleSignIn();
+
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       if (user == null) {
         debugPrint('User is currently signed out!');
@@ -28,6 +41,29 @@ class FirebaseAuthService implements AuthService {
         authEmail.value = user.email;
       }
     });
+  }
+
+  /// Starts the Google SDK and records whether it is usable.
+  ///
+  /// On web this service does not use `google_sign_in` at all — it calls
+  /// `FirebaseAuth.signInWithPopup`, which needs no client id — so the SDK is
+  /// skipped and the button stays available. Everywhere else a failure to
+  /// start hides the button instead of throwing at startup.
+  Future<void> _initGoogleSignIn() async {
+    if (kIsWeb) {
+      googleSignInAvailable.value = true;
+      return;
+    }
+
+    try {
+      await GoogleSignIn.instance.initialize(
+        serverClientId: const String.fromEnvironment('SERVER_CLIENT_ID'),
+      );
+      googleSignInAvailable.value = true;
+    } catch (e) {
+      debugPrint('Google Sign-In unavailable: $e');
+      googleSignInAvailable.value = false;
+    }
   }
 
   @override
@@ -53,6 +89,10 @@ class FirebaseAuthService implements AuthService {
 
   @override
   Future<bool> signInWithGoogle() async {
+    // The SDK starts in the background during setup(), so the first tap may
+    // arrive before it is ready.
+    await googleSignInReady;
+
     if (kIsWeb) {
       try {
         UserCredential userCredential =

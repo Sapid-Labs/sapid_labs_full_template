@@ -19,17 +19,31 @@ import 'package:crypto/crypto.dart';
 class SupabaseAuthService implements AuthService {
   late final SupabaseClient supabase;
 
-  Future<void> setup() async {
-    await GoogleSignIn.instance.initialize(
-      serverClientId: const String.fromEnvironment("SERVER_CLIENT_ID"),
-    );
+  static const webGoogleClientId =
+      String.fromEnvironment('GOOGLE_WEB_CLIENT_ID');
 
+  /// Resolves when the Google SDK has finished starting, successfully or not.
+  ///
+  /// It is deliberately NOT awaited by [setup]. This service used to await
+  /// `GoogleSignIn.instance.initialize()` before `Supabase.initialize()`, and
+  /// on web that call throws when no web client id is configured — so
+  /// `setup()` aborted, Supabase was never initialised, and the app painted no
+  /// first frame at all (a white page, zero canvases). One unavailable
+  /// sign-in provider must cost the user that button, never the whole app.
+  late final Future<void> googleSignInReady;
+
+  Future<void> setup() async {
     await Supabase.initialize(
       url: const String.fromEnvironment('SUPABASE_URL'),
       anonKey: const String.fromEnvironment('SUPABASE_ANON_KEY'),
     );
 
     supabase = Supabase.instance.client;
+
+    // Started here, awaited only by signInWithGoogle. Startup does not wait on
+    // a network-backed SDK, and a failure lands in _initGoogleSignIn rather
+    // than as an unhandled error on the zone.
+    googleSignInReady = _initGoogleSignIn();
 
     // Listen to auth state changes
     supabase.auth.onAuthStateChange.listen((data) {
@@ -74,6 +88,32 @@ class SupabaseAuthService implements AuthService {
     authIsInitialized.value = true;
   }
 
+  /// Starts the Google SDK and records whether it is usable.
+  ///
+  /// `google_sign_in_web` needs a web client id — either the `clientId`
+  /// argument or a `<meta name="google-signin-client_id">` tag in
+  /// `web/index.html`. A fresh app has neither, so on web this is skipped
+  /// rather than attempted: the button is hidden and nothing throws. Set
+  /// GOOGLE_WEB_CLIENT_ID in assets/config.json to turn it on.
+  Future<void> _initGoogleSignIn() async {
+    if (kIsWeb && webGoogleClientId.isEmpty) {
+      debugPrint('Google Sign-In skipped: no GOOGLE_WEB_CLIENT_ID for web.');
+      googleSignInAvailable.value = false;
+      return;
+    }
+
+    try {
+      await GoogleSignIn.instance.initialize(
+        clientId: kIsWeb ? webGoogleClientId : null,
+        serverClientId: const String.fromEnvironment('SERVER_CLIENT_ID'),
+      );
+      googleSignInAvailable.value = true;
+    } catch (e) {
+      debugPrint('Google Sign-In unavailable: $e');
+      googleSignInAvailable.value = false;
+    }
+  }
+
   Future<void> createUser({
     required String id,
     String? email,
@@ -108,83 +148,84 @@ class SupabaseAuthService implements AuthService {
   }
 
   Future<bool> signInWithGoogle() async {
-    if (kIsWeb) {
-      try {
-        /* debugPrint('Signing in with Google on web');
-        final bool signedIn = await supabase.auth.signInWithOAuth(
+    // The SDK starts in the background during setup(), so the first tap may
+    // arrive before it is ready.
+    await googleSignInReady;
 
+    if (!googleSignInAvailable.value) {
+      // The old web branch returned `true` here without signing anybody in,
+      // which routed the caller to onboarding with no session at all. Saying
+      // no is better than a silent fake success.
+      throw FastAuthException(
+        'Google sign-in is not available here. Use your email and password.',
+      );
+    }
+
+    try {
+      debugPrint('Signing in with Google');
+      if (GoogleSignIn.instance.supportsAuthenticate()) {
+        // Trigger the authentication flow
+        final GoogleSignInAccount? googleUser =
+            await GoogleSignIn.instance.authenticate();
+
+        // Obtain the auth details from the request
+        final GoogleSignInAuthentication? googleAuth =
+            googleUser?.authentication;
+
+        final response = await supabase.auth.signInWithIdToken(
           provider: OAuthProvider.google,
-          redirectTo: 'io.supabase.flutterquickstart://login-callback/',
+          idToken: googleAuth!.idToken!,
         );
-        authUserId.value = authResponse.user?.id;
-        authEmail.value = authResponse.user?.email; */
-        return true;
-      } catch (e) {
-        rethrow;
-      }
-    } else {
-      try {
-        debugPrint('Signing in with Google');
-        if (GoogleSignIn.instance.supportsAuthenticate()) {
-          // Trigger the authentication flow
-          final GoogleSignInAccount? googleUser =
-              await GoogleSignIn.instance.authenticate();
 
-          // Obtain the auth details from the request
-          final GoogleSignInAuthentication? googleAuth =
-              googleUser?.authentication;
+        await createUser(
+          id: response.user?.id ?? '',
+          email: response.user?.email,
+        );
 
-          final response = await supabase.auth.signInWithIdToken(
-            provider: OAuthProvider.google,
-            idToken: googleAuth!.idToken!,
-          );
+        debugPrint('User signed in with Google');
 
+        DateTime? createdAt = DateTime.tryParse(response.user?.createdAt ?? '');
+        debugPrint('Created At: ${response.user?.createdAt}');
+        debugPrint('Metadata: ${response.user?.userMetadata}');
+
+        bool newUser = createdAt != null &&
+            createdAt.isAfter(DateTime.now().subtract(Duration(minutes: 5)));
+
+        if (newUser) {
           await createUser(
             id: response.user?.id ?? '',
             email: response.user?.email,
           );
-
-          debugPrint('User signed in with Google');
-
-          DateTime? createdAt =
-              DateTime.tryParse(response.user?.createdAt ?? '');
-          debugPrint('User signed in with Apple: ${response.user?.id}');
-          debugPrint('Created At: ${response.user?.createdAt}');
-          debugPrint('Metadata: ${response.user?.userMetadata}');
-
-          bool newUser = createdAt != null &&
-              createdAt.isAfter(DateTime.now().subtract(Duration(minutes: 5)));
-
-          if (newUser) {
-            await createUser(
-              id: response.user?.id ?? '',
-              email: response.user?.email,
-            );
-          }
-
-          return newUser;
-        } else {
-          debugPrint('Google Sign-In is not supported on this platform.');
-          throw Exception('Google Sign-In is not supported on this platform.');
-        }
-      } on GoogleSignInException catch (e) {
-        debugPrint('e: $e');
-
-        if (e.code == GoogleSignInExceptionCode.canceled) {
-          throw FastAuthException('');
         }
 
+        return newUser;
+      } else {
+        debugPrint('Google Sign-In is not supported on this platform.');
         throw FastAuthException(
-          'There was an error signing you in with Google. Please try again.',
-          error: e.toString(),
-        );
-      } catch (e) {
-        debugPrint('Error signing in with Google: $e');
-        throw FastAuthException(
-          'There was an error signing you in with Google. Please try again.',
-          error: e.toString(),
+          'Google sign-in is not available here. Use your email and password.',
         );
       }
+    } on FastAuthException {
+      // Already a message written for the user; the generic catch below would
+      // replace it with "please try again".
+      rethrow;
+    } on GoogleSignInException catch (e) {
+      debugPrint('e: $e');
+
+      if (e.code == GoogleSignInExceptionCode.canceled) {
+        throw FastAuthException('');
+      }
+
+      throw FastAuthException(
+        'There was an error signing you in with Google. Please try again.',
+        error: e.toString(),
+      );
+    } catch (e) {
+      debugPrint('Error signing in with Google: $e');
+      throw FastAuthException(
+        'There was an error signing you in with Google. Please try again.',
+        error: e.toString(),
+      );
     }
   }
 
