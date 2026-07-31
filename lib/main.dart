@@ -28,7 +28,7 @@ const sentryDsn = String.fromEnvironment('SENTRY_DSN');
 
 // STACK_AMPLITUDE
 /* final Amplitude amplitude = Amplitude(Configuration(
-  apiKey: "ff2f485bec7b3432c7a6ed352cc6420c",
+  apiKey: "your-amplitude-api-key",
   flushQueueSize: 1,
 )); */
 

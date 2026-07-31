@@ -6,7 +6,7 @@ Google Mobile Ads integration. Independent of other stacks.
 
 ### 1. Initialize ads in `lib/main.dart`
 
-Uncomment line 37:
+Uncomment the single commented call in `main()`:
 
 ```dart
 MobileAds.instance.initialize();

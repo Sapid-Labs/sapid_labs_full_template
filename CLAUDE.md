@@ -37,11 +37,16 @@ The template supports multiple backend, analytics, and crash reporting providers
 
 **How to activate a stack**:
 1. Read the guide from `stack/` for the requested technology
-2. Follow its activation steps (config.json values, `lib/main.dart` changes, etc.)
-3. Delete the competing service files listed in the guide
-4. Run `flutter pub run build_runner build --delete-conflicting-outputs`
+2. Move the active `@Injectable(as: Interface)` / `@Singleton(as: ...)` / `@LazySingleton(as: ...)` annotation onto the implementation you want, and comment the rival's out, leaving a plain `@Injectable()` in its place
+3. Follow the guide's other steps (`assets/config.json` keys, `lib/main.dart` init blocks)
+4. Run `./tool/codegen.sh` — never plain `build_runner`, never `--delete-conflicting-outputs`
+5. Read `lib/app/get_it.config.dart` and check that exactly one implementation is registered against each interface, then run `flutter test test/stack/stack_selection_test.dart`
 
-Each guide specifies the active services to keep and the competing code to delete. Stack selection is configured in `assets/config.json` using `STACK_PAAS` (backend), `STACK_ANALYTICS` (analytics), and `STACK_CRASHLYTICS` (crash reporting) keys.
+**Selection is by annotation and nothing else.** The `// STACK_<NAME>` marker comment above each swappable annotation is how you find the pair. There is no `STACK_PAAS`, `STACK_ANALYTICS` or `STACK_CRASHLYTICS` key in `assets/config.json`, and no code reads one — an older scheme used them and any doc still saying so is stale. Two active annotations for one interface compile without complaint and throw at startup.
+
+Deleting the rival's file is optional cleanup, not part of activation. Each guide's "Competing Code" section lists what to comment out.
+
+Defaults as shipped: Firebase (auth, feedback), Firebase Analytics, Sentry.
 
 ## Build & Development Commands
 
@@ -56,7 +61,7 @@ flutter pub get
 # Clean build artifacts
 flutter clean
 
-# Run the app (uses assets/config.json for stack and environment config)
+# Run the app (uses assets/config.json for environment config)
 flutter run --dart-define-from-file=assets/config.json
 ```
 
@@ -102,7 +107,7 @@ git merge template/main --allow-unrelated-histories
 
 ### Dependency Injection
 - Uses `get_it` with `injectable` for dependency registration
-- **Multi-backend pattern**: Abstract service classes (e.g., `AuthService`, `AnalyticsService`, `CrashService`) have multiple concrete implementations. When activating a stack, you keep the chosen implementation and delete the competing ones (see `stack/` guides).
+- **Multi-backend pattern**: Abstract service classes (e.g., `AuthService`, `AnalyticsService`, `CrashService`) have multiple concrete implementations. Activating a stack moves the `as: Interface` annotation onto the chosen one and comments the rivals' out (see `stack/` guides). Exactly one may claim each interface.
 - Services are decorated with:
   - `@Singleton(as: AuthService)` for single instance services with an interface
   - `@LazySingleton(as: AnalyticsService)` for lazily initialized services with an interface
@@ -252,5 +257,5 @@ Purpose: propagate improvements between the template and child apps. All Sapid L
 - `lib/app/constants.dart`: UI constants (gaps, paddings, borders, breakpoints)
 - `lib/app/config.dart`: App configuration and branding (first file to customize per child app)
 - `lib/app/theme.dart`: Theme configuration (uses FlexColorScheme)
-- `assets/config.json`: Stack selection and environment variable configuration
+- `assets/config.json`: Environment variable configuration (gitignored). Stack selection is by annotation, not by a key in this file.
 - `stack/`: Activation guides for each supported technology

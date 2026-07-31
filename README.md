@@ -30,7 +30,7 @@ Search the project for `slapp` and replace it with your app's package name. Then
 
 ### 2. Configure Your Stack
 
-The template defaults to Firebase + Firebase Analytics + Firebase Crashlytics. To switch stacks, search for the `// STACK_*` labels (e.g., `// STACK_SUPABASE`) and uncomment/comment the relevant annotations. See the **Stack System** section below for details.
+The template defaults to Firebase + Firebase Analytics + Sentry. To switch stacks, search for the `// STACK_*` labels (e.g., `// STACK_SUPABASE`) and uncomment/comment the relevant annotations. See the **Stack System** section below for details.
 
 Create `assets/config.json` for any environment variables your stack needs:
 
@@ -61,19 +61,22 @@ The template supports multiple backend, analytics, and crash reporting providers
 2. Uncomment the `@Singleton(as: ...)` or `@LazySingleton(as: ...)` annotation for the stack you want to activate
 3. Comment out the annotation for the stack you want to deactivate
 4. Update `lib/main.dart` initialization blocks accordingly
-5. Run `flutter pub run build_runner build --delete-conflicting-outputs`
+5. Run `./tool/codegen.sh` and read `lib/app/get_it.config.dart` to check that exactly one implementation is registered against each interface
 
 | Label | Technology | Category | Default |
 |---|---|---|---|
-| `STACK_FIREBASE` | Firebase Auth, Firestore, Crashlytics | Backend + Crash | Active |
+| `STACK_FIREBASE` | Firebase Auth, Firestore | Backend | Active |
 | `STACK_SUPABASE` | Supabase Auth, Database | Backend | Inactive |
 | `STACK_POCKETBASE` | Pocketbase Auth, Database | Backend | Inactive |
 | `STACK_FIREBASE_ANALYTICS` | Firebase Analytics | Analytics | Active |
 | `STACK_AMPLITUDE` | Amplitude | Analytics | Inactive |
-| `STACK_FIREBASE_CRASHLYTICS` | Firebase Crashlytics | Crash Reporting | Active |
-| `STACK_SENTRY` | Sentry | Crash Reporting | Inactive |
+| `STACK_SENTRY` | Sentry | Crash Reporting | Active |
+| `STACK_FIREBASE_CRASHLYTICS` | Firebase Crashlytics | Crash Reporting | Inactive |
+| `STACK_MOBILE_ADS` | Google Mobile Ads | Ads | Inactive |
 
 Abstract service classes (`AuthService`, `AnalyticsService`, `CrashService`, `FeedbackService`) have multiple concrete implementations. Only the implementation with an active (uncommented) annotation registers via get_it. Your feature code always depends on the abstract interface, so swapping backends requires no changes to feature code.
+
+**The annotation is the only selector.** There is no `STACK_PAAS`, `STACK_ANALYTICS` or `STACK_CRASHLYTICS` key in `assets/config.json`; nothing reads such a key. Two active annotations for the same interface compile without complaint and throw at startup, so run `flutter test test/stack/stack_selection_test.dart` after a swap.
 
 ### Environment Variables
 
@@ -82,6 +85,7 @@ Abstract service classes (`AuthService`, `AnalyticsService`, `CrashService`, `Fe
 | `SUPABASE_URL` | Supabase stack active | Supabase project URL |
 | `SUPABASE_ANON_KEY` | Supabase stack active | Supabase anonymous key |
 | `AMPLITUDE_API_KEY` | Amplitude stack active | Amplitude API key |
+| `SENTRY_DSN` | Sentry stack active | Sentry ingest DSN; empty skips init |
 | `SERVER_CLIENT_ID` | Google Sign-In is used | Google OAuth server client ID |
 
 ## Architecture
@@ -130,18 +134,19 @@ Auth state is exposed as global signals (`authUserId`, `authEmail`, `authIsAuthe
 
 ### Analytics
 
-Track events through a unified `AnalyticsService` interface. Swap providers by changing `STACK_ANALYTICS`:
+Track events through a unified `AnalyticsService` interface. Swap providers by moving the active annotation between these two:
 
-- **Amplitude** — `amplitude`
-- **PostHog** — `posthog`
-- **Firebase Analytics** — `firebaseAnalytics`
+- **Firebase Analytics** — `// STACK_FIREBASE_ANALYTICS`, active by default
+- **Amplitude** — `// STACK_AMPLITUDE`
+
+Never call a vendor SDK outside its own service file. `test/analytics/analytics_stack_test.dart` fails when one does, because an event sent to an unconfigured vendor raises no error — it simply arrives nowhere.
 
 ### Crash Reporting
 
 Automatic crash and error reporting through a unified `CrashService` interface:
 
-- **Firebase Crashlytics** — `firebaseCrashlytics`
-- **Sentry** — `sentry`
+- **Sentry** — `// STACK_SENTRY`, active by default. Set `SENTRY_DSN` in `assets/config.json`; an empty DSN skips init and the app runs unchanged.
+- **Firebase Crashlytics** — `// STACK_FIREBASE_CRASHLYTICS`
 
 ### Subscriptions
 
