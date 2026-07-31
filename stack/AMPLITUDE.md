@@ -26,7 +26,7 @@ final Amplitude amplitude = Amplitude(Configuration(
 
 ### 3. Navigation Observer
 
-`AmplitudeNavigationObserver` is configured in `lib/main.dart` (line 88) and defined in `lib/features/shared/utils/navigation_observers.dart`. This is hardwired to Amplitude -- if you switch away from Amplitude analytics, replace or remove it.
+`AnalyticsNavigationObserver` is defined in `lib/features/shared/utils/navigation_observers.dart` and wired in the commented `navigatorObservers` block of `lib/main.dart`. It reports through `analyticsService` rather than the Amplitude SDK, so it needs no change when you switch analytics vendors.
 
 ## Active Services
 

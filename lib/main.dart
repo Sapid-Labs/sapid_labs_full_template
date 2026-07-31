@@ -114,10 +114,10 @@ class MainApp extends StatelessWidget {
         ),
         themeMode: settingsThemeMode.value,
         routerConfig: router.config(
-          // STACK_AMPLITUDE
+          // Page-view tracking. Reports through analyticsService, so it works on any stack.
           // navigatorObservers: () {
           //   return [
-          //     AmplitudeNavigationObserver(),
+          //     AnalyticsNavigationObserver(),
           //   ];
           // },
         ),

@@ -1,19 +1,16 @@
-// STACK_AMPLITUDE — this entire file is Amplitude-specific
-import 'package:amplitude_flutter/amplitude.dart';
-import 'package:amplitude_flutter/configuration.dart';
-import 'package:amplitude_flutter/events/base_event.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:slapp/app/services.dart';
 
-// Replace with your Amplitude API key when using this file
-final Amplitude amplitude = Amplitude(Configuration(
-  apiKey: const String.fromEnvironment("AMPLITUDE_API_KEY"),
-));
-
-/// Navigation observer that automatically tracks page navigation events using Amplitude.
-/// This observer will track route changes, providing analytics on user navigation patterns.
-class AmplitudeNavigationObserver extends AutoRouterObserver {
+/// Navigation observer that sends a page-view event on every route change.
+///
+/// It reports through [analyticsService], so the events follow whichever
+/// implementation the app registered. Do not call a vendor SDK from here: an
+/// earlier version held its own `Amplitude` instance, so an app on Firebase
+/// Analytics sent its page views to a second, unconfigured vendor and saw none
+/// of them.
+class AnalyticsNavigationObserver extends AutoRouterObserver {
   @override
   void didPush(Route route, Route? previousRoute) {
     super.didPush(route, previousRoute);
@@ -71,10 +68,10 @@ class AmplitudeNavigationObserver extends AutoRouterObserver {
         }
 
         // Track the navigation event
-        amplitude.track(BaseEvent(eventName, eventProperties: eventProperties));
+        analyticsService.logEvent(eventName, parameters: eventProperties);
 
         if (kDebugMode) {
-          print('Amplitude Navigation: $eventName - $routeName');
+          print('Analytics navigation: $eventName - $routeName');
         }
       }
     } catch (e) {
@@ -148,12 +145,12 @@ class AmplitudeNavigationObserver extends AutoRouterObserver {
         value.toString().isNotEmpty;
   }
 
-  /// Sanitize property keys for Amplitude
+  /// Sanitize property keys for the analytics backend
   String _sanitizePropertyKey(String key) {
     return key.replaceAll(RegExp(r'[^a-zA-Z0-9_]'), '_').toLowerCase();
   }
 
-  /// Sanitize property values for Amplitude
+  /// Sanitize property values for the analytics backend
   dynamic _sanitizePropertyValue(dynamic value) {
     if (value == null) return null;
 

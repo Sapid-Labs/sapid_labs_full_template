@@ -22,9 +22,19 @@ class FirebaseAnalyticsService implements AnalyticsService {
 
   @override
   Future<void> logEvent(String name, {Map<String, dynamic>? parameters}) async {
+    // Do not cast the map. `parameters` is a Map<String, dynamic> and may be
+    // null, so `parameters as Map<String, Object>` throws a TypeError on every
+    // call. Copy the non-null entries into the type Firebase asks for instead.
+    final Map<String, Object>? safeParameters = parameters == null
+        ? null
+        : <String, Object>{
+            for (final entry in parameters.entries)
+              if (entry.value != null) entry.key: entry.value as Object,
+          };
+
     await FirebaseAnalytics.instance.logEvent(
       name: name,
-      parameters: parameters as Map<String, Object>,
+      parameters: safeParameters,
     );
   }
 

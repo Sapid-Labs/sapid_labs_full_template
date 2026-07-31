@@ -16,16 +16,11 @@ Firebase must be initialized first. See [FIREBASE.md](FIREBASE.md).
 }
 ```
 
-### 2. Fix navigation observer in `lib/main.dart`
+### 2. Navigation observer
 
-The template ships with `AmplitudeNavigationObserver` hardwired in `main.dart` (line 88). Replace it with a Firebase Analytics observer or remove it:
-
-```dart
-// Replace this:
-AmplitudeNavigationObserver(),
-
-// With a Firebase Analytics observer, or remove the navigatorObservers callback entirely.
-```
+Nothing to change. `AnalyticsNavigationObserver` reports through `analyticsService`,
+so its page-view events go to whichever implementation is registered. Uncomment the
+`navigatorObservers` block in `lib/main.dart` to switch page-view tracking on.
 
 ## Active Services
 
@@ -34,5 +29,4 @@ AmplitudeNavigationObserver(),
 ## Competing Code to Delete
 
 - `lib/features/analytics/services/amplitude_analytics_service.dart`
-- Remove the `AmplitudeNavigationObserver` import and usage from `lib/main.dart`
 - Remove the Amplitude initialization block (lines 20-24) from `lib/main.dart` if uncommented

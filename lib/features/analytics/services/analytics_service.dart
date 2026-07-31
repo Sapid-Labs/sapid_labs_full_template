@@ -1,24 +1,17 @@
-import 'package:slapp/features/analytics/services/amplitude_analytics_service.dart';
-import 'package:slapp/features/analytics/services/firebase_analytics_service.dart';
-
+/// The analytics interface every child app talks to.
+///
+/// Keep this a pure interface. It used to carry method bodies that constructed
+/// `AmplitudeAnalyticsService()` and `FirebaseAnalyticsService()` directly, which
+/// defeated the point of the stack scheme: a caller who reached the base class got
+/// both vendors regardless of which implementation was registered, and each call
+/// built a fresh SDK instance. Pick the vendor with the `// STACK_<NAME>` marker on
+/// the implementation, never here.
 abstract class AnalyticsService {
-  Future<void> setup() async {
-    AmplitudeAnalyticsService().setup();
-    FirebaseAnalyticsService().setup();
-  }
+  Future<void> setup();
 
-  Future<void> setUserProperties(Map<String, dynamic> properties) async {
-    AmplitudeAnalyticsService().setUserProperties(properties);
-    FirebaseAnalyticsService().setUserProperties(properties);
-  }
+  Future<void> setUserProperties(Map<String, dynamic> properties);
 
-  Future<void> logEvent(String name, {Map<String, dynamic>? parameters}) async {
-    AmplitudeAnalyticsService().logEvent(name, parameters: parameters);
-    FirebaseAnalyticsService().logEvent(name, parameters: parameters);
-  }
+  Future<void> logEvent(String name, {Map<String, dynamic>? parameters});
 
-  void updateVersionId(String? versionId, {String? userId}) {
-    AmplitudeAnalyticsService().updateVersionId(versionId);
-    FirebaseAnalyticsService().updateVersionId(versionId);
-  }
+  void updateVersionId(String? versionId, {String? userId});
 }

@@ -121,7 +121,7 @@ class _MyAppState extends State<MyApp> {
       routerConfig: router.config(
         navigatorObservers: () {
           return [
-            AmplitudeNavigationObserver(),
+            AnalyticsNavigationObserver(),
           ];
         },
       ),
