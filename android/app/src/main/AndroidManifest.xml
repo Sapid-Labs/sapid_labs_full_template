@@ -28,7 +28,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-            <intent-filter android:autoVerify="true">
+            <!-- The custom scheme, and deliberately NOT an App Links claim.
+                 autoVerify only ever checks http and https, so on a filter with
+                 no http/https <data> it verified nothing; what it did do was
+                 make the app claim slapp.com, a domain nobody here owns. The
+                 host stays: it is the authority half of the Supabase
+                 password-reset redirect built in
+                 lib/features/auth/utils/password_reset_link.dart
+                 (slapp://slapp.com/update-password), so removing it breaks that
+                 mail link. It is a URI component, not a web address, and
+                 nothing ever resolves it.
+                 To add a real App Links claim, put it in a SECOND filter with
+                 http/https and autoVerify, as fitjo does. Never mix the two:
+                 a custom scheme in an autoVerify filter makes the whole filter
+                 fail verification. -->
+            <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
