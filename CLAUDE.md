@@ -208,6 +208,14 @@ throws and deletes the `.g.dart` files without rewriting them.
 
 Edit `lib/app/config.dart` for:
 - App name and branding (defaults to "Sapid Labs" — replace per child app)
+- `urlScheme` and `urlHost` — the deep link this app claims. Change these together with
+  the `android:scheme`/`android:host` filter in `android/app/src/main/AndroidManifest.xml`
+  and `CFBundleURLSchemes` in `ios/Runner/Info.plist`. Never derive the scheme from
+  `appName`: a scheme must be lowercase with no space, so `appName.toLowerCase()` gives
+  'sapid labs' here, which no platform can register. `test/auth/password_reset_link_test.dart`
+  reads all three files off disk and fails when they disagree, because every failure in
+  this chain is silent — Supabase substitutes its Site URL for a redirect it does not
+  know, and neither platform manifest errors on a scheme it never claimed.
 - Social media usernames
 - Subscription features
 - Anonymous user settings

@@ -8,7 +8,7 @@ import 'package:slapp/features/auth/models/app_user.dart';
 import 'package:slapp/features/auth/services/auth_service.dart';
 import 'package:slapp/features/auth/utils/fast_auth_exception.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:slapp/app/config.dart';
+import 'package:slapp/features/auth/utils/password_reset_link.dart';
 import 'package:slapp/app/router.dart';
 import 'package:slapp/app/services.dart';
 import 'package:crypto/crypto.dart';
@@ -371,8 +371,7 @@ class SupabaseAuthService implements AuthService {
     try {
       await supabase.auth.resetPasswordForEmail(
         email,
-        redirectTo:
-            '${AppConfig.appName.toLowerCase()}://${AppConfig.appName.toLowerCase()}.com/change-password',
+        redirectTo: passwordResetRedirectUrl,
       );
     } catch (e) {
       rethrow;
