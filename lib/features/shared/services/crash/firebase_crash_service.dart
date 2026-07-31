@@ -3,7 +3,8 @@ import 'package:injectable/injectable.dart';
 import 'package:slapp/features/shared/services/crash/crash_service.dart';
 
 // STACK_FIREBASE_CRASHLYTICS
-@Injectable(as: CrashService)
+// @Injectable(as: CrashService)
+@Injectable()
 class FirebaseCrashService implements CrashService {
   @override
   void logError({required dynamic error, required StackTrace stackTrace}) {
