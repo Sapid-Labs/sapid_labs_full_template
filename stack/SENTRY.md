@@ -4,40 +4,34 @@ Crash reporting using Sentry.
 
 ## Status
 
-Sentry support is **stubbed out**. The `SentryCrashService` exists but may be incomplete. The `sentry_flutter` package is not yet in `pubspec.yaml`.
+**Sentry is the default.** `sentry_flutter` is in `pubspec.yaml`, `SentryCrashService`
+calls `Sentry.captureException`, and `lib/main.dart` initializes Sentry when a DSN is set.
+A fresh clone needs nothing here except a DSN. Crashlytics has no read API, so no tool can
+ask it what is crashing; that is why this is the default rather than Firebase Crashlytics.
 
 ## Activation Steps
 
-### 1. Add the Sentry package
-
-```bash
-flutter pub add sentry_flutter
-```
-
-### 2. Set stack in `assets/config.json`
+### 1. Put the DSN in `assets/config.json`
 
 ```json
 {
-  "STACK_CRASHLYTICS": "sentry"
+  "SENTRY_DSN": "https://<key>@<org>.ingest.sentry.io/<project>"
 }
 ```
 
-### 3. Initialize Sentry in `lib/main.dart`
+An empty or missing `SENTRY_DSN` skips `SentryFlutter.init` and runs the app unchanged, so
+an app with no Sentry project yet still builds and runs.
 
-Add Sentry initialization (wrap `runApp` or add to `setup()`):
+### 2. Check the annotations
 
-```dart
-await SentryFlutter.init(
-  (options) {
-    options.dsn = 'your-sentry-dsn';
-  },
-  appRunner: () => runApp(const MainApp()),
-);
-```
+DI selection is by annotation, not by config key. Exactly one crash service may be
+registered as `CrashService`:
 
-### 4. Verify `SentryCrashService` annotation
+- `lib/features/shared/services/crash/sentry_crash_service.dart` — `@Injectable(as: CrashService)` active
+- `lib/features/shared/services/crash/firebase_crash_service.dart` — that line commented out, plain `@Injectable()` in its place
 
-Ensure `lib/features/shared/services/crash/sentry_crash_service.dart` has the `@sentryEnv` annotation so it registers correctly with the DI system.
+This is how the repo already ships. Run `./tool/codegen.sh` after any change and check
+that `lib/app/get_it.config.dart` holds one `CrashService` registration.
 
 ## Active Services
 
@@ -46,4 +40,4 @@ Ensure `lib/features/shared/services/crash/sentry_crash_service.dart` has the `@
 ## Competing Code to Delete
 
 - `lib/features/shared/services/crash/firebase_crash_service.dart`
-- Remove Firebase Crashlytics imports and error handler from `lib/main.dart` if present
+- Remove the `FlutterError.onError = FirebaseCrashlytics...` line from `lib/main.dart`
