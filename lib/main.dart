@@ -1,6 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:slapp/app/firebase_options.dart';
 import 'package:slapp/app/get_it.dart';
@@ -81,7 +80,17 @@ Future<void> setup() async {
   await analyticsService.setup();
 }
 
-String? fontFamily = GoogleFonts.quicksand().fontFamily;
+/// Declared in pubspec.yaml under `fonts:` and shipped in the APK/IPA.
+///
+/// This used to be `GoogleFonts.quicksand()`, which resolves a family by
+/// downloading the TTF from fonts.gstatic.com on first launch. Two things were
+/// wrong with that. Until the download lands the app renders in the platform
+/// fallback face, and first launch is exactly when a new user decides whether
+/// this looks like a real app -- on a bad connection they never see Quicksand at
+/// all. And it only ever fetched the w400 file, so every bold weight in the app
+/// was synthesised by the engine rather than drawn. Four real weights are now
+/// bundled, hash-checked against the files google_fonts would have fetched.
+const String fontFamily = 'Quicksand';
 
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
