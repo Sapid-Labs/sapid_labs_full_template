@@ -1,13 +1,13 @@
 import 'package:slapp/app/config.dart';
 import 'package:slapp/app/services.dart';
 import 'package:slapp/features/auth/services/auth_service.dart';
+import 'package:slapp/features/subscriptions/services/purchases_config.dart';
 import 'package:slapp/features/subscriptions/ui/premium_popup.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:injectable/injectable.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
-import 'dart:io' show Platform;
 
 import 'package:signals/signals_flutter.dart';
 
@@ -35,14 +35,13 @@ class SubscriptionService extends ChangeNotifier {
       }
       await Purchases.setDebugLogsEnabled(true);
 
-      late PurchasesConfiguration configuration;
-      if (Platform.isAndroid) {
-        configuration = PurchasesConfiguration(
-            const String.fromEnvironment('REVENUECAT_GOOGLE_API_KEY'));
-      } else if (Platform.isIOS) {
-        configuration = PurchasesConfiguration(
-            const String.fromEnvironment('REVENUECAT_IOS_API_KEY'));
+      final key = purchasesApiKey;
+      if (key.isEmpty) {
+        reportMissingPurchasesKey('slapp');
+        return;
       }
+
+      final configuration = PurchasesConfiguration(key);
 
       await Purchases.configure(configuration..appUserID = authUserId.value);
 
