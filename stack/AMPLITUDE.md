@@ -1,5 +1,11 @@
 # STACK_AMPLITUDE
 
+> Activating by hand is what this guide describes, and it still works.
+> `./tool/stack.py --analytics amplitude ...` does the same swap plus the parts that
+> fail silently: it deletes the rival files, drops the SDKs the app no longer
+> calls, and toggles the `lib/main.dart` blocks. Prefer it.
+
+
 Analytics provider using Amplitude.
 
 Firebase Analytics is the template default (see [FIREBASE_ANALYTICS.md](FIREBASE_ANALYTICS.md)).

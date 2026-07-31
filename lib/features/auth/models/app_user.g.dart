@@ -24,11 +24,11 @@ AppUser _$AppUserFromJson(Map<String, dynamic> json) => $checkedCreate(
       ),
       createdAt: $checkedConvert(
         'created_at',
-        (v) => getDateTimeFromTimestamp(v as Timestamp?),
+        (v) => getDateTimeFromTimestamp(v),
       ),
       updatedAt: $checkedConvert(
         'updated_at',
-        (v) => getDateTimeFromTimestamp(v as Timestamp?),
+        (v) => getDateTimeFromTimestamp(v),
       ),
     );
     return val;

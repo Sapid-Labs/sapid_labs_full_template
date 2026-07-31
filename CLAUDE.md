@@ -13,40 +13,64 @@ This is the **Sapid Labs Flutter Template** (package name: `slapp`) — a produc
 **Company**: Sapid Labs — "tasteful software"
 
 Key capabilities:
-- **Multi-backend support**: Firebase and Supabase, swappable via `stack/` activation guides
+- **Multi-backend support**: Firebase, Supabase or Pocketbase, one file each, chosen by `tool/stack.py`
 - **Comprehensive auth**: Email/password, phone/SMS, Google Sign-In, Apple Sign-In, anonymous
-- **Analytics**: Amplitude, PostHog, or Firebase Analytics
-- **Crash reporting**: Firebase Crashlytics or Sentry
+- **Analytics**: Firebase Analytics, Amplitude, or none
+- **Crash reporting**: Sentry, Firebase Crashlytics, or none
 - **Subscriptions**: RevenueCat
-- **Ads**: Google Mobile Ads
 - **Deployment**: Fastlane for iOS (TestFlight, App Store) and Android (internal, alpha, beta, production)
 
 ## Stack System
 
-The template supports multiple backend, analytics, and crash reporting providers. When the user tells you which technology they want, read the corresponding activation guide from the `stack/` folder and follow its steps.
+Three categories, one provider each, one file per provider:
 
-| Guide | Technology | Category |
-|---|---|---|
-| `stack/FIREBASE.md` | Firebase Auth, Firestore | Backend |
-| `stack/SUPABASE.md` | Supabase Auth, Database | Backend |
-| `stack/FIREBASE_ANALYTICS.md` | Firebase Analytics | Analytics |
-| `stack/AMPLITUDE.md` | Amplitude | Analytics |
-| `stack/FIREBASE_CRASHLYTICS.md` | Firebase Crashlytics | Crash Reporting |
-| `stack/SENTRY.md` | Sentry | Crash Reporting |
-| `stack/MOBILE_ADS.md` | Google Mobile Ads | Ads |
+| Category | Providers | Interface | Where |
+|---|---|---|---|
+| Backend | `firebase`, `supabase`, `pocketbase` | `AuthService`, `FeedbackService` | `lib/features/auth/services/`, `lib/features/feedback/services/` |
+| Analytics | `firebase`, `amplitude`, `none` | `AnalyticsService` | `lib/features/analytics/services/` |
+| Crash | `sentry`, `firebase`, `none` | `CrashService` | `lib/features/shared/services/crash/` |
 
-**How to activate a stack**:
-1. Read the guide from `stack/` for the requested technology
-2. Move the active `@Injectable(as: Interface)` / `@Singleton(as: ...)` / `@LazySingleton(as: ...)` annotation onto the implementation you want, and comment the rival's out, leaving a plain `@Injectable()` in its place
-3. Follow the guide's other steps (`assets/config.json` keys, `lib/main.dart` init blocks)
-4. Run `./tool/codegen.sh` — never plain `build_runner`, never `--delete-conflicting-outputs`
-5. Read `lib/app/get_it.config.dart` and check that exactly one implementation is registered against each interface, then run `flutter test test/stack/stack_selection_test.dart`
+**Use the script. Do not do this by hand.**
 
-**Selection is by annotation and nothing else.** The `// STACK_<NAME>` marker comment above each swappable annotation is how you find the pair. There is no `STACK_PAAS`, `STACK_ANALYTICS` or `STACK_CRASHLYTICS` key in `assets/config.json`, and no code reads one — an older scheme used them and any doc still saying so is stale. Two active annotations for one interface compile without complaint and throw at startup.
+```bash
+./tool/stack.py --backend supabase --analytics none --crash sentry --dry-run
+./tool/stack.py --backend supabase --analytics none --crash sentry
+flutter pub get && ./tool/codegen.sh && flutter test
+```
 
-Deleting the rival's file is optional cleanup, not part of activation. Each guide's "Competing Code" section lists what to comment out.
+It deletes the providers you did not pick and their `stack/*.md` guides, moves the
+`@Injectable(as: Interface)` annotation onto the ones you did, toggles the
+`// STACK_<NAME>:BEGIN … :END` blocks in `lib/main.dart`, drops the unused
+dependencies from `pubspec.yaml`, and rewrites `assets/config.example.json` to the
+keys the survivors read. Dependencies come off by set difference over what the
+survivors declare, so `--backend supabase --crash firebase` correctly keeps
+`firebase_core`. It refuses to run on a dirty git tree.
+
+The reason it is a script and not a checklist is that every step of the manual
+version fails quietly. A dependency nobody calls is not free on Android — a plugin
+contributes its own manifest — and that is how FitJo ended up declaring
+`com.google.android.gms.permission.AD_ID` for an app with no ads.
+
+`test/stack/stack_manifest_test.dart` fails if a service is renamed out from under
+the script's manifest, and `test/stack/stack_selection_test.dart` fails if two
+implementations claim one interface. Two live registrations compile without
+complaint and throw at startup.
+
+**Selection is by annotation and nothing else.** There is no `STACK_PAAS`,
+`STACK_ANALYTICS` or `STACK_CRASHLYTICS` key in `assets/config.json`, and no code
+reads one — an older scheme used them and any doc still saying so is stale.
 
 Defaults as shipped: Firebase (auth, feedback), Firebase Analytics, Sentry.
+
+**Interfaces stay pure.** `AuthService`, `CrashService` and `AnalyticsService` are
+abstract with no method bodies. They used to carry bodies that called every vendor
+in turn "for easy dev navigation", which made the interface import both SDKs — so
+no child app could delete the vendor it had not picked, and a caller who reached
+the base class ran two SDKs at once. Do not put a body back.
+
+**Nothing outside a `*/services/` directory may import a vendor SDK.** A phone
+sign-in screen once imported `firebase_auth` for a listener that `AuthService`
+already had, and it was the single file that stopped a Supabase app compiling.
 
 ## Build & Development Commands
 
@@ -139,17 +163,18 @@ Current features: `analytics`, `auth`, `dashboard`, `demo`, `feed`, `feedback`, 
 - **UI Components**: `lib/features/shared/ui/` contains reusable widgets:
   - `app_logo.dart`, `app_name.dart`, `app_version.dart`
   - `loading_indicator.dart`, `loading_overlay.dart`, `loading_stack.dart`
-  - `phone_number_text_field.dart`, `banner_ad.dart`, `layout.dart`
+  - `phone_number_text_field.dart`, `layout.dart`
 - **Utilities**: `lib/features/shared/utils/` contains helper functions
 - **Services**: `lib/features/shared/services/` contains cross-cutting concerns (AI, crash reporting, permissions, HTTP client)
 
 ### Backend Services
-The template supports multiple backend providers. See `stack/FIREBASE.md` and `stack/SUPABASE.md` for activation instructions.
+The template supports multiple backend providers. See `stack/FIREBASE.md`, `stack/SUPABASE.md` and `stack/POCKETBASE.md`. Pocketbase supports email and password only — Google, Apple, anonymous and phone sign-in throw a readable `FastAuthException` there rather than pretending to work.
 
 | Backend | Auth Service | Data Access | Files |
 |---|---|---|---|
 | **Firebase** | `FirebaseAuthService` | Cloud Firestore | `lib/features/auth/services/firebase_auth_service.dart` |
 | **Supabase** | `SupabaseAuthService` | `supabase.from('table')` | `lib/features/auth/services/supabase_auth_service.dart` |
+| **Pocketbase** | `PocketbaseAuthService` | `pb.collection('name')` | `lib/features/auth/services/pocketbase_auth_service.dart` |
 
 Auth methods available: email/password, Google Sign-In, Apple Sign-In, phone/SMS, anonymous
 
@@ -160,10 +185,9 @@ Auth state is managed through global signals (`authUserId`, `authEmail`, `authIs
 | Function | Options | Files |
 |---|---|---|
 | **Backend/Auth** | Firebase, Supabase, Pocketbase | `lib/features/auth/services/` |
-| **Analytics** | Amplitude, PostHog, Firebase Analytics | `lib/features/analytics/services/` |
-| **Crash Reporting** | Firebase Crashlytics, Sentry | `lib/features/shared/services/crash/` |
+| **Analytics** | Firebase Analytics, Amplitude, none | `lib/features/analytics/services/` |
+| **Crash Reporting** | Sentry, Firebase Crashlytics, none | `lib/features/shared/services/crash/` |
 | **Subscriptions** | RevenueCat | `lib/features/subscriptions/services/subscription_service.dart` |
-| **Ads** | Google Mobile Ads | `lib/features/shared/ui/banner_ad.dart` |
 | **OAuth** | Google Sign-In, Apple Sign-In | Used within auth services |
 | **Theming** | FlexColorScheme | `lib/app/theme.dart`, `lib/main.dart` |
 

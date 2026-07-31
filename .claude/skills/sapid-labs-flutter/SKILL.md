@@ -27,11 +27,10 @@ Every Sapid Labs app derives from the `sapid_labs_flutter_template` (package nam
 | Routing | `auto_route` | Declarative, with `AuthGuard` for protected routes |
 | Models | `json_serializable` | `@JsonSerializable()` + `copyWith` + equality |
 | Theming | `FlexColorScheme` | Configured in `lib/app/theme.dart` |
-| Backend | Firebase OR Supabase | Swappable via `stack/` activation guides in template |
-| Analytics | Amplitude OR Firebase Analytics | Abstract `AnalyticsService` |
-| Crash reporting | Crashlytics OR Sentry | Abstract `CrashService` |
+| Backend | Firebase OR Supabase OR Pocketbase | Picked once by `tool/stack.py` in the template |
+| Analytics | Firebase Analytics OR Amplitude OR none | Abstract `AnalyticsService` |
+| Crash reporting | Sentry OR Crashlytics OR none | Abstract `CrashService` |
 | Subscriptions | RevenueCat | `subscription_service.dart` |
-| Ads | Google Mobile Ads | `banner_ad.dart` widget |
 | CI/CD | Fastlane + Shorebird | iOS and Android lanes with Slack notifications |
 
 ## Project Structure (Canonical)

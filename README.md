@@ -1,17 +1,16 @@
 # Sapid Labs Flutter Template
 
-A production-grade Flutter app template with multi-backend support, comprehensive auth, analytics, crash reporting, subscriptions, and ads — all pre-wired and swappable via a simple config file.
+A production-grade Flutter app template with multi-backend support, comprehensive auth, analytics, crash reporting and subscriptions — all pre-wired, and reduced to the one you picked by a single script.
 
 ## Why Use This Template
 
 Starting a Flutter app from scratch means wiring up authentication, analytics, crash reporting, routing, state management, dependency injection, and deployment — often taking weeks before you write any feature code. This template gives you all of that out of the box:
 
-- **Multi-backend support** — Switch between Firebase, Supabase, and Pocketbase by toggling comment labels
+- **Multi-backend support** — Firebase, Supabase or Pocketbase, chosen by one command
 - **Full auth flows** — Email/password, phone/SMS, Google Sign-In, Apple Sign-In, and anonymous auth, with pre-built sign-in, sign-up, password reset, and account management screens
-- **Analytics ready** — Amplitude, PostHog, or Firebase Analytics, swappable without touching your feature code
-- **Crash reporting** — Firebase Crashlytics or Sentry, same swap-friendly pattern
+- **Analytics ready** — Amplitude or Firebase Analytics, or none at all, swappable without touching your feature code
+- **Crash reporting** — Sentry or Firebase Crashlytics, or none at all, same swap-friendly pattern
 - **Subscriptions** — RevenueCat integration with a paywall UI
-- **Ads** — Google Mobile Ads with a reusable banner widget
 - **Deployment** — Fastlane configs for iOS (TestFlight, App Store) and Android (internal, alpha, beta, production)
 - **Opinionated architecture** — Signals for state, auto_route for navigation, get_it + injectable for DI, and a clean feature-based folder structure
 
@@ -30,15 +29,26 @@ Search the project for `slapp` and replace it with your app's package name. Then
 
 ### 2. Configure Your Stack
 
-The template defaults to Firebase + Firebase Analytics + Sentry. To switch stacks, search for the `// STACK_*` labels (e.g., `// STACK_SUPABASE`) and uncomment/comment the relevant annotations. See the **Stack System** section below for details.
+Pick one provider per category. The script deletes the rest — files, SDKs and
+activation guides — so what you are left with is one file per job:
 
-Create `assets/config.json` for any environment variables your stack needs:
-
-```json
-{
-  "SERVER_CLIENT_ID": "your_google_client_id"
-}
+```bash
+./tool/stack.py --backend supabase --analytics none --crash sentry --dry-run
+./tool/stack.py --backend supabase --analytics none --crash sentry
 ```
+
+`--backend` takes `firebase`, `supabase` or `pocketbase`; `--analytics` takes
+`firebase`, `amplitude` or `none`; `--crash` takes `sentry`, `firebase` or `none`.
+Run it on a clean git tree, read the diff, then `flutter pub get` and
+`./tool/codegen.sh`.
+
+Doing it by hand still works and the **Stack System** section below says how. The
+script exists because the manual path has four steps that fail silently: an SDK
+left in `pubspec.yaml` puts its permissions into the merged Android manifest of an
+app that never calls it, which is a data-safety answer nobody wants to defend.
+
+It writes `assets/config.example.json` with exactly the keys your selection reads.
+Copy it to `assets/config.json`, which is gitignored, and fill it in.
 
 ### 3. Install and Generate
 
@@ -72,7 +82,6 @@ The template supports multiple backend, analytics, and crash reporting providers
 | `STACK_AMPLITUDE` | Amplitude | Analytics | Inactive |
 | `STACK_SENTRY` | Sentry | Crash Reporting | Active |
 | `STACK_FIREBASE_CRASHLYTICS` | Firebase Crashlytics | Crash Reporting | Inactive |
-| `STACK_MOBILE_ADS` | Google Mobile Ads | Ads | Inactive |
 
 Abstract service classes (`AuthService`, `AnalyticsService`, `CrashService`, `FeedbackService`) have multiple concrete implementations. Only the implementation with an active (uncommented) annotation registers via get_it. Your feature code always depends on the abstract interface, so swapping backends requires no changes to feature code.
 
@@ -85,6 +94,7 @@ Abstract service classes (`AuthService`, `AnalyticsService`, `CrashService`, `Fe
 | `SUPABASE_URL` | Supabase stack active | Supabase project URL |
 | `SUPABASE_ANON_KEY` | Supabase stack active | Supabase anonymous key |
 | `AMPLITUDE_API_KEY` | Amplitude stack active | Amplitude API key |
+| `POCKETBASE_URL` | Pocketbase stack active | Pocketbase server URL |
 | `SENTRY_DSN` | Sentry stack active | Sentry ingest DSN; empty skips init |
 | `SERVER_CLIENT_ID` | Google Sign-In is used | Google OAuth server client ID |
 

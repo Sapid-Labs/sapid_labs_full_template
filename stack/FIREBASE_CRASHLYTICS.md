@@ -1,5 +1,11 @@
 # STACK_FIREBASE_CRASHLYTICS
 
+> Activating by hand is what this guide describes, and it still works.
+> `./tool/stack.py --crash firebase ...` does the same swap plus the parts that
+> fail silently: it deletes the rival files, drops the SDKs the app no longer
+> calls, and toggles the `lib/main.dart` blocks. Prefer it.
+
+
 Crash reporting using Firebase Crashlytics.
 
 Sentry is the template default (see [SENTRY.md](SENTRY.md)). Use this guide only when an

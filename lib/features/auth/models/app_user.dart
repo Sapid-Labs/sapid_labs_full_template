@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'app_user.g.dart';
@@ -94,12 +93,34 @@ class AppUser {
   }
 }
 
-DateTime? getDateTimeFromTimestamp(Timestamp? value) {
+/// Timestamp conversion that does not name a vendor type.
+///
+/// These two used to take and return a `cloud_firestore` `Timestamp`, so
+/// `AppUser` -- a model every child app uses -- imported the Firestore SDK and
+/// pinned the whole template to Firebase. A Supabase or Pocketbase app reading a
+/// real row through this model threw a cast error on the first profile it loaded.
+///
+/// The Firestore shape is still handled, by duck typing rather than by an import:
+/// a `Timestamp` answers `toDate()`. Writing goes out as ISO 8601 in every case,
+/// which Firestore stores as a string rather than as a native timestamp -- worth
+/// knowing if you want to range-query `created_at` server side there.
+///
+/// Parsing is tolerant on purpose. A malformed or absent value yields null rather
+/// than throwing, because a profile is still usable without knowing its dates.
+DateTime? getDateTimeFromTimestamp(Object? value) {
   if (value == null) return null;
-  return value.toDate();
+  if (value is DateTime) return value;
+  if (value is String) return DateTime.tryParse(value);
+  if (value is int) return DateTime.fromMillisecondsSinceEpoch(value);
+  try {
+    final dynamic candidate = value;
+    final Object? converted = candidate.toDate();
+    if (converted is DateTime) return converted;
+  } catch (_) {
+    // Not a Firestore Timestamp. Fall through to null.
+  }
+  return null;
 }
 
-Timestamp? getTimestampFromDateTime(DateTime? value) {
-  if (value == null) return null;
-  return Timestamp.fromDate(value);
-}
+String? getTimestampFromDateTime(DateTime? value) =>
+    value?.toUtc().toIso8601String();

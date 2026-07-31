@@ -1,7 +1,13 @@
+// STACK_FIREBASE:BEGIN
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:slapp/app/firebase_options.dart';
+// STACK_FIREBASE:END
+// STACK_FIREBASE_CRASHLYTICS:BEGIN
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+// STACK_FIREBASE_CRASHLYTICS:END
+// STACK_SENTRY:BEGIN
+import 'package:sentry_flutter/sentry_flutter.dart';
+// STACK_SENTRY:END
 import 'package:slapp/app/get_it.dart';
 import 'package:slapp/app/router.dart';
 import 'package:slapp/app/services.dart';
@@ -12,25 +18,15 @@ import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:slapp/app/theme.dart';
 import 'package:slapp/features/settings/services/settings_service.dart';
 import 'package:get_it/get_it.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:signals/signals_flutter.dart';
 
-// STACK_AMPLITUDE
-// import 'package:amplitude_flutter/amplitude.dart';
-// import 'package:amplitude_flutter/configuration.dart';
-// import 'package:slapp/features/shared/utils/navigation_observers.dart';
-
+// STACK_SENTRY:BEGIN
 /// Sentry is the portfolio's crash backend -- Crashlytics has no read API, so no tool can
 /// ask it what is crashing. See docs/tech-stack.md in the fun-money repo. Put SENTRY_DSN in
 /// the gitignored assets/config.json; an empty DSN skips init, so a scaffolded app with no
 /// Sentry project yet behaves exactly as it did before.
 const sentryDsn = String.fromEnvironment('SENTRY_DSN');
-
-// STACK_AMPLITUDE
-/* final Amplitude amplitude = Amplitude(Configuration(
-  apiKey: "your-amplitude-api-key",
-  flushQueueSize: 1,
-)); */
+// STACK_SENTRY:END
 
 Future<void> main() async {
   // Comment to activate Signals logging
@@ -43,37 +39,41 @@ Future<void> main() async {
 
   await setup();
 
-  // MobileAds.instance.initialize();
   await subscriptionService.initPlatformState();
   await gateService.setup();
 
-  if (sentryDsn.isEmpty) {
-    runApp(const MainApp());
+  // STACK_SENTRY:BEGIN
+  if (sentryDsn.isNotEmpty) {
+    await SentryFlutter.init(
+      (options) {
+        options.dsn = sentryDsn;
+        options.tracesSampleRate = 0.2;
+        options.environment = kDebugMode ? 'development' : 'production';
+        options.sendDefaultPii = true;
+      },
+      appRunner: () => runApp(const MainApp()),
+    );
     return;
   }
-  await SentryFlutter.init(
-    (options) {
-      options.dsn = sentryDsn;
-      options.tracesSampleRate = 0.2;
-      options.environment = kDebugMode ? 'development' : 'production';
-      options.sendDefaultPii = true;
-    },
-    appRunner: () => runApp(const MainApp()),
-  );
+  // STACK_SENTRY:END
+
+  runApp(const MainApp());
 }
 
 Future<void> setup() async {
-  // STACK_FIREBASE
-  await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform);
+  // STACK_FIREBASE:BEGIN
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // STACK_FIREBASE:END
 
+  // STACK_FIREBASE_CRASHLYTICS:BEGIN
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+  // STACK_FIREBASE_CRASHLYTICS:END
 
-  // STACK_SUPABASE
-  /*    await Supabase.initialize(
-      url: 'https://your-project.supabase.co',
-      anonymousKey: 'your-anonymous-key',
-  ); */
+  // Supabase and Pocketbase have no block here on purpose. Their clients are
+  // built inside the service that uses them -- SupabaseAuthService.setup() calls
+  // Supabase.initialize itself, and calling it here as well throws "already
+  // initialized". Firebase is the odd one out because DefaultFirebaseOptions has
+  // to be resolved before any Firebase service is constructed.
 
   await configureDependencies();
   await authService.setup();

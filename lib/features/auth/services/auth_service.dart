@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'package:slapp/features/auth/models/app_user.dart';
-import 'package:slapp/features/auth/services/firebase_auth_service.dart';
-import 'package:slapp/features/auth/services/supabase_auth_service.dart';
 import 'package:signals/signals_flutter.dart';
 
 final authUserId = signal<String?>(null);
@@ -18,120 +16,61 @@ final appUser = signal<AppUser?>(null);
 /// start, so the UI hides the button rather than offering one that throws.
 final googleSignInAvailable = signal<bool>(false);
 
+/// The auth interface every screen and route guard talks to.
+///
+/// Keep this a pure interface. It used to carry method bodies that called
+/// `FirebaseAuthService()` and `SupabaseAuthService()` one after the other "for easy
+/// dev navigation". That made the interface import both vendors, so neither could be
+/// deleted from a child app that had picked the other one, and a caller who reached
+/// the base class ran two SDKs at once. Pick the vendor with the `// STACK_<NAME>`
+/// marker on the implementation, or run `tool/stack.py`.
 abstract class AuthService {
-  // all implementations are linked here for easy dev navigation
-  Future<void> setup() async {
-    FirebaseAuthService().setup();
-    SupabaseAuthService().setup();
-  }
+  Future<void> setup();
 
-  Future<void> signUpAnonymously() async {
-    FirebaseAuthService().signUpAnonymously();
-    SupabaseAuthService().signUpAnonymously();
-  }
+  Future<void> signUpAnonymously();
 
-  Future<bool> signInWithGoogle() async {
-    FirebaseAuthService().signInWithGoogle();
-    SupabaseAuthService().signInWithGoogle();
-    return true;
-  }
+  Future<bool> signInWithGoogle();
 
-  Future<bool> signInWithApple() async {
-    FirebaseAuthService().signInWithApple();
-    SupabaseAuthService().signInWithApple();
-    return true;
-  }
+  Future<bool> signInWithApple();
 
   Future<void> loginWithEmailAndPassword({
     required String email,
     required String password,
-  }) async {
-    FirebaseAuthService()
-        .loginWithEmailAndPassword(email: email, password: password);
-    SupabaseAuthService()
-        .loginWithEmailAndPassword(email: email, password: password);
-  }
+  });
 
   Future<void> signUpWithEmailAndPassword({
     required String email,
     required String password,
-  }) async {
-    FirebaseAuthService()
-        .signUpWithEmailAndPassword(email: email, password: password);
-    SupabaseAuthService()
-        .signUpWithEmailAndPassword(email: email, password: password);
-  }
+  });
 
-  Future<void> updatePassword({
-    required String password,
-  }) async {
-    FirebaseAuthService().updatePassword(password: password);
-    SupabaseAuthService().updatePassword(password: password);
-  }
+  Future<void> updatePassword({required String password});
 
-  Future<void> resetPassword({
-    required String email,
-  }) async {
-    FirebaseAuthService().resetPassword(email: email);
-    SupabaseAuthService().resetPassword(email: email);
-  }
+  Future<void> resetPassword({required String email});
 
-  Future<void> logout() async {
-    FirebaseAuthService().logout();
-    SupabaseAuthService().logout();
-  }
+  Future<void> logout();
 
-  Future<void> deleteAccount() async {
-    FirebaseAuthService().deleteAccount();
-    SupabaseAuthService().deleteAccount();
-  }
+  Future<void> deleteAccount();
 
   Future<void> createUser({
     required String id,
     String? email,
     String? phoneNumber,
-  }) async {
-    FirebaseAuthService()
-        .createUser(id: id, email: email, phoneNumber: phoneNumber);
-    SupabaseAuthService()
-        .createUser(id: id, email: email, phoneNumber: phoneNumber);
-  }
+  });
 
-  Future<void> loadUserData(String userId) async {
-    FirebaseAuthService().loadUserData(userId);
-    SupabaseAuthService().loadUserData(userId);
-  }
+  Future<void> loadUserData(String userId);
 
-  Future<void> saveUserData(AppUser user) async {
-    FirebaseAuthService().saveUserData(user);
-    SupabaseAuthService().saveUserData(user);
-  }
+  Future<void> saveUserData(AppUser user);
 
   Future<void> verifyPhoneNumber({
     required String phoneNumber,
     required Function(String verificationId) onCodeSent,
     required Function(String error) onVerificationFailed,
-  }) async {
-    FirebaseAuthService().verifyPhoneNumber(
-      phoneNumber: phoneNumber,
-      onCodeSent: onCodeSent,
-      onVerificationFailed: onVerificationFailed,
-    );
-  }
+  });
 
   Future<bool> signInWithPhoneNumber({
     required String verificationId,
     required String smsCode,
-  }) async {
-    FirebaseAuthService().signInWithPhoneNumber(
-      verificationId: verificationId,
-      smsCode: smsCode,
-    );
-    return true;
-  }
+  });
 
-  void listenForPhoneSignUp(String phoneNumber) {
-    FirebaseAuthService().listenForPhoneSignUp(phoneNumber);
-    SupabaseAuthService().listenForPhoneSignUp(phoneNumber);
-  }
+  void listenForPhoneSignUp(String phoneNumber);
 }

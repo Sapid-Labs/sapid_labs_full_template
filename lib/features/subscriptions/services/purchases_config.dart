@@ -1,7 +1,7 @@
 import 'dart:io' show Platform;
 
 import 'package:flutter/foundation.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:slapp/app/services.dart';
 
 /// The RevenueCat API key for this platform, or an empty string.
 ///
@@ -36,9 +36,15 @@ void reportMissingPurchasesKey(String app) {
     '--dart-define-from-file=assets/config.json.',
   );
   if (!kReleaseMode) return;
-  Sentry.captureMessage(
-    'RevenueCat API key is empty in a release build of $app. The build is '
-    'missing assets/config.json, so no user can subscribe.',
-    level: SentryLevel.error,
+  // Through CrashService, not through Sentry directly. This file used to import
+  // sentry_flutter, which made a subscriptions helper the one thing outside a
+  // crash service that named a crash vendor -- so tool/stack.py could not remove
+  // Sentry from an app that had picked Crashlytics or nothing.
+  crashService.logError(
+    error: StateError(
+      'RevenueCat API key is empty in a release build of $app. The build is '
+      'missing assets/config.json, so no user can subscribe.',
+    ),
+    stackTrace: StackTrace.current,
   );
 }

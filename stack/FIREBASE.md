@@ -1,5 +1,11 @@
 # STACK_FIREBASE
 
+> Activating by hand is what this guide describes, and it still works.
+> `./tool/stack.py --backend firebase ...` does the same swap plus the parts that
+> fail silently: it deletes the rival files, drops the SDKs the app no longer
+> calls, and toggles the `lib/main.dart` blocks. Prefer it.
+
+
 Backend/auth provider using Firebase (Firestore + Firebase Auth).
 
 ## Status

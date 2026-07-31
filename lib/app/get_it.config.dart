@@ -18,8 +18,10 @@ import '../features/analytics/services/amplitude_analytics_service.dart'
 import '../features/analytics/services/analytics_service.dart' as _i546;
 import '../features/analytics/services/firebase_analytics_service.dart'
     as _i1072;
+import '../features/analytics/services/noop_analytics_service.dart' as _i801;
 import '../features/auth/services/auth_service.dart' as _i413;
 import '../features/auth/services/firebase_auth_service.dart' as _i969;
+import '../features/auth/services/pocketbase_auth_service.dart' as _i810;
 import '../features/auth/services/supabase_auth_service.dart' as _i57;
 import '../features/feedback/services/feedback_service.dart' as _i136;
 import '../features/feedback/services/firebase_feedback_service.dart' as _i565;
@@ -31,6 +33,7 @@ import '../features/settings/services/settings_service.dart' as _i542;
 import '../features/shared/services/ai_service.dart' as _i567;
 import '../features/shared/services/crash/crash_service.dart' as _i832;
 import '../features/shared/services/crash/firebase_crash_service.dart' as _i266;
+import '../features/shared/services/crash/noop_crash_service.dart' as _i36;
 import '../features/shared/services/crash/sentry_crash_service.dart' as _i199;
 import '../features/shared/services/modules.dart' as _i176;
 import '../features/shared/services/permission_service.dart' as _i901;
@@ -46,17 +49,24 @@ Future<_i174.GetIt> $initGetIt(
   final gh = _i526.GetItHelper(getIt, environment, environmentFilter);
   final registerModule = _$RegisterModule();
   gh.factory<_i266.FirebaseCrashService>(() => _i266.FirebaseCrashService());
+  gh.factory<_i36.NoopCrashService>(() => _i36.NoopCrashService());
   await gh.factoryAsync<_i460.SharedPreferences>(
     () => registerModule.sharedPrefs,
     preResolve: true,
   );
   gh.factory<_i901.PermissionService>(() => _i901.PermissionService());
+  gh.singleton<_i810.PocketbaseAuthService>(
+    () => _i810.PocketbaseAuthService(),
+  );
   gh.singleton<_i57.SupabaseAuthService>(() => _i57.SupabaseAuthService());
   gh.singleton<_i548.OnboardingService>(() => _i548.OnboardingService());
   gh.singleton<_i542.SettingsService>(() => _i542.SettingsService());
   gh.singleton<_i506.SubscriptionService>(() => _i506.SubscriptionService());
   gh.lazySingleton<_i798.AmplitudeAnalyticsService>(
     () => _i798.AmplitudeAnalyticsService(),
+  );
+  gh.lazySingleton<_i801.NoopAnalyticsService>(
+    () => _i801.NoopAnalyticsService(),
   );
   gh.lazySingleton<_i145.PocketbaseFeedbackService>(
     () => _i145.PocketbaseFeedbackService(),

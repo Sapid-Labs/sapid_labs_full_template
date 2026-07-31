@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:slapp/app/constants.dart';
 import 'package:slapp/app/router.dart';
 import 'package:slapp/app/services.dart';
@@ -30,30 +29,6 @@ class _SignInPhoneViewState extends State<SignInPhoneView> with SignalsMixin {
   late final isLoading = createSignal(false);
 
   @override
-  void initState() {
-    FirebaseAuth.instance.authStateChanges().listen((User? user) async {
-      if (user != null) {
-        if (user.metadata.creationTime == user.metadata.lastSignInTime) {
-          // New user
-          await authService.createUser(
-            id: authUserId.value!,
-            phoneNumber: phoneNumber.value,
-          );
-          await authService.loadUserData(authUserId.value!);
-
-          router.replaceAll([OnboardingRoute()]);
-        } else {
-          // Existing user
-          await authService.loadUserData(authUserId.value!);
-
-          router.replaceAll([const HomeRoute()]);
-        }
-      }
-    });
-    super.initState();
-  }
-
-  @override
   void dispose() {
     _phoneController.dispose();
     super.dispose();
@@ -64,6 +39,16 @@ class _SignInPhoneViewState extends State<SignInPhoneView> with SignalsMixin {
 
     try {
       isLoading.value = true;
+
+      // Routes the user on once the code is accepted -- to onboarding if the
+      // account is new, to home if it is not. This used to be a
+      // FirebaseAuth.instance.authStateChanges() listener in initState, which
+      // made a plain sign-in screen the one file outside lib/features/*/services
+      // that imported a vendor SDK, so no child app could drop Firebase without
+      // this view failing to compile. Every AuthService implementation answers
+      // listenForPhoneSignUp; the listener starts here rather than in initState
+      // because it needs the number the user typed.
+      authService.listenForPhoneSignUp(phoneNumber.value);
 
       await authService.verifyPhoneNumber(
         phoneNumber: phoneNumber.value,
