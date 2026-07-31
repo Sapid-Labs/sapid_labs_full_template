@@ -1,5 +1,5 @@
-// dart format width=80
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// dart format width=80
 
 // **************************************************************************
 // InjectableConfigGenerator
@@ -37,42 +37,65 @@ import '../features/shared/services/permission_service.dart' as _i901;
 import '../features/subscriptions/services/gate_service.dart' as _i1040;
 import '../features/subscriptions/services/subscription_service.dart' as _i506;
 
+const String _pocketbase = 'pocketbase';
+const String _firebase = 'firebase';
+const String _supabase = 'supabase';
+const String _firebaseAnalytics = 'firebaseAnalytics';
+const String _amplitude = 'amplitude';
+const String _sentry = 'sentry';
+const String _firebaseCrashlytics = 'firebaseCrashlytics';
+
 // initializes the registration of main-scope dependencies inside of GetIt
 Future<_i174.GetIt> $initGetIt(
   _i174.GetIt getIt, {
   String? environment,
   _i526.EnvironmentFilter? environmentFilter,
 }) async {
-  final gh = _i526.GetItHelper(
-    getIt,
-    environment,
-    environmentFilter,
-  );
+  final gh = _i526.GetItHelper(getIt, environment, environmentFilter);
   final registerModule = _$RegisterModule();
-  gh.factory<_i901.PermissionService>(() => _i901.PermissionService());
   await gh.factoryAsync<_i460.SharedPreferences>(
     () => registerModule.sharedPrefs,
     preResolve: true,
   );
-  gh.factory<_i199.SentryCrashService>(() => _i199.SentryCrashService());
-  gh.singleton<_i542.SettingsService>(() => _i542.SettingsService());
+  gh.factory<_i901.PermissionService>(() => _i901.PermissionService());
   gh.singleton<_i57.SupabaseAuthService>(() => _i57.SupabaseAuthService());
-  gh.singleton<_i506.SubscriptionService>(() => _i506.SubscriptionService());
   gh.singleton<_i548.OnboardingService>(() => _i548.OnboardingService());
+  gh.singleton<_i542.SettingsService>(() => _i542.SettingsService());
+  gh.singleton<_i506.SubscriptionService>(() => _i506.SubscriptionService());
   gh.lazySingleton<_i567.AIService>(() => _i567.AIService());
-  gh.lazySingleton<_i145.PocketbaseFeedbackService>(
-      () => _i145.PocketbaseFeedbackService());
-  gh.lazySingleton<_i891.SupabaseFeedbackService>(
-      () => _i891.SupabaseFeedbackService());
   gh.lazySingleton<_i1040.GateService>(() => _i1040.GateService());
-  gh.lazySingleton<_i798.AmplitudeAnalyticsService>(
-      () => _i798.AmplitudeAnalyticsService());
-  gh.factory<_i832.CrashService>(() => _i266.FirebaseCrashService());
-  gh.singleton<_i413.AuthService>(() => _i969.FirebaseAuthService());
-  gh.lazySingleton<_i546.AnalyticsService>(
-      () => _i1072.FirebaseAnalyticsService());
   gh.lazySingleton<_i136.FeedbackService>(
-      () => _i565.FirebaseFeedbackService());
+    () => _i145.PocketbaseFeedbackService(),
+    registerFor: {_pocketbase},
+  );
+  gh.singleton<_i413.AuthService>(
+    () => _i969.FirebaseAuthService(),
+    registerFor: {_firebase},
+  );
+  gh.lazySingleton<_i136.FeedbackService>(
+    () => _i891.SupabaseFeedbackService(),
+    registerFor: {_supabase},
+  );
+  gh.lazySingleton<_i546.AnalyticsService>(
+    () => _i1072.FirebaseAnalyticsService(),
+    registerFor: {_firebaseAnalytics},
+  );
+  gh.lazySingleton<_i136.FeedbackService>(
+    () => _i565.FirebaseFeedbackService(),
+    registerFor: {_firebase},
+  );
+  gh.lazySingleton<_i546.AnalyticsService>(
+    () => _i798.AmplitudeAnalyticsService(),
+    registerFor: {_amplitude},
+  );
+  gh.factory<_i832.CrashService>(
+    () => _i199.SentryCrashService(),
+    registerFor: {_sentry},
+  );
+  gh.factory<_i832.CrashService>(
+    () => _i266.FirebaseCrashService(),
+    registerFor: {_firebaseCrashlytics},
+  );
   return getIt;
 }
 

@@ -44,7 +44,7 @@ Create `assets/config.json` for any environment variables your stack needs:
 
 ```bash
 flutter pub get
-flutter pub run build_runner build --delete-conflicting-outputs
+./tool/codegen.sh
 ```
 
 ### 4. Run
@@ -222,7 +222,7 @@ cd android && fastlane prod
 After modifying routes, services, or models, regenerate:
 
 ```bash
-flutter pub run build_runner build --delete-conflicting-outputs
+./tool/codegen.sh
 ```
 
 This updates:

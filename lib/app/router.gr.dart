@@ -14,7 +14,7 @@ part of 'router.dart';
 /// [AccountView]
 class AccountRoute extends PageRouteInfo<void> {
   const AccountRoute({List<PageRouteInfo>? children})
-      : super(AccountRoute.name, initialChildren: children);
+    : super(AccountRoute.name, initialChildren: children);
 
   static const String name = 'AccountRoute';
 
@@ -30,7 +30,7 @@ class AccountRoute extends PageRouteInfo<void> {
 /// [ChangePasswordView]
 class ChangePasswordRoute extends PageRouteInfo<void> {
   const ChangePasswordRoute({List<PageRouteInfo>? children})
-      : super(ChangePasswordRoute.name, initialChildren: children);
+    : super(ChangePasswordRoute.name, initialChildren: children);
 
   static const String name = 'ChangePasswordRoute';
 
@@ -46,11 +46,11 @@ class ChangePasswordRoute extends PageRouteInfo<void> {
 /// [DemoView]
 class DemoRoute extends PageRouteInfo<DemoRouteArgs> {
   DemoRoute({Key? key, List<PageRouteInfo>? children})
-      : super(
-          DemoRoute.name,
-          args: DemoRouteArgs(key: key),
-          initialChildren: children,
-        );
+    : super(
+        DemoRoute.name,
+        args: DemoRouteArgs(key: key),
+        initialChildren: children,
+      );
 
   static const String name = 'DemoRoute';
 
@@ -90,7 +90,7 @@ class DemoRouteArgs {
 /// [FeedbackView]
 class FeedbackRoute extends PageRouteInfo<void> {
   const FeedbackRoute({List<PageRouteInfo>? children})
-      : super(FeedbackRoute.name, initialChildren: children);
+    : super(FeedbackRoute.name, initialChildren: children);
 
   static const String name = 'FeedbackRoute';
 
@@ -106,7 +106,7 @@ class FeedbackRoute extends PageRouteInfo<void> {
 /// [HomeView]
 class HomeRoute extends PageRouteInfo<void> {
   const HomeRoute({List<PageRouteInfo>? children})
-      : super(HomeRoute.name, initialChildren: children);
+    : super(HomeRoute.name, initialChildren: children);
 
   static const String name = 'HomeRoute';
 
@@ -122,11 +122,11 @@ class HomeRoute extends PageRouteInfo<void> {
 /// [NewFeedbackView]
 class NewFeedbackRoute extends PageRouteInfo<NewFeedbackRouteArgs> {
   NewFeedbackRoute({Key? key, List<PageRouteInfo>? children})
-      : super(
-          NewFeedbackRoute.name,
-          args: NewFeedbackRouteArgs(key: key),
-          initialChildren: children,
-        );
+    : super(
+        NewFeedbackRoute.name,
+        args: NewFeedbackRouteArgs(key: key),
+        initialChildren: children,
+      );
 
   static const String name = 'NewFeedbackRoute';
 
@@ -166,7 +166,7 @@ class NewFeedbackRouteArgs {
 /// [OnboardingView]
 class OnboardingRoute extends PageRouteInfo<void> {
   const OnboardingRoute({List<PageRouteInfo>? children})
-      : super(OnboardingRoute.name, initialChildren: children);
+    : super(OnboardingRoute.name, initialChildren: children);
 
   static const String name = 'OnboardingRoute';
 
@@ -182,7 +182,7 @@ class OnboardingRoute extends PageRouteInfo<void> {
 /// [ProfileView]
 class ProfileRoute extends PageRouteInfo<void> {
   const ProfileRoute({List<PageRouteInfo>? children})
-      : super(ProfileRoute.name, initialChildren: children);
+    : super(ProfileRoute.name, initialChildren: children);
 
   static const String name = 'ProfileRoute';
 
@@ -198,7 +198,7 @@ class ProfileRoute extends PageRouteInfo<void> {
 /// [ResetPasswordView]
 class ResetPasswordRoute extends PageRouteInfo<void> {
   const ResetPasswordRoute({List<PageRouteInfo>? children})
-      : super(ResetPasswordRoute.name, initialChildren: children);
+    : super(ResetPasswordRoute.name, initialChildren: children);
 
   static const String name = 'ResetPasswordRoute';
 
@@ -214,7 +214,7 @@ class ResetPasswordRoute extends PageRouteInfo<void> {
 /// [RssView]
 class RssRoute extends PageRouteInfo<void> {
   const RssRoute({List<PageRouteInfo>? children})
-      : super(RssRoute.name, initialChildren: children);
+    : super(RssRoute.name, initialChildren: children);
 
   static const String name = 'RssRoute';
 
@@ -230,7 +230,7 @@ class RssRoute extends PageRouteInfo<void> {
 /// [SettingsView]
 class SettingsRoute extends PageRouteInfo<void> {
   const SettingsRoute({List<PageRouteInfo>? children})
-      : super(SettingsRoute.name, initialChildren: children);
+    : super(SettingsRoute.name, initialChildren: children);
 
   static const String name = 'SettingsRoute';
 
@@ -246,7 +246,7 @@ class SettingsRoute extends PageRouteInfo<void> {
 /// [SignInEmailView]
 class SignInEmailRoute extends PageRouteInfo<void> {
   const SignInEmailRoute({List<PageRouteInfo>? children})
-      : super(SignInEmailRoute.name, initialChildren: children);
+    : super(SignInEmailRoute.name, initialChildren: children);
 
   static const String name = 'SignInEmailRoute';
 
@@ -262,7 +262,7 @@ class SignInEmailRoute extends PageRouteInfo<void> {
 /// [SignInPhoneView]
 class SignInPhoneRoute extends PageRouteInfo<void> {
   const SignInPhoneRoute({List<PageRouteInfo>? children})
-      : super(SignInPhoneRoute.name, initialChildren: children);
+    : super(SignInPhoneRoute.name, initialChildren: children);
 
   static const String name = 'SignInPhoneRoute';
 
@@ -278,11 +278,11 @@ class SignInPhoneRoute extends PageRouteInfo<void> {
 /// [SignUpEmailView]
 class SignUpEmailRoute extends PageRouteInfo<SignUpEmailRouteArgs> {
   SignUpEmailRoute({Key? key, String? email, List<PageRouteInfo>? children})
-      : super(
-          SignUpEmailRoute.name,
-          args: SignUpEmailRouteArgs(key: key, email: email),
-          initialChildren: children,
-        );
+    : super(
+        SignUpEmailRoute.name,
+        args: SignUpEmailRouteArgs(key: key, email: email),
+        initialChildren: children,
+      );
 
   static const String name = 'SignUpEmailRoute';
 
@@ -324,7 +324,7 @@ class SignUpEmailRouteArgs {
 /// [SignUpPhoneView]
 class SignUpPhoneRoute extends PageRouteInfo<void> {
   const SignUpPhoneRoute({List<PageRouteInfo>? children})
-      : super(SignUpPhoneRoute.name, initialChildren: children);
+    : super(SignUpPhoneRoute.name, initialChildren: children);
 
   static const String name = 'SignUpPhoneRoute';
 
@@ -345,14 +345,14 @@ class SmsVerificationRoute extends PageRouteInfo<SmsVerificationRouteArgs> {
     required String phoneNumber,
     List<PageRouteInfo>? children,
   }) : super(
-          SmsVerificationRoute.name,
-          args: SmsVerificationRouteArgs(
-            key: key,
-            verificationId: verificationId,
-            phoneNumber: phoneNumber,
-          ),
-          initialChildren: children,
-        );
+         SmsVerificationRoute.name,
+         args: SmsVerificationRouteArgs(
+           key: key,
+           verificationId: verificationId,
+           phoneNumber: phoneNumber,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'SmsVerificationRoute';
 
@@ -405,7 +405,7 @@ class SmsVerificationRouteArgs {
 /// [SubscriptionView]
 class SubscriptionRoute extends PageRouteInfo<void> {
   const SubscriptionRoute({List<PageRouteInfo>? children})
-      : super(SubscriptionRoute.name, initialChildren: children);
+    : super(SubscriptionRoute.name, initialChildren: children);
 
   static const String name = 'SubscriptionRoute';
 

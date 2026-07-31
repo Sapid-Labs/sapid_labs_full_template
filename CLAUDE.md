@@ -51,7 +51,7 @@ Each guide specifies the active services to keep and the competing code to delet
 flutter pub get
 
 # Run code generation for auto_route, injectable, and json_serializable
-flutter pub run build_runner build --delete-conflicting-outputs
+./tool/codegen.sh
 
 # Clean build artifacts
 flutter clean
@@ -185,9 +185,24 @@ Available padding constants:
 
 ### Code Generation
 After modifying:
-- Routes in `router.dart` → Run build_runner to update `router.gr.dart`
-- Services with `@injectable` → Run build_runner to update `get_it.config.dart`
-- Models with `@JsonSerializable` → Run build_runner to update `*.g.dart` files
+- Routes in `router.dart` → Run `./tool/codegen.sh` to update `router.gr.dart`
+- Services with `@injectable` → Run `./tool/codegen.sh` to update `get_it.config.dart`
+- Models with `@JsonSerializable` → Run `./tool/codegen.sh` to update `*.g.dart` files
+
+**Always use `./tool/codegen.sh`, never `dart run build_runner` directly.** The script is
+short and its comments give the full reasoning; the summary is that plain build_runner
+fails in this package graph on Dart 3.10. It compiles the build script AOT, and
+`dart compile` refuses any graph that contains a build hook — `path_provider_foundation`
+depends on `objective_c`, which ships one. build_runner only falls back to JIT for
+`dart:mirrors` failures, so it cannot recover on its own. The script passes `--force-jit`.
+
+Do not add `--delete-conflicting-outputs`. It removes the `.g.dart` files before the
+builders run, so a failed build leaves them deleted and the analyzer then reports dozens
+of errors that look unrelated to the real cause. Recover with `git checkout --`.
+
+The `environment.sdk` constraint must stay at `^3.8.0` or higher. json_serializable 6.11.2
+emits null-aware elements (`'id': ?instance.id`); below that constraint the formatter
+throws and deletes the `.g.dart` files without rewriting them.
 
 ## App Configuration
 
