@@ -56,12 +56,19 @@ platform :android do
   end
   
   desc "Send a message to Slack"
+  # Guarded, and that guard is the whole point. With no SLACK_WEBHOOK_URL the
+  # slack action raises, so the lane exits non-zero AFTER upload_to_play_store has
+  # already shipped. That happened on abis_recipes on 2026-07-30: the caller wrote
+  # "nothing was uploaded" into the public log while real users took the build.
   lane :send_slack_notification do |options|
+    url = ENV["SLACK_WEBHOOK_URL"]
+    next UI.message("SLACK_WEBHOOK_URL unset - skipping notification") if url.to_s.empty?
+
     message = options[:message] || "A new update has been pushed!"
     slack(
       message: message,
       success: true,
-      slack_url:  ENV["SLACK_WEBHOOK_URL"]
+      slack_url: url
     )
   end
 end
