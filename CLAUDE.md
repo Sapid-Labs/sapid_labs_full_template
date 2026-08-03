@@ -245,6 +245,10 @@ Edit `lib/app/config.dart` for:
   reads all three files off disk and fails when they disagree, because every failure in
   this chain is silent — Supabase substitutes its Site URL for a redirect it does not
   know, and neither platform manifest errors on a scheme it never claimed.
+- `urlSlug` — the sapidlabs.com path segment this app's legal pages live under
+  (`https://sapidlabs.com/<urlSlug>/terms-of-service` and `/privacy-policy`). Never derive
+  it from `appName` either: it must match the `slug` of this app's entry in the sapidlabs
+  site's `src/lib/legal.ts`, the slug the policy pages are actually published under.
 - Social media usernames
 - Subscription features
 - Anonymous user settings

@@ -18,6 +18,17 @@ class AppConfig {
   /// two platform files.
   static const String urlHost = 'slapp.com';
 
+  /// The sapidlabs.com path segment this app's legal pages live under.
+  ///
+  /// The account screen opens `https://sapidlabs.com/<urlSlug>/terms-of-service`
+  /// and `/privacy-policy` (see `account_view.dart`), and Apple's reviewers
+  /// follow both. Never derive this from [appName]: 'Sapid Labs' lower-cases
+  /// to 'sapid labs', which is not a path on sapidlabs.com and 404s. It must
+  /// match the `slug` of this app's entry in the sapidlabs site's
+  /// `src/lib/legal.ts` — the slug the policy pages are actually published
+  /// under. Change it when you change [appName].
+  static const String urlSlug = 'slapp';
+
   static const String instagramUsername = 'sapidlabs';
   static const String threadsUsername = 'sapid_labs';
   static const String cta = "Build A Better App";

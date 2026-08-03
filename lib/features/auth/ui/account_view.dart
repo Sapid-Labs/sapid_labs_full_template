@@ -274,7 +274,7 @@ class _AccountViewState extends State<AccountView> {
                         onTap: () {
                           launchUrl(
                             Uri.parse(
-                              'https://sapidlabs.com/${AppConfig.appName.toLowerCase()}/terms-of-service',
+                              'https://sapidlabs.com/${AppConfig.urlSlug}/terms-of-service',
                             ),
                           );
                         },
@@ -286,7 +286,7 @@ class _AccountViewState extends State<AccountView> {
                         onTap: () {
                           launchUrl(
                             Uri.parse(
-                              'https://sapidlabs.com/${AppConfig.appName.toLowerCase()}/privacy-policy',
+                              'https://sapidlabs.com/${AppConfig.urlSlug}/privacy-policy',
                             ),
                           );
                         },
