@@ -52,9 +52,6 @@ dependencies:
   universal_io: 2.2.2
   url_launcher: ^6.3.1
 
-dependency_overrides:
-  openai_dart: 0.5.2
-
 dev_dependencies:
   auto_route_generator: ^10.2.3
   build_runner: ^2.4.13
