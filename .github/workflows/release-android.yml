@@ -160,7 +160,11 @@ jobs:
           # Play and the job still ends red, which reads like a failed release.
           for attempt in 1 2 3; do
             git fetch origin "$GITHUB_REF_NAME"
-            if git rebase "origin/$GITHUB_REF_NAME" && git push; then
+            # --autostash because the build dirties the tree it runs in: fastlane
+            # rewrites android/fastlane/report.xml, and a rebase refuses to start
+            # with unstaged changes. Without it the retry loop fails three times
+            # for a reason that has nothing to do with the race it exists for.
+            if git rebase --autostash "origin/$GITHUB_REF_NAME" && git push; then
               echo "version bump pushed on attempt $attempt"
               exit 0
             fi
