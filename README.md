@@ -12,6 +12,7 @@ Starting a Flutter app from scratch means wiring up authentication, analytics, c
 - **Crash reporting** — Sentry or Firebase Crashlytics, or none at all, same swap-friendly pattern
 - **Subscriptions** — RevenueCat integration with a paywall UI
 - **Deployment** — Fastlane configs for iOS (TestFlight, App Store) and Android (internal, alpha, beta, production)
+- **Android CI on day one** — a push to `main` builds and uploads to the Play internal track, on the self-hosted runners. One command sets it up: `bash scripts/bootstrap_ci_secrets.sh`. See [docs/ci-android.md](docs/ci-android.md)
 - **Opinionated architecture** — Signals for state, auto_route for navigation, get_it + injectable for DI, and a clean feature-based folder structure
 
 ## Getting Started

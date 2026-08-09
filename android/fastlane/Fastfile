@@ -21,17 +21,40 @@ platform :android do
   end
   
   desc "Deploy a new version to Google Play with specified track"
+  # This one lane serves both a person on a laptop and the CI runner
+  # (.github/workflows/release-android.yml). Two details make that true, and both
+  # were paid for by a real failure elsewhere in the portfolio:
+  #
+  #   - Paths are absolute, resolved from wherever pubspec.yaml actually is.
+  #     fastlane's working directory is not the same for every caller, and relative
+  #     paths that work by hand can point somewhere odd under CI.
+  #   - The Play key comes from PLAY_JSON_KEY_PATH when it is set, and from the
+  #     Appfile when it is not. CI has no ~/Dev/keys, and a laptop has no env var.
   lane :deploy do |options|
     track = options[:track] || 'internal'
+
+    root = [
+      ((__dir__ rescue nil) && File.expand_path("../..", __dir__)),
+      File.expand_path("..", Dir.pwd),
+      Dir.pwd,
+    ].compact.find { |candidate| File.exist?(File.join(candidate, "pubspec.yaml")) }
+    UI.user_error!("cannot find the repo root (no pubspec.yaml above #{Dir.pwd})") unless root
+
     versionCode = bump_version_code
 
-    sh("flutter", "build", "appbundle","--build-name", "1.0.#{versionCode}", "--build-number=#{versionCode}", "--dart-define-from-file=assets/config.json")
-  
+    sh("cd #{root} && flutter build appbundle " \
+       "--build-name=1.0.#{versionCode} --build-number=#{versionCode} " \
+       "--dart-define-from-file=assets/config.json")
+
+    key = ENV["PLAY_JSON_KEY_PATH"]
+
     upload_to_play_store(
-      track: track,
-      aab: '../build/app/outputs/bundle/release/app-release.aab',
+      **{
+        track: track,
+        aab: "#{root}/build/app/outputs/bundle/release/app-release.aab",
+      }.merge(key.to_s.empty? ? {} : { json_key: key })
     )
-  
+
     send_slack_notification(message: "New #{track} version 1.0.#{versionCode} (#{versionCode}) has been pushed to Google Play!")
   end
   

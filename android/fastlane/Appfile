@@ -1,4 +1,7 @@
-json_key_file("~josephmuller/Dev/keys/fastlane_key.json") # Path to the json secret file - Follow https://docs.fastlane.tools/actions/supply/#setup to get one
+# The literal path exists only on the Mac. Anything else — chonky, CI — sets
+# GOOGLE_PLAY_JSON_KEY_PATH, and the CI workflow passes the key to supply directly
+# as PLAY_JSON_KEY_PATH. Same pattern as the SuppConnect and Bakedown Appfiles.
+json_key_file(ENV["GOOGLE_PLAY_JSON_KEY_PATH"] || "~/Dev/keys/fastlane_key.json") # https://docs.fastlane.tools/actions/supply/#setup
 package_name("com.sapidlabs.slapp")
 
 # "E:\\dev\\resources\\keys\\fastlane_key.json" # Windows
