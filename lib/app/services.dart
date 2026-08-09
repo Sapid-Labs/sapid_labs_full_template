@@ -12,6 +12,7 @@ import 'package:slapp/features/shared/services/permission_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:slapp/features/subscriptions/services/gate_service.dart';
 import 'package:slapp/features/subscriptions/services/subscription_service.dart';
+import 'package:slapp/features/update/services/update_service.dart';
 
 AIService get aiService => getIt.get<AIService>();
 AnalyticsService get analyticsService => getIt.get<AnalyticsService>();
@@ -25,3 +26,4 @@ SettingsService get settingsService => getIt.get<SettingsService>();
 SharedPreferences get sharedPrefs => getIt.get<SharedPreferences>();
 SubscriptionService get subscriptionService => getIt.get<SubscriptionService>();
 PermissionService get permissionService => getIt.get<PermissionService>();
+UpdateService get updateService => getIt.get<UpdateService>();

@@ -29,6 +29,24 @@ class AppConfig {
   /// under. Change it when you change [appName].
   static const String urlSlug = 'slapp';
 
+  /// Where the app reads "is there a newer version" from, on launch.
+  ///
+  /// A static JSON published beside the release on sapidlabs.com, one file per
+  /// app, named after [urlSlug]. It is derived from the slug rather than
+  /// written out per app because a URL nobody remembers to change is a URL
+  /// that 404s, and a 404 here shows nothing at all -- the feature would be
+  /// off in a way no build, test or analyzer run can see.
+  ///
+  /// It is not a store lookup. Play publishes no "latest version" API and
+  /// scraping a listing is off-limits, so the current version is a number we
+  /// publish ourselves. The shape is documented in
+  /// `lib/features/update/models/app_update_info.dart`.
+  ///
+  /// Set it to an empty string to switch the check off for an app that is not
+  /// in a store yet.
+  static const String updateManifestUrl =
+      'https://sapidlabs.com/app-updates/$urlSlug.json';
+
   static const String instagramUsername = 'sapidlabs';
   static const String threadsUsername = 'sapid_labs';
   static const String cta = "Build A Better App";

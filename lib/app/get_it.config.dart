@@ -39,6 +39,7 @@ import '../features/shared/services/modules.dart' as _i176;
 import '../features/shared/services/permission_service.dart' as _i901;
 import '../features/subscriptions/services/gate_service.dart' as _i1040;
 import '../features/subscriptions/services/subscription_service.dart' as _i506;
+import '../features/update/services/update_service.dart' as _i933;
 
 // initializes the registration of main-scope dependencies inside of GetIt
 Future<_i174.GetIt> $initGetIt(
@@ -76,6 +77,7 @@ Future<_i174.GetIt> $initGetIt(
   );
   gh.lazySingleton<_i567.AIService>(() => _i567.AIService());
   gh.lazySingleton<_i1040.GateService>(() => _i1040.GateService());
+  gh.lazySingleton<_i933.UpdateService>(() => _i933.UpdateService());
   gh.factory<_i832.CrashService>(() => _i199.SentryCrashService());
   gh.singleton<_i413.AuthService>(() => _i969.FirebaseAuthService());
   gh.lazySingleton<_i546.AnalyticsService>(

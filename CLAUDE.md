@@ -249,12 +249,46 @@ Edit `lib/app/config.dart` for:
   (`https://sapidlabs.com/<urlSlug>/terms-of-service` and `/privacy-policy`). Never derive
   it from `appName` either: it must match the `slug` of this app's entry in the sapidlabs
   site's `src/lib/legal.ts`, the slug the policy pages are actually published under.
+- `updateManifestUrl` — where the launch-time "New version available" check reads from.
+  It is derived from `urlSlug` (`https://sapidlabs.com/app-updates/<urlSlug>.json`), so
+  there is nothing to change per app, but the JSON has to exist: a 404 shows nothing at
+  all, which looks exactly like an app that is up to date. Publish the file when you
+  publish the release. See "Update prompt" below.
 - Social media usernames
 - Subscription features
 - Anonymous user settings
 - VIP email list
 
 This is the first file to customize when creating a new child app from the template.
+
+## Update prompt
+
+`lib/features/update/` shows a "New version available" dialog at launch. `HomeView`'s
+`initState` calls `maybeShowUpdateDialog` in a post-frame callback — the first screen is
+the only place with a `Navigator` context at launch, since `MainApp` is a `StatelessWidget`.
+
+It is **not** a store lookup. Play publishes no "latest version" API and scraping a listing
+is off-limits, so the current version is a number we publish ourselves, in a static JSON on
+sapidlabs.com named after `urlSlug`:
+
+```json
+{
+  "android": { "latest": "1.4.0", "minSupported": "1.2.0", "notes": "Faster sync." },
+  "ios":     { "latest": "1.4.0" }
+}
+```
+
+Both keys are optional and so is every field. `latest` above the running version nags once
+per published version (remembered in `shared_preferences`). `minSupported` above the running
+version shows a dialog that cannot be dismissed — use it only when an older build is
+genuinely broken against the live backend. `storeUrl` overrides the button's destination;
+without it the Play listing is derived from the running package name, and iOS falls back to
+the `APP_STORE_ID` define.
+
+Every failure path — no URL, no network, a 404, malformed JSON, no entry for the platform —
+resolves to "show nothing". A version check that can hold the app closed is worse than no
+version check. `test/update/` covers the version compare, the manifest parse, the
+urgency decision, the store-URL fallbacks and both dialog shapes.
 
 ## Claude Skills
 
