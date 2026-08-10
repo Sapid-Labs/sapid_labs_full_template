@@ -1,3 +1,6 @@
+require "shellwords"
+require "tmpdir"
+
 update_fastlane
 
 default_platform(:android)
@@ -20,6 +23,36 @@ platform :android do
     versionCode
   end
   
+  # Verify the built bundle carries the upload certificate we expect, BEFORE it is
+  # uploaded. Only runs when EXPECTED_SIGNING_SHA256 is set, so a manual run and a
+  # CI run are both unaffected; loop/release.sh in the fun-money repo sets it.
+  #
+  # Two traps, both learned the hard way on the shipped apps: jarsigner exits
+  # non-zero on every Play bundle because of hundreds of benign "signed in JarFile
+  # but is not signed in JarInputStream" warnings, so grep for "jar verified."
+  # instead of trusting the exit code. And the certificate lives in
+  # META-INF/UPLOAD.RSA inside the AAB.
+  lane :verify_signing do |options|
+    expected = ENV["EXPECTED_SIGNING_SHA256"]
+    next UI.message("EXPECTED_SIGNING_SHA256 unset - skipping signature check") if expected.to_s.empty?
+
+    aab = options[:aab]
+    UI.user_error!("no bundle at #{aab.inspect}") unless aab && File.exist?(aab)
+
+    verified = `jarsigner -verify #{Shellwords.escape(aab)} 2>&1`
+    UI.user_error!("#{aab} is not signed ('jar verified.' absent)") unless verified.include?("jar verified.")
+
+    Dir.mktmpdir do |tmp|
+      sh("unzip", "-o", "-q", File.expand_path(aab), "META-INF/UPLOAD.RSA", "-d", tmp)
+      printed = `keytool -printcert -file #{Shellwords.escape(File.join(tmp, "META-INF/UPLOAD.RSA"))}`
+      actual = printed[/SHA256:\s*([0-9A-F:]+)/i, 1].to_s.strip
+      if actual.casecmp(expected.strip) != 0
+        UI.user_error!("WRONG SIGNING KEY. expected #{expected} got #{actual} - refusing to upload")
+      end
+      UI.success("signature verified: #{actual}")
+    end
+  end
+
   desc "Deploy a new version to Google Play with specified track"
   # This one lane serves both a person on a laptop and the CI runner
   # (.github/workflows/release-android.yml). Two details make that true, and both
@@ -47,12 +80,25 @@ platform :android do
        "--dart-define-from-file=assets/config.json")
 
     key = ENV["PLAY_JSON_KEY_PATH"]
+    aab = "#{root}/build/app/outputs/bundle/release/app-release.aab"
+
+    verify_signing(aab: aab)
+
+    # charter.md Class B (fun-money loop): a PRODUCTION release never goes to 100%
+    # in one step. PLAY_ROLLOUT is set by loop/release.sh; when it is unset the
+    # arguments are omitted entirely and supply behaves exactly as it always did.
+    #
+    # Only the production track stages. Every testing track — internal, alpha and
+    # beta — is Class A (charter, 2026-08-09): nobody on one is a customer, so a
+    # staged rollout there only keeps some testers on the older build for longer.
+    staged = (track == 'production' && !ENV["PLAY_ROLLOUT"].to_s.empty?) ?
+      { rollout: ENV["PLAY_ROLLOUT"], release_status: "inProgress" } : {}
 
     upload_to_play_store(
       **{
         track: track,
-        aab: "#{root}/build/app/outputs/bundle/release/app-release.aab",
-      }.merge(key.to_s.empty? ? {} : { json_key: key })
+        aab: aab,
+      }.merge(key.to_s.empty? ? {} : { json_key: key }).merge(staged)
     )
 
     send_slack_notification(message: "New #{track} version 1.0.#{versionCode} (#{versionCode}) has been pushed to Google Play!")
