@@ -166,3 +166,8 @@ app.*.symbols
 !/dev/ci/**/Gemfile.lock
 !.vscode/settings.json
 /keys
+
+# Local fun-money loop tooling — per-device state, never part of the app
+.claude/settings.json
+.claude/skills/fun-money-project/
+.fun-money/
