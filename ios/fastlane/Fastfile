@@ -52,6 +52,19 @@ platform :ios do
   desc "Send a message to Slack"
   lane :send_slack_notification do |options|
     message = options[:message] || "A new update has been pushed!"
+    # Every app posts to ONE shared webhook, so a message that does not name its
+    # app cannot be read in that channel. The name is read from pubspec.yaml, so
+    # an app scaffolded from this template labels itself with no rename step.
+    # SLACK_APP_LABEL overrides it. (A lane body runs with cwd = fastlane/.)
+    app_label = ENV["SLACK_APP_LABEL"].to_s.strip
+    if app_label.empty?
+      app_label = begin
+        File.read("../../pubspec.yaml")[/^name:\s*(\S+)/, 1] || "unknown app"
+      rescue StandardError
+        "unknown app"
+      end
+    end
+    message = "*#{app_label} (iOS)* — #{message}"
     slack(
     message: message,
     success: true,
