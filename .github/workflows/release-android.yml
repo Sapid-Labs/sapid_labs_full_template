@@ -53,7 +53,7 @@ jobs:
       # Full history, not the default shallow clone: the version-bump step rebases
       # onto whatever landed during the build, and a rebase on a shallow clone can
       # fail for want of the common ancestor.
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
