@@ -30,7 +30,11 @@
 				<key>CFBundleURLSchemes</key>
 				<array>
 					<string>slapp</string>
-					<string>com.googleusercontent.apps.359662441201-5ai1r3qbcim5055j2l6jcnupjnetkeo1</string>
+					<!-- A new app adds its OWN reversed iOS client id here, next
+					     to GIDClientID below. Both are left out of the template
+					     on purpose: a copied id is worse than a missing one,
+					     because it fails silently. See the comment at
+					     GIDClientID. -->
 				</array>
 			</dict>
 			<dict />
@@ -58,7 +62,30 @@
 		<true />
 		<key>UIApplicationSupportsIndirectInputEvents</key>
 		<true />
-		<key>GIDClientID</key>
-		<string>359662441201-5ai1r3qbcim5055j2l6jcnupjnetkeo1.apps.googleusercontent.com</string>
+		<!-- iOS Google sign-in runs on these two keys, not on the Dart config.
+		     google_sign_in_ios builds a GIDConfiguration only when it is handed
+		     a client id, and it is handed none here: supabase_auth_service.dart
+		     passes `clientId: null` off web, and no GoogleService-Info.plist is
+		     bundled. So GIDSignIn falls back to its default configuration,
+		     which it reads from Info.plist.
+
+		     The template carried a GIDClientID naming Abi's Recipes' project
+		     until 2026-08-12, and every app scaffolded from it inherited that
+		     value. A foreign id breaks sign-in two ways at once and errors at
+		     neither build, analyze nor test time: the OAuth redirect goes to a
+		     scheme the app does not register, and the Dart serverClientId is
+		     discarded with the nil configuration, so the token audience is
+		     wrong for Supabase's signInWithIdToken.
+
+		     So the template ships them REMOVED. An absent GIDClientID fails
+		     loudly; a copied one does not. An app that uses Google sign-in adds
+		     a GIDClientID key holding its own iOS OAuth client id, a
+		     GIDServerClientID key beside it, and the reversed form of the
+		     client id to CFBundleURLSchemes above.
+
+		     GIDServerClientID is
+		     SERVER_CLIENT_ID from assets/config.json, repeated here because the
+		     Dart value never reaches GIDSignIn on this path.
+		     test/auth/google_ios_client_id_test.dart holds the pair together. -->
 	</dict>
 </plist>
