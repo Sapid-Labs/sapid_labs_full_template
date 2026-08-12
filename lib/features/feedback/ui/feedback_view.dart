@@ -28,6 +28,7 @@ class _FeedbackViewState extends State<FeedbackView> {
   void initState() {
     setLoading(true);
     feedbackService.getLatestFeedback().then((value) {
+      if (!mounted) return;
       setState(() {
         allFeedback = value;
         setLoading(false);

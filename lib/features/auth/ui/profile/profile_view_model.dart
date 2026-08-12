@@ -43,6 +43,7 @@ class ProfileViewModel extends ViewModel<ProfileViewModel> {
       }
 
       await authService.loadUserData(userId);
+      if (!mounted) return;
 
       setState(() {
         _appUser = appUser.value;
@@ -51,6 +52,7 @@ class ProfileViewModel extends ViewModel<ProfileViewModel> {
     } catch (e, s) {
       print('Error fetching user data: $e');
       crashService.logError(error: e, stackTrace: s);
+      if (!mounted) return;
       setState(() {
         _isLoading = false;
       });

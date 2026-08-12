@@ -250,6 +250,7 @@ class _AnimatedOnboardingSequenceState extends State<AnimatedOnboardingSequence>
 
     // Mark current tip as shown
     await widget.onTipShown(widget.tips[_currentTipIndex].id);
+    if (!mounted) return;
 
     // Prepare for next tip
     final nextIndex = _currentTipIndex + 1;
@@ -283,6 +284,7 @@ class _AnimatedOnboardingSequenceState extends State<AnimatedOnboardingSequence>
     }
 
     // Update state and fade in new tip
+    if (!mounted) return;
     setState(() {
       _currentTipIndex = nextIndex;
       _currentSpotlightRect = nextRect;
